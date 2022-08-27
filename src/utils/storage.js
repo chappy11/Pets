@@ -3,15 +3,15 @@ export const KEY = {
 }
 
 
-export const save = async(data)=>{
+export const save = (data)=>{
     const payload = JSON.stringify(data);
-
-    localStorage.setItem(KEY.ACCOUNT,data);
+    
+    localStorage.setItem(KEY.ACCOUNT,payload);
 }
 
 export const getItem = async(key) =>{
-    const data = await localStorage.get(key);
-
+    const data = await localStorage.getItem(key);
+    console.log("GG",data);
     if(data){
         return JSON.parse(data)
     }

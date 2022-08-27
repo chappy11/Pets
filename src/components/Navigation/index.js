@@ -22,14 +22,16 @@ export default function Navigation(){
     const [data,setData] = useState(null);
 
     useEffect(()=>{
-        getSession();
-    },[])
+        const fetch = async() =>{
+            const user = await getItem(KEY.ACCOUNT);
 
-    const getSession = async() =>{
-        const user = await getItem(KEY.ACCOUNT);
+            setData(user);
+        }
 
-       setData(user);
-    }
+         fetch();
+        
+    },[]);
+
 
     const displayLinks = useMemo(()=>{
         return(
@@ -39,11 +41,21 @@ export default function Navigation(){
         );
     },[])
 
-
-    const displayAccount = useMemo(()=>{
-      if(data){
-        return(
-            <NavDropdown title={data.firstname} id="basic-nav-dropdown" className="justify-content-end">
+    
+    return(
+        <Navbar bg="dark" variant='dark' expand="lg">
+      <Container>
+        <Navbar.Brand href="#home">Pet Society</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+                {displayLinks}
+          </Nav>
+          <p>{data?.firstname}</p>
+          {data ? 
+      (
+        <Nav>            
+            <NavDropdown title={data?.username} id="basic-nav-dropdown" className="justify-content-end">
             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.2">
               Another action
@@ -54,29 +66,19 @@ export default function Navigation(){
               Separated link
             </NavDropdown.Item>
           </NavDropdown>
-        );
-      }
-      return(
-        <Nav>
-        <Nav.Link>Login</Nav.Link>
-        <Navbar.Text>
-       /
-      </Navbar.Text>
-      <Nav.Link>Register</Nav.Link>
-      </Nav>
-      );
-    },[data])
-
-    return(
-        <Navbar bg="dark" variant='dark' expand="lg">
-      <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-                {displayLinks}
           </Nav>
-          {displayAccount}
+
+        )
+      :    (
+            <Nav>
+            <Nav.Link href='/login'>Login</Nav.Link>
+            <Navbar.Text>
+           /
+          </Navbar.Text>
+          <Nav.Link href='/register'>Register</Nav.Link>
+          </Nav>
+          )}
+
         </Navbar.Collapse>
       </Container>
     </Navbar>
