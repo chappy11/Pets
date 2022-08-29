@@ -12,6 +12,11 @@ import Product from './pages/MyShop/Product';
 import Admin from './pages/Admin';
 import PendingUser from './pages/Admin/PendingUser';
 import PendingShop from './pages/Admin/PendingShop';
+import Subscription from './pages/MyShop/Subscription';
+import ChooseSubscription from './pages/MyShop/ChooseSubscription';
+import ViewProduct from './pages/ViewProduct';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 
 function App() {
   return (
@@ -27,7 +32,12 @@ function App() {
         <Route  path='/admin' element={<Admin/>}/>
         <Route  path='/pendinguser' element={<PendingUser/>}/>
         <Route path="/pendingshop" element={<PendingShop/>}/>
-        </Routes>
+        <Route path="/mysubscription" element={<Subscription/>}/>
+        <Route path="/choosesubscription" element={<ChooseSubscription/>}/>
+        <Route path="/viewproduct/:id" element={<ViewProduct/>}/>
+        <Route path="/cart" element={<Cart/>}/>
+        <Route path="/checkout" element={<Checkout/>}/>
+      </Routes>
     </BrowserRouter>
   );
 }

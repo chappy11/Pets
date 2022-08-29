@@ -16,5 +16,18 @@ export const Product = {
           const data = await axios.post(ItemApi(`createproduct`),formdata,{headers});
 
           return data;
-    }
+    },
+
+    displayProducts:async()=>{
+        const data = await axios.get(ItemApi('displayproducts'));
+
+        return data;
+    },
+    
+    getProductById:async(product_id)=>{
+        const data = await axios.get(ItemApi(`product/${product_id}`));
+        
+        return data;
+    },
+
 }

@@ -11,7 +11,6 @@ export const save = (data)=>{
 
 export const getItem = async(key) =>{
     const data = await localStorage.getItem(key);
-    console.log("GG",data);
     if(data){
         return JSON.parse(data)
     }

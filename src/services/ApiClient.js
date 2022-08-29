@@ -23,3 +23,15 @@ export const CategoryApi = (method) =>{
 export const ShopApi = (method) =>{
     return `${BASE_URL}shop/${method}`;
 }
+
+export const SubscriptionApi = (method) =>{
+    return `${BASE_URL}subscription/${method}`
+}
+
+export const CartApi = (method) =>{
+    return `${BASE_URL}cart/${method}`;
+}
+
+export const OrderApi = (method) =>{
+    return `${BASE_URL}userorder/${method}`;
+}

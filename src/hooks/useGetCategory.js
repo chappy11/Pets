@@ -12,6 +12,8 @@ export default function useGetCategory(){
         const response = await Category.getCategory();
         if(response.data.status == '1'){
             setCategory(response.data.data);
+        }else{
+            setCategory([]);
         }
         
     }

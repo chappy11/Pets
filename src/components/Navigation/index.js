@@ -41,6 +41,10 @@ export default function Navigation(){
         );
     },[])
 
+    function handleLogout(){
+      localStorage.clear();
+      window.location.href="/";
+    }
     
     return(
         <Navbar bg="dark" variant='dark' expand="lg">
@@ -62,8 +66,8 @@ export default function Navigation(){
             </NavDropdown.Item>
             <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">
-              Separated link
+            <NavDropdown.Item onClick={handleLogout}>
+              Logout
             </NavDropdown.Item>
           </NavDropdown>
           </Nav>

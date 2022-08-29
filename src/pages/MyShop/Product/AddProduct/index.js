@@ -41,6 +41,7 @@ export default function AddProduct(){
             swal("Warning","Fill out all fields");
         }else{
             try{
+                console.log(user.shop_id);
                 const formdata = new FormData();
                 formdata.append("name",name);
                 formdata.append("description",description);

@@ -4,24 +4,32 @@ import {Row,Col} from 'react-bootstrap';
 import React from 'react'
 import {Link} from 'react-router-dom';
 export default function Sidebar(props){
+    
+    function handleLogout(){
+        localStorage.clear();
+        window.location.href="/";
+    }
+    
     return(
-        <Row>
-            <Col lg={2}>
-            <ProSidebar style={{height:'100vh'}}>
-                <Menu iconShape='square'>
-                    <MenuItem >Dashboard <Link to="/myshop" /> </MenuItem>
-                    <MenuItem >Profile</MenuItem>
-                    <MenuItem >Products <Link to="/myproduct" /></MenuItem>
-                    <SubMenu title="Orders">
-                        <MenuItem>Active</MenuItem>
-                        <MenuItem>Pending</MenuItem>
-                        <MenuItem>Ready For Delivery</MenuItem>
-                        <MenuItem>Delivered</MenuItem>
-                    </SubMenu>
-                </Menu>
-            </ProSidebar>
+        <Row style={{width:'100vw',height:'100vh'}}>
+            <Col sm={2}  style={{width:'20vw',background:'blue'}} >
+                <ProSidebar  collapsedWidth={'10vw'} collapse={true} >
+                    <Menu iconShape='square'>
+                        <MenuItem >Dashboard <Link to="/myshop" /> </MenuItem>
+                        <MenuItem >Profile</MenuItem>
+                        <MenuItem >Products <Link to="/myproduct" /></MenuItem>
+                        <SubMenu title="Orders">
+                            <MenuItem>Active</MenuItem>
+                            <MenuItem>Pending</MenuItem>
+                            <MenuItem>Ready For Delivery</MenuItem>
+                            <MenuItem>Delivered</MenuItem>
+                        </SubMenu>
+                        <MenuItem >My Subscription <Link to="/mysubscription" /></MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Menu>
+                </ProSidebar>
             </Col>
-            <Col>
+            <Col style={{width:'80vw'}}>
                 {props.children}
             </Col>
         </Row>
