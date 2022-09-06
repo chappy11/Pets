@@ -32,7 +32,7 @@ export default function Login(){
                   
                     swal("Success",response?.data.message,"success").then(res=>{
                       
-                         window.location.href="http://localhost:3000/shop";
+                         window.location.href="http://localhost:3000/myshop";
                       })
                   }else if(response.data.data.user_roles === "2"){
                     console.log("user ")

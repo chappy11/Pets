@@ -3,6 +3,18 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import {Row,Col} from 'react-bootstrap';
 import React from 'react'
 import {Link} from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import DepartureBoardIcon from '@mui/icons-material/DepartureBoard';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import LogoutIcon from '@mui/icons-material/Logout';
+import * as S from './style';
+
 export default function Sidebar(props){
     
     function handleLogout(){
@@ -12,26 +24,25 @@ export default function Sidebar(props){
     
     return(
         <Row style={{width:'100vw',height:'100vh'}}>
-            <Col sm={2}  style={{width:'20vw',background:'blue'}} >
-                <ProSidebar  collapsedWidth={'10vw'} collapse={true} >
-                    <Menu iconShape='square'>
-                        <MenuItem >Dashboard <Link to="/myshop" /> </MenuItem>
-                        <MenuItem >Profile</MenuItem>
-                        <MenuItem >Products <Link to="/myproduct" /></MenuItem>
-                        <SubMenu title="Orders">
-                            <MenuItem>Active</MenuItem>
-                            <MenuItem>Pending</MenuItem>
-                            <MenuItem>Ready For Delivery</MenuItem>
-                            <MenuItem>Delivered</MenuItem>
+            {/* <Col   style={{width:'20vw'}} > */}
+                <ProSidebar  collapsedWidth={100} style={{minWidth:100,backgroundColor:'violet'}}  collapse={true} width={'15vw'}>
+                    <Menu >
+                        <MenuItem icon={<DashboardIcon/>}>Dashboard <Link to="/myshop" /> </MenuItem>
+                        <MenuItem icon={<PersonOutlineIcon/>} >Profile</MenuItem>
+                        <MenuItem icon={<InventoryIcon/>}>Inventory <Link to="/myproduct" /></MenuItem>
+                        <SubMenu icon={<PointOfSaleIcon/>} title="Orders">
+                            <MenuItem icon={<PendingActionsIcon/>}>Pending</MenuItem>
+                            <MenuItem icon={<DepartureBoardIcon/>}>Ready For Delivery</MenuItem>
+                            <MenuItem icon={<LocalShippingIcon/>}>Delivered</MenuItem>
                         </SubMenu>
-                        <MenuItem >My Subscription <Link to="/mysubscription" /></MenuItem>
-                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        <MenuItem icon={<SubscriptionsIcon/>}>My Subscription <Link to="/mysubscription" /></MenuItem>
+                        <MenuItem icon={<LogoutIcon/>} onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </ProSidebar>
-            </Col>
-            <Col style={{width:'80vw'}}>
+            {/* </Col> */}
+            <S.Body>
                 {props.children}
-            </Col>
+            </S.Body>
         </Row>
 
     );

@@ -4,7 +4,7 @@ import { SizeBox } from "../../../components";
 import { getItem, KEY } from "../../../utils/storage";
 import {Product as ProductAPi} from '../../../services/Product';
 import {BASE_URL} from '../../../services/ApiClient';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import * as S from './style';
 
 export default function Product(){
@@ -27,6 +27,15 @@ export default function Product(){
     function handleAddProduct(){
         window.location.href="/addproduct";
     }
+
+    const itemAvailability = useCallback((stock)=>{
+        if(stock < 0){
+            return 'Sold Out';
+        }
+
+        return 'Available';
+    },[])
+    
     return(
         <Sidebar>
             <SizeBox height={20}/>
@@ -38,18 +47,19 @@ export default function Product(){
                     <Button className="float-right" onClick={handleAddProduct}>Add New Product</Button>
                 </Col>
             </Row>
-            <Table responsive>
+            <Table responsive={'md'}>
                 <thead>
                     <tr>
+                        <th>
+                            Date Created
+                        </th>
                         <th>
                             Image
                         </th>
                         <th>
                             Name
                         </th>
-                        <th>
-                            Description
-                        </th>
+                       
                         <th>
                             Quantity
                         </th>
@@ -59,19 +69,28 @@ export default function Product(){
                         <th>
                             Status
                         </th>
+                        <th>
+                            Date Updated
+                        </th>
+                        <th>
+                            Action
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     
                     {products.map((val,i)=>(
                         <tr>
-                            <td><img src={BASE_URL+""+val.productImage} alt="product" style={{width:100,height:100}}/></td>
+                            <td>{val.p_createdAt}</td>
+                            <td><img src={BASE_URL+""+val.productImage} alt="product" style={{width:50,height:50}}/></td>
                             <td>{val.productName}</td>
-                            <td>{val.productDescription}</td>
-                            <td>{val.stock}</td>
+                            <td>{val.stock} {val.unit}</td>
                             <td>{val.price}</td>
+                            <td color="green">{itemAvailability(val.stock)}</td>
+                            <td>{val.p_updateAt}</td>
                             <td>
                                 <ButtonGroup className="me-2">
+                                    <Button variant='primary'>View</Button>
                                     <Button variant='info'>Update</Button>
                                     <Button variant='danger'>Delete</Button>
                                 </ButtonGroup>
