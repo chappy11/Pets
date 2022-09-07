@@ -1,14 +1,25 @@
 import Sidebar from "../components/Sidebar";
-import {Table,Row,Col,Button,ButtonGroup} from 'react-bootstrap'
-import { SizeBox } from "../../../components";
+import {Table,Row,Col,Button,ButtonGroup, Modal} from 'react-bootstrap'
+import { SizeBox, TextInput } from "../../../components";
 import { getItem, KEY } from "../../../utils/storage";
 import {Product as ProductAPi} from '../../../services/Product';
 import {BASE_URL} from '../../../services/ApiClient';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as S from './style';
+import useModal from "../../../hooks/useModal";
+
+
+export const Content = () =>{
+    return(<TextInput name="" label="test"/>)
+}
 
 export default function Product(){
     const [products,setProducts] = useState([]);
+    const [currenId,setCurrentId] = useState({
+        updateType:null,
+        itemId:null
+    });
+    const {isOpen,setIsOpen,displayModal} = useModal({content:Content,});
 
     useEffect(()=>{
         getProducts();
@@ -24,21 +35,25 @@ export default function Product(){
         }
     }
 
+   
     function handleAddProduct(){
         window.location.href="/addproduct";
     }
 
     const itemAvailability = useCallback((stock)=>{
         if(stock < 0){
-            return 'Sold Out';
+            return <p style={{color:'red'}}>Sold Out</p>;
         }
 
-        return 'Available';
+        return <p style={{color:'green'}}>Available</p>;
     },[])
-    
+
+   
     return(
         <Sidebar>
             <SizeBox height={20}/>
+            {displayModal}
+            <Button onClick={()=>setIsOpen(true)}>Open Mdoal</Button>
             <Row>
                 <Col>
                     <h3>Products</h3>
@@ -47,7 +62,8 @@ export default function Product(){
                     <Button className="float-right" onClick={handleAddProduct}>Add New Product</Button>
                 </Col>
             </Row>
-            <Table responsive={'md'}>
+            <SizeBox height={20}/>
+            <Table responsive={'md'} bordered={true}>
                 <thead>
                     <tr>
                         <th>
@@ -86,13 +102,12 @@ export default function Product(){
                             <td>{val.productName}</td>
                             <td>{val.stock} {val.unit}</td>
                             <td>{val.price}</td>
-                            <td color="green">{itemAvailability(val.stock)}</td>
+                            <td >{itemAvailability(val.stock)}</td>
                             <td>{val.p_updateAt}</td>
                             <td>
                                 <ButtonGroup className="me-2">
-                                    <Button variant='primary'>View</Button>
-                                    <Button variant='info'>Update</Button>
-                                    <Button variant='danger'>Delete</Button>
+                                    <Button variant='success' size={'sm'}>Stock In </Button>
+                                    <Button variant='danger' size={'sm'}>Stock out</Button>
                                 </ButtonGroup>
                             </td>
                         </tr>
