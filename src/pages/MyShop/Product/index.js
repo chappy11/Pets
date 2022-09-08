@@ -1,5 +1,5 @@
 import Sidebar from "../components/Sidebar";
-import {Table,Row,Col,Button,ButtonGroup, Modal} from 'react-bootstrap'
+import {Table,Row,Col,Button,ButtonGroup, Modal, Form} from 'react-bootstrap'
 import { SizeBox, TextInput } from "../../../components";
 import { getItem, KEY } from "../../../utils/storage";
 import {Product as ProductAPi} from '../../../services/Product';
@@ -7,23 +7,45 @@ import {BASE_URL} from '../../../services/ApiClient';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as S from './style';
 import useModal from "../../../hooks/useModal";
+import swal from "sweetalert";
 
 
-export const Content = () =>{
-    return(<TextInput name="" label="test"/>)
+export const Content = (props) =>{
+    const displayError = useMemo(()=>{
+        return props.error ? (
+            <Form.Text className="text-danger">
+                 {props.error}
+             </Form.Text>
+        ):null
+    },[props])
+    return(
+    <>
+        <TextInput type="number" name="" label="test" onChange={props.onChange}/>
+        {displayError}
+    </>    
+    )
 }
 
 export default function Product(){
     const [products,setProducts] = useState([]);
-    const [currenId,setCurrentId] = useState({
-        updateType:null,
-        itemId:null
-    });
-    const {isOpen,setIsOpen,displayModal} = useModal({content:Content,});
+    const [currentItem,setCurrentItem] = useState(null);
+    const [error,setError] = useState(null);
+    const [noItems,setNoItems] = useState(0);
+
+    useEffect(()=>{
+        setError(null);
+    },[noItems])
 
     useEffect(()=>{
         getProducts();
     },[])
+
+    const handleSubmit = () =>{
+        if(noItems < 1){
+            setError('Please specify number of items');
+            return;
+        }   
+    }
 
     const getProducts = async() =>{
         const shopData = await getItem(KEY.ACCOUNT);
@@ -35,6 +57,9 @@ export default function Product(){
         }
     }
 
+    const onChange = (e) =>{
+        setNoItems(e.target.value);
+    }
    
     function handleAddProduct(){
         window.location.href="/addproduct";
@@ -48,7 +73,13 @@ export default function Product(){
         return <p style={{color:'green'}}>Available</p>;
     },[])
 
-   
+    function handleModal(item,updateType){
+        setCurrentItem({...item,updateType});
+        setIsOpen(true)
+    }
+
+    console.log(error);
+    const {isOpen,setIsOpen,displayModal} = useModal({content:<Content error={error} onChange={onChange}/>,handleSubmit,});
     return(
         <Sidebar>
             <SizeBox height={20}/>
@@ -106,7 +137,7 @@ export default function Product(){
                             <td>{val.p_updateAt}</td>
                             <td>
                                 <ButtonGroup className="me-2">
-                                    <Button variant='success' size={'sm'}>Stock In </Button>
+                                    <Button variant='success' size={'sm'} onClick={()=>handleModal(val,"in")}>Stock In </Button>
                                     <Button variant='danger' size={'sm'}>Stock out</Button>
                                 </ButtonGroup>
                             </td>
