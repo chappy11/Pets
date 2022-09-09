@@ -30,4 +30,14 @@ export const Product = {
         return data;
     },
 
+    updateStock:async(payload)=>{
+        const headers ={
+            'Content-Type':'text/plain'
+        }
+        
+        const data = await axios.post(ItemApi(`updatestock`),payload,{headers});
+
+        return data;
+    }
+
 }

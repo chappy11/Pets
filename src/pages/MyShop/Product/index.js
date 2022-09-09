@@ -18,9 +18,11 @@ export const Content = (props) =>{
              </Form.Text>
         ):null
     },[props])
+    console.log("PARAM",props);
     return(
     <>
-        <TextInput type="number" name="" label="test" onChange={props.onChange}/>
+    
+        <TextInput type="number" name="" label="test" placeholder={props.item.stock} />
         {displayError}
     </>    
     )
@@ -31,7 +33,7 @@ export default function Product(){
     const [currentItem,setCurrentItem] = useState(null);
     const [error,setError] = useState(null);
     const [noItems,setNoItems] = useState(0);
-
+    const {setAlertOption,displayModal,closeAlertModal} = useModal();
     useEffect(()=>{
         setError(null);
     },[noItems])
@@ -57,9 +59,9 @@ export default function Product(){
         }
     }
 
-    const onChange = (e) =>{
-        setNoItems(e.target.value);
-    }
+    // const onChange = (e) =>{
+    //     setNoItems(e.target.value);
+    // }
    
     function handleAddProduct(){
         window.location.href="/addproduct";
@@ -73,18 +75,56 @@ export default function Product(){
         return <p style={{color:'green'}}>Available</p>;
     },[])
 
-    function handleModal(item,updateType){
-        setCurrentItem({...item,updateType});
-        setIsOpen(true)
+    async function updatestock(product_id,type){
+        if(noItems < 1){
+            swal('Warning','You must input no of item that you want add','warning');
+            
+            return;
+        }
+
+        try{
+            const payload = {
+                noStockAdded:noItems,
+                itemId:product_id,
+                type:type
+            }
+    
+            const response = await ProductAPi.updateStock(payload);
+            
+            
+            if(response.data.status == 1){
+                swal('Success',response.data.message,'success')
+                
+                return;
+            }
+
+            swal('Error','Something went wrong','error')
+    
+        }catch(e){
+            swal("Error","Something went wrong",'error');
+        }
+        
+
     }
 
-    console.log(error);
-    const {isOpen,setIsOpen,displayModal} = useModal({content:<Content error={error} onChange={onChange}/>,handleSubmit,});
+    function handleModal(item,updateType){
+        setAlertOption({
+            isOpen:true,
+            content:<Content item={item}/>,
+            btnSubmitText:'Save',
+            btnCancelText:"Cancel",
+            onConfirm:()=>updatestock(item.product_id,updateType),
+            onCancel:()=>closeAlertModal()
+        })
+    }
+
+  
+  
     return(
         <Sidebar>
             <SizeBox height={20}/>
-            {displayModal}
-            <Button onClick={()=>setIsOpen(true)}>Open Mdoal</Button>
+         
+            {displayModal()}
             <Row>
                 <Col>
                     <h3>Products</h3>
@@ -137,7 +177,7 @@ export default function Product(){
                             <td>{val.p_updateAt}</td>
                             <td>
                                 <ButtonGroup className="me-2">
-                                    <Button variant='success' size={'sm'} onClick={()=>handleModal(val,"in")}>Stock In </Button>
+                                    <Button variant='success' size={'sm'} onClick={()=>handleModal(val,"add")}>Stock In </Button>
                                     <Button variant='danger' size={'sm'}>Stock out</Button>
                                 </ButtonGroup>
                             </td>
