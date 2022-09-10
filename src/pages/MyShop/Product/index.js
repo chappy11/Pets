@@ -8,46 +8,27 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import * as S from './style';
 import useModal from "../../../hooks/useModal";
 import swal from "sweetalert";
+import UpdateStock from "../components/UpdateStock";
 
 
-export const Content = (props) =>{
-    const displayError = useMemo(()=>{
-        return props.error ? (
-            <Form.Text className="text-danger">
-                 {props.error}
-             </Form.Text>
-        ):null
-    },[props])
-    console.log("PARAM",props);
-    return(
-    <>
-    
-        <TextInput type="number" name="" label="test" placeholder={props.item.stock} />
-        {displayError}
-    </>    
-    )
-}
 
 export default function Product(){
     const [products,setProducts] = useState([]);
-    const [currentItem,setCurrentItem] = useState(null);
+    const [currentItem,setCurrentItem] = useState({
+        itemData:null,
+        type:""
+    });
     const [error,setError] = useState(null);
     const [noItems,setNoItems] = useState(0);
-    const {setAlertOption,displayModal,closeAlertModal} = useModal();
-    useEffect(()=>{
-        setError(null);
-    },[noItems])
+      const [isOpen,setIsOpen] = useState(false);
+
+   
 
     useEffect(()=>{
         getProducts();
     },[])
 
-    const handleSubmit = () =>{
-        if(noItems < 1){
-            setError('Please specify number of items');
-            return;
-        }   
-    }
+    
 
     const getProducts = async() =>{
         const shopData = await getItem(KEY.ACCOUNT);
@@ -59,10 +40,8 @@ export default function Product(){
         }
     }
 
-    // const onChange = (e) =>{
-    //     setNoItems(e.target.value);
-    // }
-   
+
+  
     function handleAddProduct(){
         window.location.href="/addproduct";
     }
@@ -75,56 +54,75 @@ export default function Product(){
         return <p style={{color:'green'}}>Available</p>;
     },[])
 
-    async function updatestock(product_id,type){
-        if(noItems < 1){
-            swal('Warning','You must input no of item that you want add','warning');
+
+ 
+    const onChange = (e)=>{
+        setNoItems(e.target.value)
+    }
+ 
+    const updateStock = useCallback(async()=>{
+     console.log("UPdate stock",noItems);
+     console.log("ITEMS",currentItem);
+      
+     if(noItems < 1){
+        swal('Warning','You must input no of item that you want add','warning');
+        
+        return;
+    }
+
+    try{
+        const payload = {
+            noStockAdded:noItems,
+            itemId:currentItem.itemData.product_id,
+            type:currentItem.type
+        }
+
+        const response =  await ProductAPi.updateStock(payload);
+        
+        if(response.data?.status == 1){
+            swal('Success',response.data.message,'success')
             
             return;
         }
 
-        try{
-            const payload = {
-                noStockAdded:noItems,
-                itemId:product_id,
-                type:type
-            }
-    
-            const response = await ProductAPi.updateStock(payload);
-            
-            
-            if(response.data.status == 1){
-                swal('Success',response.data.message,'success')
-                
-                return;
-            }
+        swal('Error',response?.data?.message,'error')
 
-            swal('Error','Something went wrong','error')
-    
-        }catch(e){
-            swal("Error","Something went wrong",'error');
-        }
-        
-
+    }catch(e){
+        console.log("EERR",e);
+        swal("Error","Something went wrong",'error');
     }
+ },[noItems,setNoItems,isOpen ]);
 
-    function handleModal(item,updateType){
-        setAlertOption({
-            isOpen:true,
-            content:<Content item={item}/>,
-            btnSubmitText:'Save',
-            btnCancelText:"Cancel",
-            onConfirm:()=>updatestock(item.product_id,updateType),
-            onCancel:()=>closeAlertModal()
-        })
-    }
+
+ const handleModal = (item,updateType) =>{
+    setIsOpen(true);
+    setCurrentItem({
+        type:updateType,
+        itemData:item
+    })
+ }
+  
+    
 
   
   
     return(
         <Sidebar>
             <SizeBox height={20}/>
-         
-            {displayModal()}
+            <Modal show={isOpen}>
+                <Modal.Title>{currentItem.type === "add" ? "Stock In" : "Stock Out"}</Modal.Title>
+                <Modal.Body>
+                    <TextInput onChange={onChange} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button className="btn btn-dark" onClick={updateStock}>
+                        Save
+                    </Button>
+                    <Button className="btn btn-danger" onClick={()=>setIsOpen(false)}>
+                        Close 
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Row>
                 <Col>
                     <h3>Products</h3>
@@ -178,7 +176,7 @@ export default function Product(){
                             <td>
                                 <ButtonGroup className="me-2">
                                     <Button variant='success' size={'sm'} onClick={()=>handleModal(val,"add")}>Stock In </Button>
-                                    <Button variant='danger' size={'sm'}>Stock out</Button>
+                                    <Button variant='danger' size={'sm'} onClick={()=>handleModal(val,'out')}>Stock out</Button>
                                 </ButtonGroup>
                             </td>
                         </tr>

@@ -17,27 +17,81 @@ import ChooseSubscription from './pages/MyShop/ChooseSubscription';
 import ViewProduct from './pages/ViewProduct';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import { getItem, KEY } from './utils/storage';
+import { useCallback, useEffect, useState } from 'react';
+import PageNotFound from './pages/PageNotFound';
+
+
+
 
 function App() {
+  const [currentSession,setCurrentSession] = useState(null);
+
+  useEffect(()=>{
+    getSession();
+  },[])
+
+  const getSession = async() =>{
+    const user  = await getItem(KEY.ACCOUNT)
+    
+  setCurrentSession(user);
+  }
+
+  const displayRoutes = useCallback(()=>{
+    if(!currentSession){
+      return(
+        <Routes>
+          <Route exact path='/' element={<Home/>} />
+          <Route path="/viewproduct/:id" element={<ViewProduct/>}/>
+          <Route  path='/login' element={<Login/>} />
+          <Route  path='/register' element={<Register/>} />
+          <Route  path='/createshop' element={<CreateShop/>}/>
+        </Routes>
+       );
+    }
+   
+    if(currentSession.user_roles == 1){
+      return (
+        <Routes>
+          <Route  path='/myshop' element={<MyShop/>}/>
+          <Route  path='/myproduct' element={<Product/>}/>
+          <Route  path='/addproduct' element={<AddProduct/>}/>
+          <Route path="/mysubscription" element={<Subscription/>}/>
+          <Route path="/choosesubscription" element={<ChooseSubscription/>}/>
+          <Route path='*' element={<PageNotFound/>}/>
+        </Routes>
+      )
+    }
+
+    if(currentSession.user_roles == 2){
+        return(
+          <Routes>
+                <Route exact path='/' element={<Home/>} />
+                <Route path="/viewproduct/:id" element={<ViewProduct/>}/>
+                <Route path="/cart" element={<Cart/>}/>
+                <Route path="/checkout" element={<Checkout/>}/>
+                <Route path='*' element={<PageNotFound/>}/>
+          </Routes>
+        );
+    } 
+
+    if(currentSession.user_roles == 0){
+      return(
+        <Routes>
+          <Route  path='/admin' element={<Admin/>}/>
+          <Route  path='/pendinguser' element={<PendingUser/>}/>
+          <Route path="/pendingshop" element={<PendingShop/>}/>
+          <Route path='*' element={<PageNotFound/>}/>
+      </Routes> 
+      )
+    }
+
+   
+  },[currentSession])
+  
   return (
     <BrowserRouter>
-      <Routes>
-        <Route exact path='/' element={<Home/>} />
-        <Route  path='/login' element={<Login/>} />
-        <Route  path='/register' element={<Register/>} />
-        <Route  path='/createshop' element={<CreateShop/>}/>
-        <Route  path='/myshop' element={<MyShop/>}/>
-        <Route  path='/myproduct' element={<Product/>}/>
-        <Route  path='/addproduct' element={<AddProduct/>}/>
-        <Route  path='/admin' element={<Admin/>}/>
-        <Route  path='/pendinguser' element={<PendingUser/>}/>
-        <Route path="/pendingshop" element={<PendingShop/>}/>
-        <Route path="/mysubscription" element={<Subscription/>}/>
-        <Route path="/choosesubscription" element={<ChooseSubscription/>}/>
-        <Route path="/viewproduct/:id" element={<ViewProduct/>}/>
-        <Route path="/cart" element={<Cart/>}/>
-        <Route path="/checkout" element={<Checkout/>}/>
-      </Routes>
+      {displayRoutes()}
     </BrowserRouter>
   );
 }

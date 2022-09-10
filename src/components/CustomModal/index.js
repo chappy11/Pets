@@ -4,7 +4,7 @@ import { Button, Modal } from "react-bootstrap";
 
 export default function CustomModal(props){
     const {title,message,onConfirm,onCancel,content,isOpen,btnSubmitText,btnCancelText} = props;
-    console.log("PROPS",props);
+ 
     const titleView = useMemo(()=>{
         return(
             title && (

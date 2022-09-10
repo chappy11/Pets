@@ -1,4 +1,4 @@
-import React ,{ useEffect, useMemo,useState } from 'react';
+import React ,{ useCallback, useEffect, useMemo,useState } from 'react';
 import {Container,Navbar,Nav,NavDropdown} from 'react-bootstrap'
 import { getItem, KEY } from '../../utils/storage';
 
@@ -8,14 +8,25 @@ const NAVATION = [
         url:"/"
     },
     {
-        name:'Products',
-        url:"/products"
+        name:'My Orders',
+        url:"/order"
     },
     {
         name:'Cart',
         url:"/cart"
     }
-]
+];
+
+const NO_SESSION = [
+  {
+    name:'Home',
+    url:"/"
+},
+{
+    name:'About',
+    url:"/about"
+},
+];
 
 
 export default function Navigation(){
@@ -32,14 +43,14 @@ export default function Navigation(){
         
     },[]);
 
-
+    
     const displayLinks = useMemo(()=>{
         return(
-            NAVATION.map((val,index)=>(
+           (data ? NAVATION : NO_SESSION ).map((val,index)=>(
                 <Nav.Link href={val.url}>{val.name}</Nav.Link>
             ))
         );
-    },[])
+    },[data])
 
     function handleLogout(){
       localStorage.clear();

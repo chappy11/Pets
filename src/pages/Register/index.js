@@ -1,9 +1,10 @@
 import React,{useState} from 'react';
-import {Container,Row,Col,Form,Button} from 'react-bootstrap';
-import { SizeBox, TextInput } from '../../components';
+import {Container,Row,Col,Form,Button,Stack, Navbar} from 'react-bootstrap';
+import { Navigation, SizeBox, TextInput } from '../../components';
 import * as S from './style';
 import swal from 'sweetalert';
 import { User } from '../../services/User';
+import HeaderText from '../../components/HeaderText';
 
 export default function Register(){
     const [img,setImage] = useState(null);
@@ -63,32 +64,48 @@ export default function Register(){
     }
     
     return(
+        <>
+        <Navigation/>
         <Container>
+            <HeaderText>Are You Shop Owner?</HeaderText>
+            
             <Row>
                 <Col lg='3'>
-                    {img  &&
-                        <S.Image src={URL.createObjectURL(img)} alt={'Profile Pic'} />
-                    }
-                    <SizeBox height={20}/>
-
-                    <TextInput type='file' name='img' label='Upload Image' onChange={onImageChange}/>
-                    
+                    <SizeBox height={100}/>
+                    <S.ImageContainer>
+                  
+                        {img  ? (<S.Image src={URL.createObjectURL(img)} alt={'Profile Pic'} />):(<S.defaultImage/>)
+                            
+                        }
+                    </S.ImageContainer>
+                   
+                    <TextInput type='file' name='img'  onChange={onImageChange}/>
                 </Col>
-                <Col >
-                    <h3>Account Details</h3>
-                    <SizeBox height={20}/>
-                    <TextInput name="username" placeholder='Enter username' label='Username' onChange={onChange}/>
+                <Col lg='7'>
+                    <SizeBox height={50}/>
+                    <HeaderText>Account Details</HeaderText>
+                    <Row >
+                        <Col>
+                             <TextInput name="username" placeholder='Enter username' label='Username' onChange={onChange}/>
+                        </Col>
+                        <Col>
+                           <TextInput name="password" placeholder='Enter password' label='Password' onChange={onChange}/>
+                        </Col>
+                        <Col>
+                             <TextInput name="cpassword" placeholder='Confirm Password' label='Confirm Password' onChange={onChange}/>
+                        </Col>
+                    </Row>
                     <SizeBox height={10}/>
-                    <TextInput name="password" placeholder='Enter password' label='Password' onChange={onChange}/>
-                    <SizeBox height={10}/>
-                    <TextInput name="cpassword" placeholder='Confirm Password' label='Confirm Password' onChange={onChange}/>
-                    <SizeBox height={10}/>
-                    <TextInput name="email" placeholder='Enter email' label='Email' onChange={onChange}/>
-                    <SizeBox height={10}/>
-                    <TextInput name="contact" placeholder='Enter contact number' label='Contact Number' onChange={onChange}/>
-                    <SizeBox height={15}/>
-                    <h3>Personal Information</h3>
-                    <SizeBox height={20}/>
+                    <Row>
+                        <Col>   
+                            <TextInput name="email" placeholder='Enter email' label='Email' onChange={onChange}/>
+                        </Col>
+                        <Col>
+                        <TextInput name="contact" placeholder='Enter contact number' label='Contact Number' onChange={onChange}/>
+                        </Col>
+                    </Row>
+                    <SizeBox height={18}/>
+                    <HeaderText>Personal Information</HeaderText>
                     <Row>
                         <Col>
                             <TextInput name="firstname" placeholder="Enter firstname" label="Firstname" onChange={onChange}/>
@@ -103,15 +120,12 @@ export default function Register(){
                     <SizeBox height={10}/>
                     <Row>
                         <Col>
-                            <p>Gender</p>
-                            <Row>
-                                <Col>
-                                    <Form.Check label='Male' type='radio' name="gender" value="Male" onChange={onChange} />
-                                </Col>
-                                <Col>
-                                    <Form.Check label='Female' type='radio' name="gender" value="Female" onChange={onChange}/>
-                                </Col>
-                            </Row>
+                            <Form.Label>Gender</Form.Label>
+                            <Form.Select name="gender">
+                                <option value="">Choose</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </Form.Select>
                         </Col>
                         <Col>
                             <TextInput label="Birthdate" type='date' name='birthdate' onChange={onChange}/>
@@ -125,5 +139,6 @@ export default function Register(){
                 </Col>
             </Row>
         </Container>
+        </>
     );
 }

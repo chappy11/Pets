@@ -25,6 +25,31 @@ export default function ViewProduct(){
     }
 
     async function handleAddToCart(){
+        if(!user){
+            swal("A wild Pikachu appeared! What do you want to do?", {
+                buttons: {
+                  cancel: "Cancel",
+                  catch: {
+                    text: "Login",
+                    value: "login",
+                  },
+                
+                },
+              })
+              .then((value) => {
+                switch (value) {
+                  case "login":
+                    window.location.href="/login";
+                    break;
+               
+                  default:
+                    
+                }
+              });
+            return;
+        }
+      
+      
         const payload = {
             user_id:user.user_id,
             product_id:data.product_id,
@@ -65,7 +90,7 @@ export default function ViewProduct(){
                         <Col>{data?.shopName}</Col>
                     </Row>
                     <SizeBox height={20}/>
-                    <TextInput label="Buy" value={noItems} type="number" onChange={(e)=>setNoItems(e.target.value)}/>
+                    <TextInput label="Buy" value={noItems} type="number" onChange={(e)=>setNoItems(e.target.value)} disabled={!user}/>
                     <SizeBox height={20}/>
                    <Button onClick={handleAddToCart} >Add To Cart</Button>
                 </Col>

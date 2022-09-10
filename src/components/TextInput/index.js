@@ -5,7 +5,7 @@ export default function TextInput(props){
     return(
         <>
             <Form.Label>{props.label}</Form.Label>
-            <Form.Control placeholder={props.placeholder} name={props.name} onChange={props.onChange} value={props.value} type={props.type}/>
+            <Form.Control placeholder={props.placeholder} name={props.name} onChange={props.onChange} value={props.value} type={props.type} disabled={props.disabled} className="input-sm"/>
         </>
     );
 }
