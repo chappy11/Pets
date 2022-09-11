@@ -12,6 +12,7 @@ export const Carts ={
     },
 
     mycart:async(user_id)=>{
+        
         const data = await axios.get(CartApi(`mycart/${user_id}`));
 
         return data;

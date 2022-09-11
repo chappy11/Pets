@@ -1,98 +1,118 @@
-import logo from './logo.svg';
-import './App.css';
-import Navigation from './components/Navigation';
-import Home from './pages/Home';
-import {BrowserRouter,Route,Router, Routes,} from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import CreateShop from './pages/CreateShop';
-import MyShop from './pages/MyShop';
-import AddProduct from './pages/MyShop/Product/AddProduct';
-import Product from './pages/MyShop/Product';
-import Admin from './pages/Admin';
-import PendingUser from './pages/Admin/PendingUser';
-import PendingShop from './pages/Admin/PendingShop';
-import Subscription from './pages/MyShop/Subscription';
-import ChooseSubscription from './pages/MyShop/ChooseSubscription';
-import ViewProduct from './pages/ViewProduct';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import { getItem, KEY } from './utils/storage';
-import { useCallback, useEffect, useState } from 'react';
-import PageNotFound from './pages/PageNotFound';
-
-
-
-
+import logo from "./logo.svg";
+import "./App.css";
+import Navigation from "./components/Navigation";
+import Home from "./pages/Home";
+import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import CreateShop from "./pages/CreateShop";
+import MyShop from "./pages/MyShop";
+import AddProduct from "./pages/MyShop/Product/AddProduct";
+import Product from "./pages/MyShop/Product";
+import Admin from "./pages/Admin";
+import PendingUser from "./pages/Admin/PendingUser";
+import PendingShop from "./pages/Admin/PendingShop";
+import Subscription from "./pages/MyShop/Subscription";
+import ChooseSubscription from "./pages/MyShop/ChooseSubscription";
+import ViewProduct from "./pages/ViewProduct";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import { getItem, KEY } from "./utils/storage";
+import { useCallback, useEffect, useState } from "react";
+import PageNotFound from "./pages/PageNotFound";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import MyOrder from "./pages/MyOrder";
+import ViewOrder from "./pages/ViewOrder";
+import PendingList from "./pages/MyShop/PendingList";
+import AcceptedList from "./pages/MyShop/AcceptedList";
+import Packed from "./pages/MyShop/Packed";
+import Deliver from "./pages/MyShop/Deliver";
+const initialOptions = {
+  "client-id":
+    "AXXPiHrCffEqkk7hesxLl7tUUylTSC_QTJcf1NYFpiSbSzk54crEZHrmC9PevPMtny4bhUQUPM4cs7l5",
+  currency: "USD",
+  intent: "capture",
+};
 function App() {
-  const [currentSession,setCurrentSession] = useState(null);
+  const [currentSession, setCurrentSession] = useState(null);
 
-  useEffect(()=>{
+  useEffect(() => {
     getSession();
-  },[])
+  }, []);
 
-  const getSession = async() =>{
-    const user  = await getItem(KEY.ACCOUNT)
-    
-  setCurrentSession(user);
-  }
+  const getSession = async () => {
+    const user = await getItem(KEY.ACCOUNT);
 
-  const displayRoutes = useCallback(()=>{
-    if(!currentSession){
-      return(
-        <Routes>
-          <Route exact path='/' element={<Home/>} />
-          <Route path="/viewproduct/:id" element={<ViewProduct/>}/>
-          <Route  path='/login' element={<Login/>} />
-          <Route  path='/register' element={<Register/>} />
-          <Route  path='/createshop' element={<CreateShop/>}/>
-        </Routes>
-       );
-    }
-   
-    if(currentSession.user_roles == 1){
+    setCurrentSession(user);
+  };
+
+  const displayRoutes = useCallback(() => {
+    if (!currentSession) {
       return (
         <Routes>
-          <Route  path='/myshop' element={<MyShop/>}/>
-          <Route  path='/myproduct' element={<Product/>}/>
-          <Route  path='/addproduct' element={<AddProduct/>}/>
-          <Route path="/mysubscription" element={<Subscription/>}/>
-          <Route path="/choosesubscription" element={<ChooseSubscription/>}/>
-          <Route path='*' element={<PageNotFound/>}/>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/viewproduct/:id" element={<ViewProduct />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/createshop" element={<CreateShop />} />
         </Routes>
-      )
+      );
     }
 
-    if(currentSession.user_roles == 2){
-        return(
-          <Routes>
-                <Route exact path='/' element={<Home/>} />
-                <Route path="/viewproduct/:id" element={<ViewProduct/>}/>
-                <Route path="/cart" element={<Cart/>}/>
-                <Route path="/checkout" element={<Checkout/>}/>
-                <Route path='*' element={<PageNotFound/>}/>
-          </Routes>
-        );
-    } 
-
-    if(currentSession.user_roles == 0){
-      return(
+    if (currentSession.user_roles == 1) {
+      return (
         <Routes>
-          <Route  path='/admin' element={<Admin/>}/>
-          <Route  path='/pendinguser' element={<PendingUser/>}/>
-          <Route path="/pendingshop" element={<PendingShop/>}/>
-          <Route path='*' element={<PageNotFound/>}/>
-      </Routes> 
-      )
+          <Route path="/" element={<MyShop />} />
+          <Route path="/myproduct" element={<Product />} />
+          <Route path="/addproduct" element={<AddProduct />} />
+          <Route path="/pending" element={<PendingList />} />
+          <Route path="/accepted" element={<AcceptedList />} />
+          <Route path="/packed" element={<Packed />} />
+          <Route path="/deliver" element={<Deliver />} />
+          <Route path="/mysubscription" element={<Subscription />} />
+          <Route path="/choosesubscription" element={<ChooseSubscription />} />
+          <Route path="/vieworder/:id" element={<ViewOrder />} />
+
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      );
     }
 
-   
-  },[currentSession])
-  
+    if (currentSession.user_roles == 2) {
+      return (
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/viewproduct/:id" element={<ViewProduct />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order" element={<MyOrder />} />
+          <Route path="/vieworder/:id/:reference" element={<ViewOrder />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      );
+    }
+
+    if (currentSession.user_roles == 0) {
+      return (
+        <Routes>
+          <Route path="/" element={<Admin />} />
+          <Route path="/pendinguser" element={<PendingUser />} />
+          <Route path="/pendingshop" element={<PendingShop />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      );
+    }
+  }, [currentSession]);
+
   return (
-    <BrowserRouter>
-      {displayRoutes()}
-    </BrowserRouter>
+    <PayPalScriptProvider
+      options={{
+        "client-id":
+          "AXXPiHrCffEqkk7hesxLl7tUUylTSC_QTJcf1NYFpiSbSzk54crEZHrmC9PevPMtny4bhUQUPM4cs7l5",
+      }}
+    >
+      <BrowserRouter>{displayRoutes()}</BrowserRouter>;
+    </PayPalScriptProvider>
   );
 }
 

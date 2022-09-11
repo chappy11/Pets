@@ -26,7 +26,7 @@ export default function ViewProduct(){
 
     async function handleAddToCart(){
         if(!user){
-            swal("A wild Pikachu appeared! What do you want to do?", {
+            swal("You Should Login First", {
                 buttons: {
                   cancel: "Cancel",
                   catch: {
@@ -46,14 +46,15 @@ export default function ViewProduct(){
                     
                 }
               });
-            return;
+           
+              return;
         }
       
       
         const payload = {
             user_id:user.user_id,
             product_id:data.product_id,
-            no_items:parseInt(noItems),
+            no_item:parseInt(noItems),
         }
 
         const res = await Carts.addToCart(payload);
@@ -92,7 +93,7 @@ export default function ViewProduct(){
                     <SizeBox height={20}/>
                     <TextInput label="Buy" value={noItems} type="number" onChange={(e)=>setNoItems(e.target.value)} disabled={!user}/>
                     <SizeBox height={20}/>
-                   <Button onClick={handleAddToCart} >Add To Cart</Button>
+                   <Button className="btn btn-dark" onClick={handleAddToCart} >Add To Cart</Button>
                 </Col>
             </Row>
         </Container>

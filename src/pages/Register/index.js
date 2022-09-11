@@ -1,10 +1,11 @@
 import React,{useState} from 'react';
-import {Container,Row,Col,Form,Button,Stack, Navbar} from 'react-bootstrap';
+import {Container,Row,Col,Form,Button,Stack, Navbar, ButtonGroup} from 'react-bootstrap';
 import { Navigation, SizeBox, TextInput } from '../../components';
 import * as S from './style';
 import swal from 'sweetalert';
 import { User } from '../../services/User';
 import HeaderText from '../../components/HeaderText';
+import { Link } from 'react-router-dom';
 
 export default function Register(){
     const [img,setImage] = useState(null);
@@ -67,8 +68,9 @@ export default function Register(){
         <>
         <Navigation/>
         <Container>
+            <SizeBox height={20}/>
             <HeaderText>Are You Shop Owner?</HeaderText>
-            
+            <Button variant='link' onClick={()=>window.location.href="/createshop"}>Register as Shop owner now</Button>
             <Row>
                 <Col lg='3'>
                     <SizeBox height={100}/>

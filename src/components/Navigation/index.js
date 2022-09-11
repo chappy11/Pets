@@ -1,4 +1,4 @@
-import React ,{ useCallback, useEffect, useMemo,useState } from 'react';
+import React ,{ useEffect, useMemo,useState } from 'react';
 import {Container,Navbar,Nav,NavDropdown} from 'react-bootstrap'
 import { getItem, KEY } from '../../utils/storage';
 
@@ -19,13 +19,13 @@ const NAVATION = [
 
 const NO_SESSION = [
   {
-    name:'Home',
-    url:"/"
-},
-{
-    name:'About',
-    url:"/about"
-},
+      name:'Home',
+      url:"/"
+  },
+  {
+      name:'About',
+      url:"/about"
+  },
 ];
 
 

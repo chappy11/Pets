@@ -32,7 +32,7 @@ export default function Login(){
                   
                     swal("Success",response?.data.message,"success").then(res=>{
                       
-                         window.location.href="http://localhost:3000/myshop";
+                         window.location.href="http://localhost:3000/";
                       })
                   }else if(response.data.data.user_roles === "2"){
                     console.log("user ")
@@ -42,7 +42,7 @@ export default function Login(){
                 })
             }else if(response.data.data.user_roles == 0){
                 swal("Success",response?.data.message,"success").then(res=>{
-                   window.location.href="http://localhost:3000/admin";
+                   window.location.href="http://localhost:3000";
               })
             }
            
