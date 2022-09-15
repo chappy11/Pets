@@ -6,7 +6,11 @@ export default function usePrompts() {
   };
 
   const alertError = (message) => {
-    return swal("Error", message || "" ? message : "Something went wrong");
+    return swal(
+      "Error",
+      message || "" ? message : "Something went wrong",
+      "error"
+    );
   };
 
   const alertWarning = (message) => {

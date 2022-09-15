@@ -19,14 +19,18 @@ import { Carts } from "../../services/Cart";
 import HeaderText from "../../components/HeaderText";
 import { defaultThemes } from "../../constants/DefaultThemes";
 import Subtitle from "../../components/Subtitle";
+import usePrompts from "../../hooks/usePrompts";
 import { Icon } from "@mui/material";
 import { Box, BoxContainer, ItemRow } from "./style";
 import { Add, Remove } from "@mui/icons-material";
+
 export default function ViewProduct() {
   const [data, setData] = useState(null);
   const { id } = useParams();
   const [noItems, setNoItems] = useState(1);
   const { user } = useGetUserFromStorage();
+  const { alertError, alertWarning } = usePrompts();
+
   useEffect(() => {
     getproduct();
   }, []);
@@ -75,6 +79,35 @@ export default function ViewProduct() {
     }
   }
 
+  const handleIncrement = () => {
+    if (!user) {
+      alertError("You Have to Log your account first");
+      return;
+    }
+
+    if (noItems >= data?.stock) {
+      alertWarning(
+        `The available stock is only ${data?.stock} you cannot add anymore`
+      );
+      return;
+    }
+    setNoItems((prev) => prev + 1);
+  };
+
+  const handleDecrement = () => {
+    if (!user) {
+      alertError("You Have to Log your account first");
+
+      return;
+    }
+
+    if (noItems === 1) {
+      alertWarning("You cannot set the item to zero");
+      return;
+    }
+
+    setNoItems((prev) => prev - 1);
+  };
   return (
     <>
       <Navigation />
@@ -95,7 +128,10 @@ export default function ViewProduct() {
             </HeaderText>
             <Subtitle>{data?.productDescription}</Subtitle>
             <SizeBox height={10} />
-            <ListItem label={"Stock"} value={data?.stock} />
+            <ListItem
+              label={"Stock"}
+              value={data?.stock + " " + data?.unit + " available"}
+            />
             <SizeBox height={10} />
             <ListItem
               label="Price"
@@ -103,20 +139,12 @@ export default function ViewProduct() {
             />
             <SizeBox height={10} />
             <ListItem label="Vendor" value={data?.shopName} />
-            {/* <Row>
-              <Col>Stock</Col>
-              <Col>{data?.stock + " "}available</Col>
-            </Row>
-            <Row>
-              <text>HI</text>
-              <Col>Shop Name</Col>
-              <Col>{data?.shopName + ""}</Col>
-            </Row> */}
 
             <SizeBox height={20} />
 
             <BoxContainer>
               <Box
+                onClick={handleIncrement}
                 color={defaultThemes.secondary}
                 fontColor={defaultThemes.white}
               >
@@ -124,6 +152,7 @@ export default function ViewProduct() {
               </Box>
               <Box borderSize={1}>{noItems}</Box>
               <Box
+                onClick={handleDecrement}
                 color={defaultThemes.primary}
                 fontColor={defaultThemes.white}
               >
@@ -132,7 +161,7 @@ export default function ViewProduct() {
             </BoxContainer>
 
             <SizeBox height={20} />
-            <Button>
+            <Button onClick={handleAddToCart}>
               <ShoppingCartIcon /> Add to Cart
             </Button>
           </Col>

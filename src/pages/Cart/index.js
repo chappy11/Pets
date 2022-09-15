@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Form,
-  Stack,
-  Image,
-  Row,
-  Col,
-  Button,
-} from "react-bootstrap";
+import { Container, Form, Stack, Image, Row, Col } from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Navigation, SizeBox, TextInput, Line } from "../../components";
+import { Navigation, SizeBox, TextInput, Line, Button } from "../../components";
 import RemoveIcon from "@mui/icons-material/Remove";
 import useGetCartItems from "../../hooks/useActiveItem";
 import { BASE_URL } from "../../services/ApiClient";
@@ -117,24 +109,14 @@ export default function Cart() {
                 <HeaderText>My Cart</HeaderText>
               </div>
               <SizeBox width={10} />
-              <ShoppingCartIcon />
             </Stack>
           </S.TitleContainer>
-          <S.CheckoutContainer>
-            <HeaderText>
-              {" "}
-              Total{" " + formatCurrency(parseFloat(displayTotal()))}
-            </HeaderText>
-            <SizeBox width={20} />
-            <Button variant="dark" className="btn btn-sm">
-              Checkout{" "}
-            </Button>
-          </S.CheckoutContainer>
         </Stack>
 
         <SizeBox height={20} />
         {item.map((val, i) => (
           <>
+            <SizeBox height={50} />
             <HeaderText>{val.shopName}</HeaderText>
             {val.data.map((item) => (
               <>
@@ -198,7 +180,9 @@ export default function Cart() {
             ))}
           </>
         ))}
-        <h3 style={{ textAlign: "right" }}></h3>
+        <h3 style={{ textAlign: "right" }}>
+          {formatCurrency(+displayTotal())}
+        </h3>
         <Button onClick={handleCheckout}>Checkout</Button>
       </Container>
     </>
