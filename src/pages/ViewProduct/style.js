@@ -29,3 +29,11 @@ export const Box = styled.div`
     transition: opacity 0.3s, visibility 0.3s;
   }
 `;
+
+export const Column = styled.div`
+  background: blue;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
