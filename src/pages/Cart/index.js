@@ -93,7 +93,10 @@ export default function Cart() {
 
     if (response.data.status == 1) {
       getCart();
+      return;
     }
+
+    swal("Warning", response?.data?.message, "warning");
   }
 
   function handleCheckout() {

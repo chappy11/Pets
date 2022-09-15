@@ -1,5 +1,5 @@
 import logo from "./logo.svg";
-import "./App.css";
+
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
@@ -27,6 +27,9 @@ import PendingList from "./pages/MyShop/PendingList";
 import AcceptedList from "./pages/MyShop/AcceptedList";
 import Packed from "./pages/MyShop/Packed";
 import Deliver from "./pages/MyShop/Deliver";
+
+require("./App.css");
+
 const initialOptions = {
   "client-id":
     "AXXPiHrCffEqkk7hesxLl7tUUylTSC_QTJcf1NYFpiSbSzk54crEZHrmC9PevPMtny4bhUQUPM4cs7l5",

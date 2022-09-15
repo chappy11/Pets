@@ -1,8 +1,13 @@
 * {
   padding: 0;
   margin: 0;
+  font-family: "Urbanist", sans-serif;
 }
 
 body {
-  background-color: #e5eff8;
+  background: #e1f1f2;
+}
+
+p {
+  line-height: 0.7em;
 }

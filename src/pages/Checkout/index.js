@@ -112,7 +112,7 @@ export default function Checkout() {
           onChange={onChange}
         />
         <SizeBox height={30} />
-        <h5>Total: {Number(displayTotal()).toFixed(2)}</h5>
+        <h5>Total: {formatCurrency(parseFloat(displayTotal()))}</h5>
         <Button onClick={handleCheckout}>Chekcout</Button>
         <PayPalButtons
           createOrder={(data, actions) => {

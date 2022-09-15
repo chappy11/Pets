@@ -1,9 +1,10 @@
-import React from 'react'
-import * as S from './style';
+import React from "react";
+import * as S from "./style";
 
-
-export default function HeaderText(props){
-    return(
-        <S.Text>{props.children}</S.Text>
-    )
+export default function HeaderText(props) {
+  return (
+    <S.Text color={props?.color ? props?.color : "black"}>
+      {props.children}
+    </S.Text>
+  );
 }

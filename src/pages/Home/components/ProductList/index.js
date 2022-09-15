@@ -1,35 +1,41 @@
-import { Card, CardGroup,Row,Col,Container,Button,Image } from "react-bootstrap";
+import { Card, CardGroup, Row, Col, Container, Image } from "react-bootstrap";
 import useGetAllProducts from "../../../../hooks/useGetAllProducts";
 import { BASE_URL } from "../../../../services/ApiClient";
+import * as S from "./style";
+import { SizeBox, Button } from "../../../../components";
 
+export default function ProductList() {
+  const { products } = useGetAllProducts();
 
-export default function ProductList(){
-    const {products} = useGetAllProducts();
-    
-    
+  return (
+    <Container>
+      <S.BodyText>Welcome Shoppers</S.BodyText>
 
-    return(
-        <Container>
-        <Row style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-            {products.map((val, idx) => (
-        
-                <Card style={{width:250,margin:10,padding:0,height:300}}>
-                <div style={{width:'100%',height:200}}>
-                <Image   src={BASE_URL+val.productImage}  style={{width:'100%',height:'150px'}}/>
-                </div>
-                
-                <Card.Body>
-                    <Card.Title>{val.productName}</Card.Title>
-                    <Card.Subtitle>{val.category_name}</Card.Subtitle>
-                    <Card.Text>
-                        &#8369; {val.price}
-                    </Card.Text>
-                    <Button onClick={()=>window.location.href=`/viewproduct/${val.product_id}`}>View Product</Button>
-                </Card.Body>
-                </Card>
-            ))}
+      <SizeBox height={20} />
+      <Row style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        {products.map((val, idx) => (
+          <S.CustomizeCard
+            onClick={() =>
+              (window.location.href = `/viewproduct/${val.product_id}`)
+            }
+          >
+            <S.ImageContainer style={{ width: "100%", height: 200 }}>
+              <S.CardImage src={BASE_URL + val.productImage} />
+            </S.ImageContainer>
+
+            <Card.Body>
+              <S.Title>{val.productName}</S.Title>
+              <S.Subtitle>{val.category_name}</S.Subtitle>
+
+              <div>
+                <text>{val.stock} available</text>
+              </div>
+
+              <text>&#8369; {val.price}</text>
+            </Card.Body>
+          </S.CustomizeCard>
+        ))}
       </Row>
-        </Container>
-     
-    );
+    </Container>
+  );
 }

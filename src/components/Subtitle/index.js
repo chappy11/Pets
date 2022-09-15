@@ -1,5 +1,9 @@
 import React from "react";
 import * as S from "./style";
 export default function Subtitle(props) {
-  return <S.Subtitle>{props.children}</S.Subtitle>;
+  return (
+    <S.Subtitle color={props?.color ? props?.color : "black"}>
+      {props.children}
+    </S.Subtitle>
+  );
 }

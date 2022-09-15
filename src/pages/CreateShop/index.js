@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { Row, Container, Col, Button } from "react-bootstrap";
+import { Row, Container, Col, Button, Modal } from "react-bootstrap";
 import { Navigation, SizeBox, TextInput } from "../../components";
 import swal from "sweetalert";
 import * as S from "./style";
 import { User } from "../../services/User";
 import HeaderText from "../../components/HeaderText";
+import Subtitle from "../../components/Subtitle";
+import { Text } from "../../components/HeaderText/style";
+import { Email } from "../../services/Email";
+import { AlertModal } from "../../components/AlertModal";
 export default function CreateShop() {
   const [img, setImg] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -30,8 +35,7 @@ export default function CreateShop() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  async function handleSubmit() {
-    console.log(user);
+  async function openVerification() {
     if (
       user.username === "" ||
       user.password === "" ||
@@ -45,32 +49,49 @@ export default function CreateShop() {
       user.description === "" ||
       user.address === ""
     ) {
-      swal("Warning", "Fill out all fields");
+      swal("Warning", "Fill out all fields", "warning");
     } else if (user.password !== user.cpassword) {
       swal("Warning", "Password do not match");
     } else {
-      const formdata = new FormData();
-      formdata.append("username", user.username);
-      formdata.append("password", user.password);
-      formdata.append("firstname", user.firstname);
-      formdata.append("middlename", user.middlename);
-      formdata.append("lastname", user.lastname);
-      formdata.append("shopDescription", user.description);
-      formdata.append("shopName", user.name);
-      formdata.append("address", user.address);
-      formdata.append("shopEmail", user.email);
-      formdata.append("contact", user.contact);
-      formdata.append("shopLogo", img);
+      try {
+        const sixDigit = Math.floor(100000 + Math.random() * 900000);
+        const payload = {
+          email: user.email,
+          code: sixDigit,
+        };
+        const res = await Email.emailVerification(payload);
+        if (res.data.status == 1) {
+          AlertModal.success({ message: "We send you a verification code" });
+          await setIsOpen(true);
+          return;
+        }
+      } catch (e) {}
+    }
+  }
+  async function handleSubmit() {
+    console.log(user);
 
-      const response = await User.createshop(formdata);
-      console.log("WEW", response);
-      if (response.data.status == 1) {
-        swal("Success", response.data.message, "success").then((val) => {
-          window.location.href = "/login";
-        });
-      } else {
-        swal("Error", response.data.message, "error");
-      }
+    const formdata = new FormData();
+    formdata.append("username", user.username);
+    formdata.append("password", user.password);
+    formdata.append("firstname", user.firstname);
+    formdata.append("middlename", user.middlename);
+    formdata.append("lastname", user.lastname);
+    formdata.append("shopDescription", user.description);
+    formdata.append("shopName", user.name);
+    formdata.append("address", user.address);
+    formdata.append("shopEmail", user.email);
+    formdata.append("contact", user.contact);
+    formdata.append("shopLogo", img);
+
+    const response = await User.createshop(formdata);
+    console.log("WEW", response);
+    if (response.data.status == 1) {
+      swal("Success", response.data.message, "success").then((val) => {
+        window.location.href = "/login";
+      });
+    } else {
+      swal("Error", response.data.message, "error");
     }
   }
 
@@ -78,6 +99,39 @@ export default function CreateShop() {
     <>
       <Navigation />
       <Container>
+        <Modal show={isOpen} aria-labelledby="contained-modal-title-vcenter">
+          <Modal.Header>
+            <HeaderText>Email Verification</HeaderText>
+          </Modal.Header>
+          <Modal.Body>
+            <Subtitle>
+              Please Check your email we send you a verfication code
+            </Subtitle>
+            <SizeBox height={5} />
+            <S.InputContainer>
+              <TextInput
+                type="number"
+                placeholder="Enter the 6 Digit code here"
+              />
+            </S.InputContainer>
+
+            <SizeBox height={10} />
+
+            <div className="d-grid gap-2">
+              <S.VerificationMessage>
+                Didn't recieve the code?
+              </S.VerificationMessage>
+
+              <Button variant="link" size="sm">
+                Resend
+              </Button>
+              <Button>Verify</Button>
+              <Button variant="danger" onClick={() => setIsOpen(false)}>
+                Close
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
         <SizeBox height={20} />
         <Row>
           <Col lg="3">
@@ -104,6 +158,7 @@ export default function CreateShop() {
               </Col>
               <Col>
                 <TextInput
+                  type="password"
                   name="cpassword"
                   placeholder="Confirm Password"
                   label="Confirm Password"
@@ -112,6 +167,7 @@ export default function CreateShop() {
               </Col>
               <Col>
                 <TextInput
+                  type="password"
                   name="password"
                   placeholder="Enter password"
                   label="Password"
@@ -191,7 +247,7 @@ export default function CreateShop() {
               onChange={onChange}
             />
             <SizeBox height={15} />
-            <Button onClick={handleSubmit}>Register</Button>
+            <Button onClick={openVerification}>Register</Button>
           </Col>
         </Row>
       </Container>

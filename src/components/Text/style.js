@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
 export const Text = styled.p`
-  font-size: 13px;
-  color: gray;
+  font-size: 16px;
+  color: ${(props) => props.color};
 `;

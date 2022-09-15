@@ -67,7 +67,7 @@ export default function Deliver() {
                   <td>
                     {`${val.firstname} ${val.middlename} ${val.lastname}`}
                   </td>
-                  <td>{formatCurrency(parseFloat(val.totalAmount))}</td>
+                  <td>{formatCurrency(parseFloat(val.shopordertotal))}</td>
                   <td>
                     {val.shop_order_status !== "5" ? "On Deliver" : "Recieved"}
                   </td>
