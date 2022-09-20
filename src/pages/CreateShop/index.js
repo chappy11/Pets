@@ -1,17 +1,29 @@
 import React, { useState } from "react";
-import { Row, Container, Col, Button, Modal } from "react-bootstrap";
-import { Navigation, SizeBox, TextInput } from "../../components";
+import { Row, Container, Col, Modal } from "react-bootstrap";
+import { Line, Navigation, SizeBox, TextInput, Button } from "../../components";
+import StoreIcon from "@mui/icons-material/Store";
 import swal from "sweetalert";
 import * as S from "./style";
 import { User } from "../../services/User";
 import HeaderText from "../../components/HeaderText";
 import Subtitle from "../../components/Subtitle";
-import { Text } from "../../components/HeaderText/style";
+
 import { Email } from "../../services/Email";
-import { AlertModal } from "../../components/AlertModal";
+import usePrompts from "../../hooks/usePrompts";
+import {
+  isContainNumber,
+  isContainNumberAndSpecialCharacter,
+  emailIsvalid,
+  isMobileNumberValid,
+} from "../../utils/String";
+import { defaultThemes } from "../../constants/DefaultThemes";
+
 export default function CreateShop() {
   const [img, setImg] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [code, setCode] = useState(null);
+  const [sixDigitCode, setSixDigitCode] = useState(null);
+  const { alertSuccess, alertError, alertWarning } = usePrompts();
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -24,6 +36,7 @@ export default function CreateShop() {
     name: "",
     description: "",
     address: "",
+    shippingFee: 35,
   });
 
   const [shop, setShop] = useState({});
@@ -49,28 +62,63 @@ export default function CreateShop() {
       user.description === "" ||
       user.address === ""
     ) {
-      swal("Warning", "Fill out all fields", "warning");
+      alertWarning("Please fillout all fields");
+    } else if (!img) {
+      alertWarning("Please choose your logo");
+    } else if (!emailIsvalid(user.email)) {
+      alertWarning("Invalid Email");
+    } else if (!isMobileNumberValid(user.contact)) {
+      alertWarning("Invalid Mobile Number");
+    } else if (
+      isContainNumber(user.firstname) ||
+      isContainNumberAndSpecialCharacter(user.firstname)
+    ) {
+      alertWarning(
+        "Invalid Firstname should not contain number and special character"
+      );
+    } else if (
+      isContainNumber(user.middlename) ||
+      isContainNumberAndSpecialCharacter(user.middlename)
+    ) {
+      alertWarning(
+        "Invalid Middlename should not contain number and special character"
+      );
+    } else if (
+      isContainNumber(user.lastname) ||
+      isContainNumberAndSpecialCharacter(user.lastname)
+    ) {
+      alertWarning(
+        "Invalid Lastname should not contain number and special character"
+      );
     } else if (user.password !== user.cpassword) {
-      swal("Warning", "Password do not match");
+      alertWarning("Password do not match");
     } else {
       try {
         const sixDigit = Math.floor(100000 + Math.random() * 900000);
+        setSixDigitCode(sixDigit);
         const payload = {
+          username: user.username,
           email: user.email,
           code: sixDigit,
         };
         const res = await Email.emailVerification(payload);
+        console.log("Response", res);
         if (res.data.status == 1) {
-          AlertModal.success({ message: "We send you a verification code" });
+          alertSuccess("We send you a verification code");
           await setIsOpen(true);
           return;
         }
-      } catch (e) {}
+      } catch (e) {
+        alertError();
+      }
     }
   }
-  async function handleSubmit() {
-    console.log(user);
 
+  async function handleSubmit() {
+    if (code != sixDigitCode) {
+      alertError("Invalid code please check you email again");
+      return;
+    }
     const formdata = new FormData();
     formdata.append("username", user.username);
     formdata.append("password", user.password);
@@ -85,7 +133,6 @@ export default function CreateShop() {
     formdata.append("shopLogo", img);
 
     const response = await User.createshop(formdata);
-    console.log("WEW", response);
     if (response.data.status == 1) {
       swal("Success", response.data.message, "success").then((val) => {
         window.location.href = "/login";
@@ -94,6 +141,9 @@ export default function CreateShop() {
       swal("Error", response.data.message, "error");
     }
   }
+
+  console.log("CODE", sixDigitCode);
+  console.log("INPUTED", code);
 
   return (
     <>
@@ -112,6 +162,7 @@ export default function CreateShop() {
               <TextInput
                 type="number"
                 placeholder="Enter the 6 Digit code here"
+                onChange={(e) => setCode(e.target.value)}
               />
             </S.InputContainer>
 
@@ -122,11 +173,14 @@ export default function CreateShop() {
                 Didn't recieve the code?
               </S.VerificationMessage>
 
-              <Button variant="link" size="sm">
+              <S.LinkButton size="sm" onClick={openVerification}>
                 Resend
-              </Button>
-              <Button>Verify</Button>
-              <Button variant="danger" onClick={() => setIsOpen(false)}>
+              </S.LinkButton>
+              <Button onClick={handleSubmit}>Verify</Button>
+              <Button
+                color={defaultThemes.secondary}
+                onClick={() => setIsOpen(false)}
+              >
                 Close
               </Button>
             </div>
@@ -146,6 +200,11 @@ export default function CreateShop() {
             <TextInput type="file" name="img" onChange={onImageChange} />
           </Col>
           <Col md="7">
+            <HeaderText>
+              <StoreIcon /> Create Shop
+            </HeaderText>
+            <Line />
+            <SizeBox height={20} />
             <HeaderText>Account Details</HeaderText>
             <Row>
               <Col>
@@ -179,7 +238,7 @@ export default function CreateShop() {
               <Col>
                 <TextInput
                   name="contact"
-                  placeholder="Enter contact number"
+                  placeholder="09XXXXXXXXX"
                   label="Contact Number"
                   onChange={onChange}
                 />
@@ -194,7 +253,6 @@ export default function CreateShop() {
               </Col>
             </Row>
             <SizeBox height={10} />
-
             <SizeBox height={15} />
             <HeaderText>Shop Details</HeaderText>
             <TextInput
@@ -208,6 +266,13 @@ export default function CreateShop() {
               name="description"
               placeholder="Enter shop description"
               label="Shop Description"
+              onChange={onChange}
+            />
+            <TextInput
+              name="shippingFee"
+              type="number"
+              placeholder={user.shippingFee}
+              label="Shop Shipping Fee"
               onChange={onChange}
             />
             <SizeBox height={15} />
@@ -247,7 +312,7 @@ export default function CreateShop() {
               onChange={onChange}
             />
             <SizeBox height={15} />
-            <Button onClick={openVerification}>Register</Button>
+            <Button onClick={() => openVerification()}>Create Shop</Button>
           </Col>
         </Row>
       </Container>

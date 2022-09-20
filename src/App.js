@@ -27,6 +27,7 @@ import PendingList from "./pages/MyShop/PendingList";
 import AcceptedList from "./pages/MyShop/AcceptedList";
 import Packed from "./pages/MyShop/Packed";
 import Deliver from "./pages/MyShop/Deliver";
+import "./App.css";
 
 require("./App.css");
 
@@ -95,7 +96,8 @@ function App() {
       );
     }
 
-    if (currentSession.user_roles == 0) {
+    if (currentSession.user_roles == 0 || currentSession.user_roles == 3) {
+      console.log("GG");
       return (
         <Routes>
           <Route path="/" element={<Admin />} />

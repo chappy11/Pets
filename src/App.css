@@ -5,7 +5,8 @@
 }
 
 body {
-  background: #e1f1f2;
+  background: #f5fcff !important;
+  background-repeat: no-repeat !important;
 }
 
 p {

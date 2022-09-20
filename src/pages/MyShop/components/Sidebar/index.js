@@ -16,6 +16,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import * as S from "./style";
 import { SizeBox } from "../../../../components";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
+import { blue } from "@mui/material/colors";
 
 export default function Sidebar(props) {
   function handleLogout() {
@@ -33,11 +34,18 @@ export default function Sidebar(props) {
         {/* <Col   style={{width:'20vw'}} > */}
         <ProSidebar
           collapsedWidth={100}
-          style={{ minWidth: 100 }}
+          style={{
+            minWidth: 100,
+            background: "transparent",
+            overflowY: "auto",
+            height: "100%",
+            position: "fixed",
+          }}
           collapse={true}
           width={"15vw"}
+          color={"grey"}
         >
-          <Menu>
+          <Menu style={{ background: "transparent" }}>
             <MenuItem icon={<DashboardIcon />}>
               Dashboard <Link to="/" />{" "}
             </MenuItem>

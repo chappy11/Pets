@@ -117,7 +117,7 @@ export default function ViewProduct() {
             />
           </S.Column>
           <S.Column md={6}>
-            <div>
+            <S.InfoContainer>
               <HeaderText color={defaultThemes.primary}>
                 {data?.productName}
               </HeaderText>
@@ -159,7 +159,7 @@ export default function ViewProduct() {
               <Button onClick={handleAddToCart}>
                 <ShoppingCartIcon /> Add to Cart
               </Button>
-            </div>
+            </S.InfoContainer>
           </S.Column>
         </ItemRow>
       </Container>

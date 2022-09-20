@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { TextInput } from "../../components";
+import { defaultThemes } from "../../constants/DefaultThemes";
 
 export const Image = styled.img`
   width: 200px;
@@ -31,4 +32,11 @@ export const VerificationMessage = styled.label`
 
 export const InputContainer = styled.div`
   padding: 0 12px;
+`;
+
+export const LinkButton = styled.button`
+  border: none;
+  padding: 10px;
+  background-color: transparent;
+  color: ${defaultThemes.primary};
 `;

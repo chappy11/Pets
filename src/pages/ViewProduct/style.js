@@ -31,9 +31,14 @@ export const Box = styled.div`
 `;
 
 export const Column = styled.div`
-  background: blue;
   display: flex;
   flex: 1;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+`;
+
+export const InfoContainer = styled.div`
+  width: 100%;
+  min-width: 50%;
 `;

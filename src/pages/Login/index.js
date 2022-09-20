@@ -36,13 +36,12 @@ export default function Login() {
             window.location.href = "http://localhost:3000/";
           });
         } else if (response.data.data.user_roles === "2") {
-          console.log("user ");
           swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "http://localhost:3000";
+            window.location.href = "http://localhost:3000/";
           });
         } else if (response.data.data.user_roles == 0) {
           swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "http://localhost:3000";
+            window.location.href = "http://localhost:3000/";
           });
         }
       } else {

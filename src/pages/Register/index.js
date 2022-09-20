@@ -103,6 +103,11 @@ export default function Register() {
           </Col>
           <Col lg="7">
             <SizeBox height={50} />
+            <Text>
+              If you're a shop owner you can register your shop here{" "}
+              <a href="/createshop">Create Shop</a>
+            </Text>
+            <SizeBox height={20} />
             <HeaderText>Account Details</HeaderText>
             <Row>
               <Col>
@@ -210,8 +215,9 @@ export default function Register() {
                 <Button onClick={register}>Register</Button>{" "}
               </Col>
               <Col>
-                <Text>Register as a</Text>
-                <Text>Shop Onwer</Text>
+                <Text textAlign={"center"}>
+                  Register as a <a href="/createshop">Shop Owner</a>
+                </Text>
               </Col>
             </Row>
           </Col>
