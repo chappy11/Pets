@@ -1,6 +1,3 @@
-import logo from "./logo.svg";
-
-import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import Login from "./pages/Login";
@@ -10,8 +7,8 @@ import MyShop from "./pages/MyShop";
 import AddProduct from "./pages/MyShop/Product/AddProduct";
 import Product from "./pages/MyShop/Product";
 import Admin from "./pages/Admin";
-import PendingUser from "./pages/Admin/PendingUser";
-import PendingShop from "./pages/Admin/PendingShop";
+import PendingUser from "./pages/Admin/users/PendingUser";
+import PendingShop from "./pages/Admin/shops/PendingShop";
 import Subscription from "./pages/MyShop/Subscription";
 import ChooseSubscription from "./pages/MyShop/ChooseSubscription";
 import ViewProduct from "./pages/ViewProduct";
@@ -28,6 +25,7 @@ import AcceptedList from "./pages/MyShop/AcceptedList";
 import Packed from "./pages/MyShop/Packed";
 import Deliver from "./pages/MyShop/Deliver";
 import "./App.css";
+import AllUser from "./pages/Admin/users/AllUsers";
 
 require("./App.css");
 
@@ -101,6 +99,7 @@ function App() {
       return (
         <Routes>
           <Route path="/" element={<Admin />} />
+          <Route path="/users" element={<AllUser />} />
           <Route path="/pendinguser" element={<PendingUser />} />
           <Route path="/pendingshop" element={<PendingShop />} />
           <Route path="*" element={<PageNotFound />} />

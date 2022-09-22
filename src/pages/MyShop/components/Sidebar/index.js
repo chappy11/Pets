@@ -26,7 +26,7 @@ export default function Sidebar(props) {
 
   return (
     <>
-      <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
         <SizeBox width={"50"} />
         <Navbar.Brand>Pet Society</Navbar.Brand>
       </Navbar>
@@ -45,6 +45,7 @@ export default function Sidebar(props) {
           width={"15vw"}
           color={"grey"}
         >
+          <SizeBox height={50} />
           <Menu style={{ background: "transparent" }}>
             <MenuItem icon={<DashboardIcon />}>
               Dashboard <Link to="/" />{" "}
