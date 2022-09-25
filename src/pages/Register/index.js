@@ -1,24 +1,38 @@
 import React, { useState } from "react";
+import { Container, Row, Col, Form, Modal } from "react-bootstrap";
 import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Stack,
-  Navbar,
-  ButtonGroup,
-} from "react-bootstrap";
-import { Navigation, SizeBox, TextInput, Button } from "../../components";
+  Navigation,
+  SizeBox,
+  TextInput,
+  Button,
+  Loading,
+  Line,
+} from "../../components";
 import * as S from "./style";
-import swal from "sweetalert";
+
 import { User } from "../../services/User";
 import HeaderText from "../../components/HeaderText";
 import Text from "../../components/Text";
-import { Link } from "react-router-dom";
+
+import usePrompts from "../../hooks/usePrompts";
+import {
+  emailIsvalid,
+  isMobileNumberValid,
+  isContainNumberAndSpecialCharacter,
+  isContainNumber,
+} from "../../utils/String";
+import { Email } from "../../services/Email";
+import { defaultThemes } from "../../constants/DefaultThemes";
+import { Pets, TrySharp } from "@mui/icons-material";
 
 export default function Register() {
   const [img, setImage] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [sixDigitCode, setSixDigitCode] = useState(null);
+  const [code, setCode] = useState("");
+  const { alertSuccess, alertError, alertWarning, alertWithCallBack } =
+    usePrompts();
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -41,9 +55,14 @@ export default function Register() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  async function register() {
-    console.log(user);
-    if (
+  function validaDate() {
+    openVerification();
+  }
+  async function openVerification() {
+    setIsOpen(false);
+    if (!img) {
+      alertWarning("Profile Picture is Required");
+    } else if (
       user.username === "" ||
       user.password === "" ||
       user.cpassword === "" ||
@@ -56,10 +75,62 @@ export default function Register() {
       user.birthdate === "" ||
       user.address === ""
     ) {
-      swal("Warning", "Fill out all fields");
+      alertWarning("Fill Out all fields");
+    } else if (
+      isContainNumber(user.firstname) ||
+      isContainNumberAndSpecialCharacter(user.firstname)
+    ) {
+      alertWarning(
+        "Invalid Firstname should not contain number and special character"
+      );
+    } else if (
+      isContainNumber(user.middlename) ||
+      isContainNumberAndSpecialCharacter(user.middlename)
+    ) {
+      alertWarning(
+        "Invalid Middlename should not contain number and special character"
+      );
+    } else if (
+      isContainNumber(user.lastname) ||
+      isContainNumberAndSpecialCharacter(user.lastname)
+    ) {
+      alertWarning(
+        "Invalid Lastname should not contain number and special character"
+      );
     } else if (user.password !== user.cpassword) {
-      swal("Warning", "Password do not match");
+      alertWarning("Password do not match");
+    } else if (!isMobileNumberValid(user.contact)) {
+      alertWarning("Mobile Number is Invalid");
+    } else if (!emailIsvalid(user.email)) {
+      alertWarning("Email is Invalid");
     } else {
+      try {
+        setIsLoading(true);
+        const sixDigit = Math.floor(100000 + Math.random() * 900000);
+        setSixDigitCode(sixDigit);
+        const payload = {
+          username: user.username,
+          email: user.email,
+          code: sixDigit,
+        };
+        const res = await Email.emailVerification(payload);
+        if (res.data.status == 1) {
+          alertSuccess("We send you a verification code");
+          await setIsOpen(true);
+          return;
+        }
+
+        alertError(res.data.message);
+      } catch (e) {
+        alertError();
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
+  async function register() {
+    try {
       const formdata = new FormData();
       formdata.append("username", user.username);
       formdata.append("password", user.password);
@@ -75,18 +146,61 @@ export default function Register() {
 
       const response = await User.register(formdata);
       if (response.data.status == "1") {
-        swal("Success", response.data.message, "success").then((val) => {
-          window.location.href = "/login";
+        alertWithCallBack({
+          title: "Register",
+          type: "success",
+          btnTextConfirm: "Login Now",
+          message: response.data.message,
+          onConfirm: () => (window.location.href = "/login"),
         });
       } else {
-        swal("Error", response.data.message, "error");
+        alertError(response.data.message);
       }
+    } catch (e) {
+      console.log(e);
+      alertError();
     }
+  }
+
+  function handleVerify() {
+    if (code != sixDigitCode) {
+      alertError("Invalid Code. Please check your email and try again");
+      return;
+    }
+
+    register();
   }
 
   return (
     <>
       <Navigation />
+      <Loading isLoading={isLoading} />
+      <Modal show={isOpen}>
+        <Modal.Header>
+          <HeaderText>Verification Code</HeaderText>
+        </Modal.Header>
+        <Modal.Body>
+          <TextInput
+            label="Verification Code"
+            placeholder="6 digit code"
+            onChange={(e) => setCode(e.target.value)}
+          />
+
+          <S.ResendContainer>
+            <Text textAlign="center">Dont Receive any email?</Text>
+            <S.Link onClick={openVerification}>Resend</S.Link>
+          </S.ResendContainer>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleVerify}>Verify</Button>
+          <Button
+            color={defaultThemes.secondary}
+            onClick={() => setIsOpen(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Container>
         <Row>
           <Col lg="3">
@@ -103,6 +217,11 @@ export default function Register() {
           </Col>
           <Col lg="7">
             <SizeBox height={50} />
+            <HeaderText>
+              <Pets color={defaultThemes.secondary} /> Sign up
+            </HeaderText>
+            <Line />
+            <SizeBox height={20} />
             <Text>
               If you're a shop owner you can register your shop here{" "}
               <a href="/createshop">Create Shop</a>
@@ -121,6 +240,7 @@ export default function Register() {
               <Col>
                 <TextInput
                   name="password"
+                  type="password"
                   placeholder="Enter password"
                   label="Password"
                   onChange={onChange}
@@ -129,6 +249,7 @@ export default function Register() {
               <Col>
                 <TextInput
                   name="cpassword"
+                  type="password"
                   placeholder="Confirm Password"
                   label="Confirm Password"
                   onChange={onChange}
@@ -186,7 +307,7 @@ export default function Register() {
             <Row>
               <Col>
                 <Form.Label>Gender</Form.Label>
-                <Form.Select name="gender">
+                <Form.Select name="gender" onChange={onChange}>
                   <option value="">Choose</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -212,7 +333,7 @@ export default function Register() {
             <Row>
               <Col>
                 {" "}
-                <Button onClick={register}>Register</Button>{" "}
+                <Button onClick={validaDate}>Register</Button>{" "}
               </Col>
               <Col>
                 <Text textAlign={"center"}>

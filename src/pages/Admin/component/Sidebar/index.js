@@ -1,4 +1,4 @@
-import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+  import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Row, Col } from "react-bootstrap";
 import React from "react";
@@ -6,10 +6,15 @@ import { Link } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 import { SizeBox } from "../../../../components";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import { GridView, Sell, Storefront } from "@mui/icons-material";
+import { GridView, Logout, Sell, Storefront } from "@mui/icons-material";
 import * as S from "./style";
+import LoadingOverlay from "react-loading-overlay";
 
 export default function Sidebar(props) {
+  function handleLogout() {
+    window.localStorage.clear();
+    window.location.href = "/";
+  }
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
@@ -42,7 +47,11 @@ export default function Sidebar(props) {
                 <MenuItem>
                   Inactive Users <Link to="/pendinguser" />
                 </MenuItem>
-                <MenuItem>Acitive Users</MenuItem>
+                <MenuItem>
+                  {" "}
+                  <Link to="/activeuser" />
+                  Acitive Users
+                </MenuItem>
               </SubMenu>
               <SubMenu icon={<Storefront />} title="Manage Shops">
                 <MenuItem>
@@ -55,7 +64,13 @@ export default function Sidebar(props) {
                   Active Shops <Link to={"/activeshops"} />
                 </MenuItem>
               </SubMenu>
-              <MenuItem icon={<Sell />}>Item Selling</MenuItem>
+              <MenuItem icon={<Sell />}>
+                <Link to="/items" />
+                Item Selling
+              </MenuItem>
+              <MenuItem onClick={handleLogout} icon={<Logout />}>
+                Logout
+              </MenuItem>
             </Menu>
           </ProSidebar>
         </Col>

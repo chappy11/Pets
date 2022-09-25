@@ -1,43 +1,55 @@
 import { ItemApi } from "./ApiClient";
-import axios from 'axios';
-
+import axios from "axios";
 
 export const Product = {
-    getProductByShopId:async(shop_id) =>{
-        const data = await axios.get(ItemApi(`myproducts/${shop_id}`));
-        
-        return data;
-    },
-    addProduct:async(formdata) =>{
-        const headers = {
-            'Content-Type':'multipart/form-data'
-          }
+  getProductByShopId: async (shop_id) => {
+    const data = await axios.get(ItemApi(`myproducts/${shop_id}`));
 
-          const data = await axios.post(ItemApi(`createproduct`),formdata,{headers});
+    return data;
+  },
+  addProduct: async (formdata) => {
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
 
-          return data;
-    },
+    const data = await axios.post(ItemApi(`createproduct`), formdata, {
+      headers,
+    });
 
-    displayProducts:async()=>{
-        const data = await axios.get(ItemApi('displayproducts'));
+    return data;
+  },
 
-        return data;
-    },
-    
-    getProductById:async(product_id)=>{
-        const data = await axios.get(ItemApi(`product/${product_id}`));
-        
-        return data;
-    },
+  displayProducts: async () => {
+    const data = await axios.get(ItemApi("displayproducts"));
 
-    updateStock:async(payload)=>{
-        const headers ={
-            'Content-Type':'text/plain'
-        }
-        
-        const data = await axios.post(ItemApi(`updatestock`),payload,{headers});
+    return data;
+  },
 
-        return data;
-    }
+  getProductById: async (product_id) => {
+    const data = await axios.get(ItemApi(`product/${product_id}`));
 
-}
+    return data;
+  },
+
+  updateStock: async (payload) => {
+    const headers = {
+      "Content-Type": "text/plain",
+    };
+
+    const data = await axios.post(ItemApi(`updatestock`), payload, { headers });
+
+    return data;
+  },
+
+  getallItems: async () => {
+    const data = await axios.get(ItemApi("getallitems"));
+
+    return data;
+  },
+
+  getallitembycategory: async (cat_id) => {
+    const data = await axios.get(ItemApi(`getitembycategory/${cat_id}`));
+
+    return data;
+  },
+};

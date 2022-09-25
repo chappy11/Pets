@@ -26,6 +26,12 @@ import Packed from "./pages/MyShop/Packed";
 import Deliver from "./pages/MyShop/Deliver";
 import "./App.css";
 import AllUser from "./pages/Admin/users/AllUsers";
+import LoadingOverlay from "react-loading-overlay";
+import ActiveUser from "./pages/Admin/users/ActiveUser";
+import AllShop from "./pages/Admin/shops/AllShop";
+import AllItems from "./pages/Admin/items/AllItems";
+import Categories from "./pages/Products";
+import Products from "./pages/Products";
 
 require("./App.css");
 
@@ -86,6 +92,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route path="/viewproduct/:id" element={<ViewProduct />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/products/:id" element={<Products />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order" element={<MyOrder />} />
           <Route path="/vieworder/:id/:reference" element={<ViewOrder />} />
@@ -101,7 +108,10 @@ function App() {
           <Route path="/" element={<Admin />} />
           <Route path="/users" element={<AllUser />} />
           <Route path="/pendinguser" element={<PendingUser />} />
-          <Route path="/pendingshop" element={<PendingShop />} />
+          <Route path="/activeuser" element={<ActiveUser />} />
+          <Route path="/shops" element={<AllShop />} />
+          <Route path="/pendingshops" element={<PendingShop />} />
+          <Route path="/items" element={<AllItems />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );

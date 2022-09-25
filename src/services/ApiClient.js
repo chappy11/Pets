@@ -37,3 +37,7 @@ export const OrderApi = (method) => {
 export const EmailApi = (method) => {
   return `${BASE_URL}email/${method}`;
 };
+
+export const DashboardApi = (method) => {
+  return `${BASE_URL}dashboard/${method}`;
+};

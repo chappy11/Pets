@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Row, Container, Col, Modal } from "react-bootstrap";
-import { Line, Navigation, SizeBox, TextInput, Button } from "../../components";
+import {
+  Line,
+  Navigation,
+  SizeBox,
+  TextInput,
+  Button,
+  Loading,
+} from "../../components";
 import StoreIcon from "@mui/icons-material/Store";
 import swal from "sweetalert";
 import * as S from "./style";
@@ -20,10 +27,13 @@ import { defaultThemes } from "../../constants/DefaultThemes";
 
 export default function CreateShop() {
   const [img, setImg] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [code, setCode] = useState(null);
+  const { alertSuccess, alertError, alertWarning, alertWithCallBack } =
+    usePrompts();
   const [sixDigitCode, setSixDigitCode] = useState(null);
-  const { alertSuccess, alertError, alertWarning } = usePrompts();
+
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -48,7 +58,12 @@ export default function CreateShop() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  function handleClick() {
+    openVerification();
+  }
+
   async function openVerification() {
+    setIsOpen(false);
     if (
       user.username === "" ||
       user.password === "" ||
@@ -94,6 +109,7 @@ export default function CreateShop() {
       alertWarning("Password do not match");
     } else {
       try {
+        setIsLoading(true);
         const sixDigit = Math.floor(100000 + Math.random() * 900000);
         setSixDigitCode(sixDigit);
         const payload = {
@@ -110,6 +126,8 @@ export default function CreateShop() {
         }
       } catch (e) {
         alertError();
+      } finally {
+        setIsLoading(false);
       }
     }
   }
@@ -134,8 +152,12 @@ export default function CreateShop() {
 
     const response = await User.createshop(formdata);
     if (response.data.status == 1) {
-      swal("Success", response.data.message, "success").then((val) => {
-        window.location.href = "/login";
+      alertWithCallBack({
+        title: "Registered",
+        message: "Successfully Registered",
+        icon: "success",
+        btnTextConfirm: "Login Now",
+        onConfirm: () => (window.location.href = "/login"),
       });
     } else {
       swal("Error", response.data.message, "error");
@@ -147,6 +169,7 @@ export default function CreateShop() {
 
   return (
     <>
+      <Loading isLoading={isLoading} />
       <Navigation />
       <Container>
         <Modal show={isOpen} aria-labelledby="contained-modal-title-vcenter">
@@ -176,15 +199,17 @@ export default function CreateShop() {
               <S.LinkButton size="sm" onClick={openVerification}>
                 Resend
               </S.LinkButton>
-              <Button onClick={handleSubmit}>Verify</Button>
-              <Button
-                color={defaultThemes.secondary}
-                onClick={() => setIsOpen(false)}
-              >
-                Close
-              </Button>
             </div>
           </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={handleSubmit}>Verify</Button>
+            <Button
+              color={defaultThemes.secondary}
+              onClick={() => setIsOpen(false)}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
         <SizeBox height={20} />
         <Row>
@@ -312,7 +337,7 @@ export default function CreateShop() {
               onChange={onChange}
             />
             <SizeBox height={15} />
-            <Button onClick={() => openVerification()}>Create Shop</Button>
+            <Button onClick={handleClick}>Create Shop</Button>
           </Col>
         </Row>
       </Container>

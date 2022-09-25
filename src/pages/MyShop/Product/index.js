@@ -17,6 +17,7 @@ import * as S from "./style";
 import useModal from "../../../hooks/useModal";
 import swal from "sweetalert";
 import UpdateStock from "../components/UpdateStock";
+import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
 
 export default function Product() {
   const [products, setProducts] = useState([]);
@@ -27,6 +28,7 @@ export default function Product() {
   const [error, setError] = useState(null);
   const [noItems, setNoItems] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useGetUserFromStorage();
 
   useEffect(() => {
     getProducts();
@@ -96,15 +98,29 @@ export default function Product() {
     });
   };
 
+  const isSubscribe = useMemo(() => {
+    if (user?.subscription_id == 0) {
+      return <p>You can only sell items if you subscribe to the application</p>;
+    }
+
+    return (
+      <Button className="float-right" onClick={handleAddProduct}>
+        Add New Product
+      </Button>
+    );
+  }, [user]);
+
   return (
     <Sidebar>
       <SizeBox height={20} />
       <Modal show={isOpen}>
-        <Modal.Title>
-          {currentItem.type === "add" ? "Stock In" : "Stock Out"}
-        </Modal.Title>
+        <Modal.Header>
+          <Modal.Title>
+            {currentItem.type === "add" ? "Stock In" : "Stock Out"}
+          </Modal.Title>
+        </Modal.Header>
         <Modal.Body>
-          <TextInput onChange={onChange} />
+          <TextInput onChange={onChange} type="number" />
         </Modal.Body>
         <Modal.Footer>
           <Button className="btn btn-dark" onClick={updateStock}>
@@ -119,10 +135,8 @@ export default function Product() {
         <Col>
           <h3>Products</h3>
         </Col>
-        <Col className="justify-content-end align-items-end">
-          <Button className="float-right" onClick={handleAddProduct}>
-            Add New Product
-          </Button>
+        <Col className="flex justify-content-end align-items-end">
+          {isSubscribe}
         </Col>
       </Row>
       <SizeBox height={20} />

@@ -18,12 +18,14 @@ export default function usePrompts() {
   };
 
   const alertWithCallBack = (data) => {
-    return swal(data?.type, data?.message, data?.type, {
+    return swal({
+      title: data?.title,
+      icon: data?.type,
       buttons: {
-        okay: data?.message ? data?.message : "Okay",
+        okay: data?.btnTextConfirm,
         value: "okay",
       },
-      text: "Close",
+      text: data?.message,
       dangerMode: true,
     }).then((val) => {
       if (val === "okay") {

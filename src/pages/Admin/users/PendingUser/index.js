@@ -1,28 +1,40 @@
-import { SizeBox } from "../../../../components";
+import { SizeBox, Button, Loading } from "../../../../components";
 
-import { Table, Image, Container, Button } from "react-bootstrap";
+import { Table, Image, Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { User } from "../../../../services/User";
 import swal from "sweetalert";
 import Sidebar from "../../component/Sidebar";
+import { defaultThemes } from "../../../../constants/DefaultThemes";
+import usePrompts from "../../../../hooks/usePrompts";
 export default function PendingUser() {
   const [user, setUser] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const { alertError, alertSuccess } = usePrompts();
   useEffect(() => {
     getUser();
   }, []);
 
+  useEffect(() => {
+    getUser();
+  }, [isLoading]);
   const getUser = async () => {
-    const response = await User.getpendinguser();
-    console.log(response);
-    if (response.data.status == 1) {
-      setUser(response.data.data);
-    } else {
-      setUser([]);
+    try {
+      const response = await User.getusers(2, 0);
+      console.log(response);
+      if (response.data.status == 1) {
+        setUser(response.data.data);
+      } else {
+        setUser([]);
+      }
+    } catch (e) {
+      alertError();
+      isLoading(false);
     }
   };
 
   const handleApproved = async (user_id) => {
+    setIsLoading(true);
     const payload = {
       user_id: user_id,
       status: 1,
@@ -30,15 +42,17 @@ export default function PendingUser() {
     const res = await User.updateStatus(payload);
 
     if (res.data.status == 1) {
-      getUser();
       swal("Succcess", "Successfully Approved", "success");
+      getUser();
     } else {
       swal("Error", "Something went wrong please try again later", "error");
     }
+    setIsLoading(false);
   };
 
   return (
     <Sidebar>
+      <Loading isLoading={isLoading} />
       <Container>
         <SizeBox height={20} />
         <h3>Pending User</h3>
@@ -49,7 +63,8 @@ export default function PendingUser() {
               <td>Username</td>
               <td>Name</td>
               <td>Email</td>
-              <td>Action</td>
+              <td>View</td>
+              <td>Actions</td>
             </tr>
           </thead>
           <tbody>
@@ -62,9 +77,18 @@ export default function PendingUser() {
                 </td>
                 <td>{val.email}</td>
                 <td>
-                  <Button onClick={() => handleApproved(val.user_id)}>
+                  <Button onClick={() => (window.location.href = "/")}>
+                    View
+                  </Button>
+                </td>
+                <td>
+                  <Button
+                    color={defaultThemes.primary}
+                    onClick={() => handleApproved(val.user_id)}
+                  >
                     Approved
                   </Button>
+                  <SizeBox width={5} />
                 </td>
               </tr>
             ))}

@@ -18,10 +18,12 @@
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-sidebar-menu": "^2.0.3",
     "react-dom": "^18.2.0",
+    "react-loading-overlay": "^1.0.1",
     "react-paypal-express-checkout": "^1.0.5",
     "react-pro-sidebar": "^0.7.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.4",
     "styled-components": "^5.3.5",
     "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4"

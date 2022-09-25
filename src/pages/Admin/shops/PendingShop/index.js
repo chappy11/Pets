@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { Container, Table, Button } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import { Shop } from "../../../../services/Shop";
 import { User } from "../../../../services/User";
 import swal from "sweetalert";
 import Sidebar from "../../component/Sidebar";
+import { Button } from "../../../../components";
 export default function PendingShop() {
   const [shop, setShop] = useState([]);
 
@@ -30,8 +31,8 @@ export default function PendingShop() {
     const res = await User.updateStatus(payload);
 
     if (res.data.status == 1) {
-      getShop();
       swal("Succcess", "Successfully Approved", "success");
+      getShop();
     } else {
       swal("Error", "Something went wrong please try again later", "error");
     }
