@@ -12,4 +12,5 @@ export const FormCotainer = styled.div`
   width: 500px;
   padding: 18px;
   border: 1px solid #d3d3d3;
+  background-color:#fefefe;
 `;

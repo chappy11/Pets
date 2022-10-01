@@ -171,7 +171,7 @@ export default function CreateShop() {
     <>
       <Loading isLoading={isLoading} />
       <Navigation />
-      <Container>
+      <S.CustomContainer>
         <Modal show={isOpen} aria-labelledby="contained-modal-title-vcenter">
           <Modal.Header>
             <HeaderText>Email Verification</HeaderText>
@@ -224,7 +224,8 @@ export default function CreateShop() {
             <SizeBox height={15} />
             <TextInput type="file" name="img" onChange={onImageChange} />
           </Col>
-          <Col md="7">
+          <S.CustomColumn  md="7">
+            <div>
             <HeaderText>
               <StoreIcon /> Create Shop
             </HeaderText>
@@ -338,9 +339,11 @@ export default function CreateShop() {
             />
             <SizeBox height={15} />
             <Button onClick={handleClick}>Create Shop</Button>
-          </Col>
+            </div>
+          </S.CustomColumn>
+          
         </Row>
-      </Container>
+      </S.CustomContainer>
     </>
   );
 }

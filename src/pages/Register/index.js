@@ -201,8 +201,8 @@ export default function Register() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Container>
-        <Row>
+      <S.CustomeContainer>
+        <S.CustomRow>
           <Col lg="3">
             <SizeBox height={50} />
             <S.ImageContainer>
@@ -215,7 +215,8 @@ export default function Register() {
 
             <TextInput type="file" name="img" onChange={onImageChange} />
           </Col>
-          <Col lg="7">
+          <S.CustomeColumn lg="7" >
+            <div>
             <SizeBox height={50} />
             <HeaderText>
               <Pets color={defaultThemes.secondary} /> Sign up
@@ -335,15 +336,11 @@ export default function Register() {
                 {" "}
                 <Button onClick={validaDate}>Register</Button>{" "}
               </Col>
-              <Col>
-                <Text textAlign={"center"}>
-                  Register as a <a href="/createshop">Shop Owner</a>
-                </Text>
-              </Col>
             </Row>
-          </Col>
-        </Row>
-      </Container>
+            </div>
+          </S.CustomeColumn>
+        </S.CustomRow>
+      </S.CustomeContainer>
     </>
   );
 }

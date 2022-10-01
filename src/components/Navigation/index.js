@@ -44,7 +44,7 @@ export default function Navigation() {
 
   const displayLinks = useMemo(() => {
     return (data ? NAVATION : NO_SESSION).map((val, index) => (
-      <Nav.Link href={val.url}>{val.name}</Nav.Link>
+    <S.CustomNav href={val.url}>{val.name}</S.CustomNav>
     ));
   }, [data]);
 
@@ -54,7 +54,7 @@ export default function Navigation() {
   }
 
   return (
-    <S.CustomNavbar variant="dark" expand="lg">
+    <S.CustomNavbar  expand="lg">
       <Container>
         <Navbar.Brand href="#home">Pet Society</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

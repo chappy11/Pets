@@ -24,6 +24,7 @@ export const CustomizeCard = styled(Card)`
   height: 300px;
   opacity: 1;
   cursor: pointer;
+  border:none;
   &:hover {
     visibility: visible;
     opacity: 0.5;
@@ -48,12 +49,15 @@ export const BodyText = styled.p`
   text-underline-offset: 5px;
   text-align: center;
   color: ${defaultThemes.primary};
+  
 `;
 
 export const Subtitle = styled.p`
   font-size: 0.9em;
+  text-align:center;
 `;
 
 export const Title = styled(Card.Title)`
-  color: ${defaultThemes.color001};
+  text-align:center;
+  font-size:18px;
 `;

@@ -1,3 +1,4 @@
+import { Container,Row,Col } from "react-bootstrap";
 import styled from "styled-components";
 import { TextInput } from "../../components";
 import { defaultThemes } from "../../constants/DefaultThemes";
@@ -39,4 +40,20 @@ export const LinkButton = styled.button`
   padding: 10px;
   background-color: transparent;
   color: ${defaultThemes.primary};
+`;
+
+export const CustomContainer = styled(Container)`
+  background-color:${defaultThemes.white};
+  padding:20px;
+`;
+
+export const CustomRow = styled(Row)`
+  flex:1;
+`;
+
+export const CustomColumn = styled(Col)`
+  display:flex;
+  flex:1;
+  justify-content:center;
+  align-items:center;
 `;

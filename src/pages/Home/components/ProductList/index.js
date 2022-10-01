@@ -3,9 +3,46 @@ import useGetAllProducts from "../../../../hooks/useGetAllProducts";
 import { BASE_URL } from "../../../../services/ApiClient";
 import * as S from "./style";
 import { SizeBox, Button } from "../../../../components";
+import { formatCurrency } from "../../../../utils/Money";
 
+const image = require('../../../../asset/pic1.jpg');
+
+const products = [
+  {
+    product_id:1,
+    productImage:image,
+    productName:"Ret",
+    category_name:"Dog",
+    stock:1,
+    price:200.00
+  },
+  {
+    product_id:1,
+    productImage:image,
+    productName:"Ret",
+    category_name:"Dog",
+    stock:1,
+    price:200.00
+  },
+  {
+    product_id:1,
+    productImage:image,
+    productName:"Ret",
+    category_name:"Dog",
+    stock:1,
+    price:200.00
+  },
+  {
+    product_id:1,
+    productImage:image,
+    productName:"Ret",
+    category_name:"Dog",
+    stock:1,
+    price:200.00
+  }
+];
 export default function ProductList() {
-  const { products } = useGetAllProducts();
+  // const { products } = useGetAllProducts();
 
   return (
     <Container>
@@ -20,18 +57,14 @@ export default function ProductList() {
             }
           >
             <S.ImageContainer style={{ width: "100%", height: 200 }}>
-              <S.CardImage src={BASE_URL + val.productImage} />
+              {/* <S.CardImage src={BASE_URL + val.productImage} /> */}
+              <S.CardImage src={val.productImage} />
             </S.ImageContainer>
 
             <Card.Body>
               <S.Title>{val.productName}</S.Title>
               <S.Subtitle>{val.category_name}</S.Subtitle>
-
-              <div>
-                <text>{val.stock} available</text>
-              </div>
-
-              <text>&#8369; {val.price}</text>
+              <S.Subtitle>{formatCurrency(val.price)}</S.Subtitle>
             </Card.Body>
           </S.CustomizeCard>
         ))}

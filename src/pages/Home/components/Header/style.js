@@ -7,8 +7,8 @@ export const HeaderBackground = styled.div`
 `;
 
 export const HeaderImage = styled.img`
-  heigth: 400px;
-  width: 400px;
+  heigth: 100%
+  width: 100%;
 `;
 
 export const HeaderText = styled.p`
@@ -34,3 +34,11 @@ export const Column = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const ColumnImage = styled.div`
+  display: flex;
+  flex: 1;
+
+  align-items: center;
+`;
+
