@@ -1,16 +1,18 @@
 import { SizeBox, Button, Loading } from "../../../../components";
 
-import { Table, Image, Container } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { User } from "../../../../services/User";
 import swal from "sweetalert";
 import Sidebar from "../../component/Sidebar";
 import { defaultThemes } from "../../../../constants/DefaultThemes";
 import usePrompts from "../../../../hooks/usePrompts";
+import Container from "../../../../components/Container";
 export default function PendingUser() {
   const [user, setUser] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { alertError, alertSuccess } = usePrompts();
+  const { alertError } = usePrompts();
+
   useEffect(() => {
     getUser();
   }, []);

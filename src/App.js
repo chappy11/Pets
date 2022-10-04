@@ -32,6 +32,7 @@ import AllShop from "./pages/Admin/shops/AllShop";
 import AllItems from "./pages/Admin/items/AllItems";
 import Categories from "./pages/Products";
 import Products from "./pages/Products";
+import SubscriptionList from "./pages/Admin/Subsription/SubcriptionList";
 
 require("./App.css");
 
@@ -112,6 +113,7 @@ function App() {
           <Route path="/shops" element={<AllShop />} />
           <Route path="/pendingshops" element={<PendingShop />} />
           <Route path="/items" element={<AllItems />} />
+          <Route path="/subscriptions" element={<SubscriptionList />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );

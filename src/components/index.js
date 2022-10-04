@@ -7,6 +7,7 @@ import ListItem from "./ListItem";
 import HeaderText from "./HeaderText";
 import Loading from "./Loading";
 import Text from "./Text";
+import Container from "./Container";
 export {
   TextInput,
   Navigation,
@@ -17,4 +18,5 @@ export {
   HeaderText,
   Loading,
   Text,
+  Container,
 };

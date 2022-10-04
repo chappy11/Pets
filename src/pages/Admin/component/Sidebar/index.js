@@ -1,4 +1,4 @@
-  import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Row, Col } from "react-bootstrap";
 import React from "react";
@@ -6,7 +6,13 @@ import { Link } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 import { SizeBox } from "../../../../components";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import { GridView, Logout, Sell, Storefront } from "@mui/icons-material";
+import {
+  GridView,
+  Logout,
+  Sell,
+  Storefront,
+  Subscriptions,
+} from "@mui/icons-material";
 import * as S from "./style";
 import LoadingOverlay from "react-loading-overlay";
 
@@ -67,6 +73,10 @@ export default function Sidebar(props) {
               <MenuItem icon={<Sell />}>
                 <Link to="/items" />
                 Item Selling
+              </MenuItem>
+              <MenuItem icon={<Subscriptions />}>
+                <Link to={"/subscriptions"} />
+                Manage Subscription
               </MenuItem>
               <MenuItem onClick={handleLogout} icon={<Logout />}>
                 Logout

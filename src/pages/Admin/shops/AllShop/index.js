@@ -2,8 +2,14 @@ import { Avatar } from "@mui/material";
 import React from "react";
 import { useEffect } from "react";
 import { useState, useMemo } from "react";
-import { Container, Table } from "react-bootstrap";
-import { Button, HeaderText, Line, SizeBox } from "../../../../components";
+import { Table } from "react-bootstrap";
+import {
+  Button,
+  HeaderText,
+  Line,
+  SizeBox,
+  Container,
+} from "../../../../components";
 import usePrompts from "../../../../hooks/usePrompts";
 import { BASE_URL } from "../../../../services/ApiClient";
 import { User } from "../../../../services/User";
@@ -21,7 +27,7 @@ export default function AllShop() {
   const getData = async () => {
     try {
       const response = await User.getusers(1, 3);
-      console.log(response.data.data);
+
       if (response.data.status == 1) {
         setData(response.data.data);
       }

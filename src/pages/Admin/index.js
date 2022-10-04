@@ -1,11 +1,12 @@
 import { HeaderText } from "../../components";
 import Sidebar from "./component/Sidebar";
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import DashBoardCard from "../../components/DashBoardCard";
 import { defaultThemes } from "../../constants/DefaultThemes";
 import { useState } from "react";
 import { DashBoard } from "../../services/DashBoard";
 import { useEffect } from "react";
+import Container from "../../components/Container";
 export default function Admin() {
   const [data, setData] = useState(null);
 

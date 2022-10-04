@@ -2,6 +2,6 @@ import styled from "styled-components";
 
 export const Line = styled.div`
   width: 100%;
-  height: 1px;
-  border: 1px solid lightgray;
+  height: 0.5px;
+  border: 0.5px solid lightgray;
 `;
