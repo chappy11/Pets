@@ -13,8 +13,8 @@ import {
   Storefront,
   Subscriptions,
 } from "@mui/icons-material";
+import CategoryIcon from "@mui/icons-material/Category";
 import * as S from "./style";
-import LoadingOverlay from "react-loading-overlay";
 
 export default function Sidebar(props) {
   function handleLogout() {
@@ -77,6 +77,10 @@ export default function Sidebar(props) {
               <MenuItem icon={<Subscriptions />}>
                 <Link to={"/subscriptions"} />
                 Manage Subscription
+              </MenuItem>
+              <MenuItem icon={<CategoryIcon />}>
+                <Link to={"/category"} />
+                Manage Categories
               </MenuItem>
               <MenuItem onClick={handleLogout} icon={<Logout />}>
                 Logout

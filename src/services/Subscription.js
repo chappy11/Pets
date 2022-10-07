@@ -25,4 +25,16 @@ export const Subscription = {
 
     return data;
   },
+  updateSubscription: async (payload) => {
+    const headers = {
+      "Content-Type": "text/plain",
+    };
+
+    console.log(payload);
+    const data = await axios.post(SubscriptionApi("update"), payload, {
+      headers,
+    });
+
+    return data;
+  },
 };

@@ -27,21 +27,6 @@ export default function Deliver() {
     }
   };
 
-  const handleUpdate = async (id) => {
-    const payload = {
-      id,
-      status: "4",
-    };
-    const resp = await Orders.updateStatus(payload);
-
-    if (resp.data.status == 1) {
-      getData();
-      swal("Success", resp.data.message, "success");
-      return;
-    }
-
-    swal("Error", resp.data.message, "error");
-  };
   return (
     <>
       <Sidebar>

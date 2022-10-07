@@ -12,10 +12,13 @@ import { formatCurrency } from "../../utils/Money";
 import { BASE_URL } from "../../services/ApiClient";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import OrderStatus from "./component/OrderStatus";
+import usePrompts from "../../hooks/usePrompts";
 
 export default function ViewOrder() {
   const [data, setData] = useState([]);
   const params = useParams();
+
+  const { alertSuccess, alertError } = usePrompts();
 
   useEffect(() => {
     getData();
@@ -28,6 +31,31 @@ export default function ViewOrder() {
       setData(res.data.data);
     }
   };
+
+  const updateStatus = async (payload) => {
+    try {
+      const resp = await Orders.updateStatus(payload);
+
+      if (resp.data.status == "1") {
+        alertSuccess(resp.data.message);
+        return;
+      }
+
+      alertError(resp.data.message);
+    } catch (e) {
+      alertError();
+    }
+  };
+
+  function handleReceivedItems() {
+    const payload = {
+      id: params.id,
+      status: "5",
+    };
+
+    updateStatus(payload);
+  }
+
   return (
     <>
       <Navigation />
@@ -42,7 +70,11 @@ export default function ViewOrder() {
                 <Accordion.Body>
                   <Container>
                     <OrderStatus status={val.status} />
-                    {val.status === "3" && <Button>Received Order</Button>}
+                    {val.status === "3" && (
+                      <Button onClick={handleReceivedItems}>
+                        Received Order
+                      </Button>
+                    )}
                     {/* <HeaderText>
                       {formatCurrency(parseFloat(val.totalAmount))}
                     </HeaderText> */}

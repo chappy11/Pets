@@ -1,8 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { DashBoard } from "../../services/DashBoard";
-
 import * as S from "./style";
 
 export default function DashBoardCard(props) {

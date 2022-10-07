@@ -8,6 +8,9 @@ import HeaderText from "./HeaderText";
 import Loading from "./Loading";
 import Text from "./Text";
 import Container from "./Container";
+import Title from "./Title";
+import Subtitle from "./Subtitle";
+import DashBoardCard from "./DashBoardCard";
 export {
   TextInput,
   Navigation,
@@ -19,4 +22,7 @@ export {
   Loading,
   Text,
   Container,
+  Title,
+  Subtitle,
+  DashBoardCard,
 };

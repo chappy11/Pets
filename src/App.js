@@ -33,6 +33,7 @@ import AllItems from "./pages/Admin/items/AllItems";
 import Categories from "./pages/Products";
 import Products from "./pages/Products";
 import SubscriptionList from "./pages/Admin/Subsription/SubcriptionList";
+import Category from "./pages/Admin/Category";
 
 require("./App.css");
 
@@ -103,7 +104,6 @@ function App() {
     }
 
     if (currentSession.user_roles == 0 || currentSession.user_roles == 3) {
-      console.log("GG");
       return (
         <Routes>
           <Route path="/" element={<Admin />} />
@@ -114,6 +114,7 @@ function App() {
           <Route path="/pendingshops" element={<PendingShop />} />
           <Route path="/items" element={<AllItems />} />
           <Route path="/subscriptions" element={<SubscriptionList />} />
+          <Route path="/category" element={<Category />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );

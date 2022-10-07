@@ -9,6 +9,14 @@ body {
   background-repeat: no-repeat !important;
 }
 
+td {
+  text-align: center;
+}
+
+th {
+  text-align: center !important;
+}
+
 p {
   line-height: 0.7em;
 }
