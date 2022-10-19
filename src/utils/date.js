@@ -1,5 +1,8 @@
 import dayjs from "dayjs";
 
+var isBetween = require("dayjs/plugin/isBetween");
+dayjs.extend(isBetween);
+
 export const getDateRange = (type) => {
   const start = dayjs().startOf(type);
   const end = dayjs().endOf(type);
@@ -10,4 +13,25 @@ export const getDateRange = (type) => {
     firstDate: firstDate,
     lastDate: lastDate,
   };
+};
+
+export const compareDate = (start, end) => {
+  const startDate = standarDateFormat(start);
+  const endDate = standarDateFormat(end);
+
+  const isValid = dayjs(start).isBefore(dayjs(end), "d");
+
+  return isValid;
+};
+
+export const isDateBetween = (start, end, current) => {
+  return dayjs(current).isBetween(start, end, "[)");
+};
+
+export const standarDateFormat = (date) => {
+  return dayjs(date).format("YYYY-MM-DD");
+};
+
+export const formatDisplayDate = (date) => {
+  return dayjs(date).format("MMM DD, YYYY hh:mm a");
 };

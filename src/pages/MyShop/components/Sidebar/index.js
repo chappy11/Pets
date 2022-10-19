@@ -17,6 +17,7 @@ import * as S from "./style";
 import { SizeBox } from "../../../../components";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import { blue } from "@mui/material/colors";
+import { Assessment } from "@mui/icons-material";
 
 export default function Sidebar(props) {
   function handleLogout() {
@@ -75,6 +76,10 @@ export default function Sidebar(props) {
                 Delivered
               </MenuItem>
             </SubMenu>
+            <MenuItem icon={<Assessment />}>
+              <Link to="/reports" />
+              Reports
+            </MenuItem>
             <MenuItem icon={<SubscriptionsIcon />}>
               My Subscription <Link to="/mysubscription" />
             </MenuItem>

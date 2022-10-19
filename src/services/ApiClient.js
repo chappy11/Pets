@@ -41,3 +41,7 @@ export const EmailApi = (method) => {
 export const DashboardApi = (method) => {
   return `${BASE_URL}dashboard/${method}`;
 };
+
+export const ShopReportApi = (method) => {
+  return `${BASE_URL}shopreport/${method}`;
+};

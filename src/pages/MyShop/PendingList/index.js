@@ -73,7 +73,7 @@ export default function PendingList() {
                       variant="dark"
                       onClick={() => handleUpdate(val.shoporder_id)}
                     >
-                      Packed
+                      Accept Order
                     </Button>
                   </td>
                 </tr>

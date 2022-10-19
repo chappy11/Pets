@@ -6,7 +6,9 @@ export const Card = styled.div`
   align-items: center;
   flex-direction: column;
   background-color: ${(props) => props.color};
-  padding: 15px 0;
+  padding: 15px;
+  cursor: pointer;
+  border-radius: 5px;
 `;
 
 export const NumberText = styled.text`

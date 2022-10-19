@@ -23,8 +23,7 @@ export default function ProductList() {
             }
           >
             <S.ImageContainer style={{ width: "100%", height: 200 }}>
-              {/* <S.CardImage src={BASE_URL + val.productImage} /> */}
-              <S.CardImage src={val.productImage} />
+              <S.CardImage src={BASE_URL + val.productImage} />
             </S.ImageContainer>
 
             <Card.Body>

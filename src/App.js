@@ -34,6 +34,7 @@ import Categories from "./pages/Products";
 import Products from "./pages/Products";
 import SubscriptionList from "./pages/Admin/Subsription/SubcriptionList";
 import Category from "./pages/Admin/Category";
+import Reports from "./pages/MyShop/Reports";
 
 require("./App.css");
 
@@ -82,6 +83,7 @@ function App() {
           <Route path="/mysubscription" element={<Subscription />} />
           <Route path="/choosesubscription" element={<ChooseSubscription />} />
           <Route path="/vieworder/:id" element={<ViewOrder />} />
+          <Route path="/reports" element={<Reports />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Routes>

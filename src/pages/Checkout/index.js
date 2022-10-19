@@ -14,13 +14,14 @@ import { Navigation, SizeBox } from "../../components";
 import swal from "sweetalert";
 import { Orders } from "../../services/Orders";
 import { getItem, KEY } from "../../utils/storage";
-import Paypal from "./components/Paypal";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { formatCurrency } from "../../utils/Money";
+import PaymentMethod from "./components/PaymentMethod";
 
 export default function Checkout() {
   const { item } = useActiveItem();
   const [isHalf, setIsHalf] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [isCheckout, setIsCheckout] = useState(false);
   const onChange = (e) => {
     setIsHalf(e.target.value);
@@ -49,29 +50,38 @@ export default function Checkout() {
     return total;
   };
   async function handleCheckout() {
-    const user = await getItem(KEY.ACCOUNT);
     if (isHalf === "") {
       swal("Warning", "Please Choose Payment", "warning");
-    } else {
-      const payload = {
-        user_id: user?.user_id,
-        total_amount: getTotal(),
-        isHalf: parseInt(isHalf),
-      };
-      const res = await Orders.checkout(payload);
-      if (res.data.status == 1) {
-        swal("Success", "Please Choose Payment", "success");
-      } else {
-        swal("Error", "Something went wrong", "error");
-      }
+      return;
     }
+
+    setIsOpen(true);
   }
+
+  const processCheckout = async () => {
+    const user = await getItem(KEY.ACCOUNT);
+    const payload = {
+      user_id: user?.user_id,
+      total_amount: getTotal(),
+      isHalf: parseInt(isHalf),
+    };
+    const res = await Orders.checkout(payload);
+    if (res.data.status == 1) {
+      swal("Success", "Order Created", "success");
+    } else {
+      swal("Error", "Something went wrong", "error");
+    }
+  };
 
   return (
     <>
       <Navigation />
       <SizeBox height={20} />
-
+      <PaymentMethod
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        checkout={processCheckout}
+      />
       <Container>
         <h5>Confirm Order</h5>
         <SizeBox height={30} />
@@ -114,28 +124,6 @@ export default function Checkout() {
         <SizeBox height={30} />
         <h5>Total: {formatCurrency(parseFloat(displayTotal()))}</h5>
         <Button onClick={handleCheckout}>Chekcout</Button>
-        <PayPalButtons
-          createOrder={(data, actions) => {
-            return actions.order.create({
-              purchase_units: [
-                {
-                  amount: {
-                    value: 500,
-                  },
-                },
-              ],
-            });
-          }}
-          onApprove={(data, actions) => {
-            return actions.order.capture().then((details) => {
-              swal("Success", "Successully paid", "success");
-            });
-          }}
-          onError={(err) => {
-            console.log("ERROR", JSON.parse(err));
-            swal("Error", "Something went wrong", "error");
-          }}
-        />
       </Container>
     </>
   );
