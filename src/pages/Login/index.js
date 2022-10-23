@@ -33,15 +33,15 @@ export default function Login() {
           console.log("SHOP");
 
           swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "http://localhost:3000/";
+            window.location.href = "/";
           });
         } else if (response.data.data.user_roles === "2") {
           swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "http://localhost:3000/";
+            window.location.href = "/";
           });
         } else if (response.data.data.user_roles == 0) {
           swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "http://localhost:3000/";
+            window.location.href = "/";
           });
         }
       } else {

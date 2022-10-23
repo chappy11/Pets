@@ -1,8 +1,15 @@
 import { Compress, GetAppRounded } from "@mui/icons-material";
+import dayjs from "dayjs";
 import React, { useState, useEffect, useCallback } from "react";
 import { useMemo } from "react";
 import { ShopReport } from "../services/ShopReport";
-import { compareDate, getDateRange, isDateBetween } from "../utils/date";
+import {
+  compareDate,
+  formatDisplayDate,
+  getDateRange,
+  isDateBetween,
+  standarDateFormat,
+} from "../utils/date";
 import { formatCurrency } from "../utils/Money";
 import { getItem, KEY } from "../utils/storage";
 import usePrompts from "./usePrompts";
@@ -22,17 +29,16 @@ export default function useGetAllSuccessTransaction() {
       setIsLoading(true);
       const account = await getItem(KEY.ACCOUNT);
       const res = await ShopReport.getShopReports(account?.shop_id);
-
-      setTransactions(res.data.data);
       const sales = {
         all: getTotalSales("", res.data.data),
         day: getTotalSales("d", res.data.data),
         week: getTotalSales("w", res.data.data),
         month: getTotalSales("M", res.data.data),
       };
-
+      console.log("RFES", res.data.data);
       setTotalSales(sales);
       setIsLoading(false);
+      setTransactions(res.data.data);
     } catch (error) {
       console.log(error);
       alertError();
@@ -42,43 +48,62 @@ export default function useGetAllSuccessTransaction() {
   const getTotalSales = (range, data) => {
     let total = 0;
     const dateRange = getDateRange(range);
+    const current = dayjs(new Date());
+    if (data?.length > 0) {
+      let filterd = [];
 
-    const filterd = data.filter((val) =>
-      isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
-    );
+      if (range !== "d") {
+        filterd = data.filter((val) =>
+          isDateBetween(
+            dateRange.firstDate,
+            dateRange.lastDate,
+            val.date_success
+          )
+        );
+      }
 
-    const list = range === "" ? data : filterd;
+      filterd = data.filter(
+        (val) =>
+          standarDateFormat(current) == standarDateFormat(val.date_success)
+      );
 
-    list.forEach((element) => {
-      total += parseFloat(element.order_total_amout);
-    });
+      const list = range === "" ? data : filterd;
 
-    return total;
+      list.forEach((element) => {
+        total += parseFloat(element.order_total_amout);
+      });
+
+      return total;
+    }
+
+    return 0;
   };
 
-  const getByMonth = useCallback(() => {
+  const getByMonth = () => {
     const dateRange = getDateRange("M");
     const filteredData = transactions.filter((val) =>
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
     setTransactions(filteredData);
-  }, [setTransactions, transactions]);
-
-  const getByWeek = useCallback(() => {
+  };
+  const getByWeek = () => {
     const dateRange = getDateRange("w");
     const filteredData = transactions.filter((val) =>
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
     setTransactions(filteredData);
-  }, [setTransactions, transactions]);
+  };
 
-  const getByDays = useCallback(() => {
+  const getByDays = () => {
     const dateRange = getDateRange("d");
-    const filteredData = transactions.filter((val) =>
-      isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
+    const current = dayjs(new Date());
+    const filteredData = transactions.filter(
+      (val) =>
+        standarDateFormat(current) === standarDateFormat(val.date_success)
     );
+
     setTransactions(filteredData);
-  }, [setTransactions, transactions]);
+  };
 
   const getByDateSearch = useCallback(
     (start, end) => {
@@ -107,11 +132,15 @@ export default function useGetAllSuccessTransaction() {
 
   const getSales = useMemo(() => {
     let total = 0;
-    transactions.forEach((val) => {
-      total += parseFloat(val.order_total_amout);
-    });
+    if (transactions?.length > 0) {
+      transactions.forEach((val) => {
+        total += parseFloat(val.order_total_amout);
+      });
 
-    return formatCurrency(total);
+      return formatCurrency(total);
+    }
+
+    return formatCurrency(0);
   }, [setTransactions, transactions]);
 
   return {

@@ -38,6 +38,7 @@ export default function ViewOrder() {
       const resp = await Orders.updateStatus(payload);
 
       if (resp.data.status == "1") {
+        getData();
         alertSuccess(resp.data.message);
         return;
       }
