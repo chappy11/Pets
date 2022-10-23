@@ -45,3 +45,7 @@ export const DashboardApi = (method) => {
 export const ShopReportApi = (method) => {
   return `${BASE_URL}shopreport/${method}`;
 };
+
+export const ReviewApi = (method) => {
+  return `${BASE_URL}review/${method}`;
+};

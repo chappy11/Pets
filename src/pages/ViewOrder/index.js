@@ -1,18 +1,19 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Accordion, Container, Row, Col, Button, Image } from "react-bootstrap";
+import { Accordion, Row, Col, Button, Image } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { Navigation, SizeBox } from "../../components";
+import { Navigation, SizeBox, Container } from "../../components";
 import HeaderText from "../../components/HeaderText";
 import Subtitle from "../../components/Subtitle";
 import ListItem from "../../components/ListItem";
 import { Orders } from "../../services/Orders";
 import { formatCurrency } from "../../utils/Money";
 import { BASE_URL } from "../../services/ApiClient";
-import SwipeRightIcon from "@mui/icons-material/SwipeRight";
+
 import OrderStatus from "./component/OrderStatus";
 import usePrompts from "../../hooks/usePrompts";
+import { defaultThemes } from "../../constants/DefaultThemes";
 
 export default function ViewOrder() {
   const [data, setData] = useState([]);
@@ -59,14 +60,19 @@ export default function ViewOrder() {
   return (
     <>
       <Navigation />
+      <SizeBox height={10} />
       <Container>
         <SizeBox height={30} />
-        <HeaderText>{params.reference}</HeaderText>
+        <HeaderText color={defaultThemes.secondary}>
+          {params.reference}
+        </HeaderText>
         <Accordion>
           {data.map((val, i) => (
             <>
               <Accordion.Item eventKey={i}>
-                <Accordion.Header>{val.shop_name}</Accordion.Header>
+                <Accordion.Header>
+                  <Subtitle>{val.shop_name}</Subtitle>
+                </Accordion.Header>
                 <Accordion.Body>
                   <Container>
                     <OrderStatus status={val.status} />
@@ -79,28 +85,31 @@ export default function ViewOrder() {
                       {formatCurrency(parseFloat(val.totalAmount))}
                     </HeaderText> */}
                     {val.items.map((item, i) => (
-                      <Row>
-                        <Col>
-                          <Image
-                            src={BASE_URL + item.productImage}
-                            sizes={"150px"}
-                            style={{ width: 150, height: 150 }}
-                          />
-                        </Col>
-                        <Col>
-                          <Subtitle>{item.productName}</Subtitle>
-                          <ListItem
-                            label="Number of Items: "
-                            value={item.orderItemNo + " " + item.unit}
-                          />
-                          <ListItem
-                            label="Total Amount: "
-                            value={formatCurrency(
-                              parseFloat(item.orderItemAmount)
-                            )}
-                          />
-                        </Col>
-                      </Row>
+                      <>
+                        <Row>
+                          <Col>
+                            <Image
+                              src={BASE_URL + item.productImage}
+                              sizes={"150px"}
+                              style={{ width: 150, height: 150 }}
+                            />
+                          </Col>
+                          <Col>
+                            <Subtitle>{item.productName}</Subtitle>
+                            <ListItem
+                              label="Number of Items: "
+                              value={item.orderItemNo + " " + item.unit}
+                            />
+                            <ListItem
+                              label="Total Amount: "
+                              value={formatCurrency(
+                                parseFloat(item.orderItemAmount)
+                              )}
+                            />
+                          </Col>
+                        </Row>
+                        <SizeBox height={10} />
+                      </>
                     ))}
                     <SizeBox height={15} />
                   </Container>

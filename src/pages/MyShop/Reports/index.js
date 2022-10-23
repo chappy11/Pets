@@ -63,7 +63,7 @@ export default function Reports() {
           <Col>
             <DashBoardCard
               onClick={() => getByMonth()}
-              color={defaultThemes.color001}
+              color={defaultThemes.secondary}
               title="This Month"
               subtitle={formatCurrency(totalSales?.month + 0)}
             />
@@ -143,7 +143,11 @@ export default function Reports() {
                 <td>{formatDisplayDate(val.date_success)}</td>
                 <td>{val.order_total_amout}</td>
                 <td>
-                  <Link to="/vieworder">View Order</Link>
+                  <Link
+                    to={`/viewordershop/${val.order_id}/${val.shopReference}`}
+                  >
+                    View Order
+                  </Link>
                 </td>
               </tr>
             ))}

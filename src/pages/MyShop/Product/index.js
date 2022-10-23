@@ -75,11 +75,11 @@ export default function Product() {
       };
 
       const response = await ProductAPi.updateStock(payload);
-      console.log("RESPONSE", response);
 
       if (response.data?.status == 1) {
         swal("Success", response.data.message, "success");
-
+        getProducts();
+        setIsOpen(false);
         return;
       }
 

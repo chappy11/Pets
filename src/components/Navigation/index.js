@@ -44,7 +44,7 @@ export default function Navigation() {
 
   const displayLinks = useMemo(() => {
     return (data ? NAVATION : NO_SESSION).map((val, index) => (
-    <S.CustomNav href={val.url}>{val.name}</S.CustomNav>
+      <S.CustomNav href={val.url}>{val.name}</S.CustomNav>
     ));
   }, [data]);
 
@@ -54,9 +54,9 @@ export default function Navigation() {
   }
 
   return (
-    <S.CustomNavbar  expand="lg">
+    <S.CustomNavbar variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">Pet Society</Navbar.Brand>
+        <S.CustomBrand href="#home">Pet Society</S.CustomBrand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">{displayLinks}</Nav>
@@ -82,9 +82,9 @@ export default function Navigation() {
             </Nav>
           ) : (
             <Nav>
-              <Nav.Link href="/login">Login</Nav.Link>
+              <S.CustomNav href="/login">Login</S.CustomNav>
               <Navbar.Text>/</Navbar.Text>
-              <Nav.Link href="/register">Register</Nav.Link>
+              <S.CustomNav href="/register">Register</S.CustomNav>
             </Nav>
           )}
         </Navbar.Collapse>

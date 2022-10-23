@@ -39,4 +39,16 @@ export const Orders = {
 
     return data;
   },
+  getOrderByShop: async (order_id, shop_id) => {
+    const data = await axios.get(
+      OrderApi(`getorderbyshop/${order_id}/${shop_id}`)
+    );
+
+    return data;
+  },
+  getallorder: async (shop_id) => {
+    const data = await axios.get(OrderApi(`getallorders/${shop_id}`));
+
+    return data;
+  },
 };

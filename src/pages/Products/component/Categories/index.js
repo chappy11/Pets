@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
+import { Title, SizeBox, Container } from "../../../../components";
 import { Category as Cat } from "../../../../services/Category";
+import * as S from "./style";
 
 export default function Categories(props) {
   const [categories, setCategories] = useState([]);
@@ -13,17 +15,48 @@ export default function Categories(props) {
     const resp = await Cat.getCategory();
 
     if (resp.data.status == 1) {
-      setCategories(resp.data.data);
+      const categoriesWithStatus = [];
+      resp.data.data.forEach((val) => {
+        const payload = {
+          ...val,
+          isActive: true,
+        };
+        categoriesWithStatus.push(payload);
+      });
+      setCategories(categoriesWithStatus);
     }
   };
 
-  const displayCategories = useMemo(() => {
-    return categories.map((val, i) => <p>{val.category_name}</p>);
-  }, [categories]);
+  const handleCheck = (id, isCheck) => {
+    const newState = categories.map((val) =>
+      val.category_id === id ? { ...val, isActive: !isCheck } : val
+    );
+
+    setCategories(newState);
+    props.filterByCategory(newState);
+  };
 
   return (
     <Row>
-      <Col>{displayCategories}</Col>
+      <Col md={3}>
+        <SizeBox height={20} />
+        <Container>
+          <S.CategoryContainer>
+            <S.TitleText>Category</S.TitleText>
+          </S.CategoryContainer>
+
+          <SizeBox height={20} />
+          {categories.map((val, i) => (
+            <S.CategoryContainer>
+              <S.Category
+                onClick={() => handleCheck(val.category_id, val.isActive)}
+                checked={val.isActive}
+                label={val.category_name}
+              />
+            </S.CategoryContainer>
+          ))}
+        </Container>
+      </Col>
       <Col>{props.children}</Col>
     </Row>
   );

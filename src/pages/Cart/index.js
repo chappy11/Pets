@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form, Stack, Image, Row, Col } from "react-bootstrap";
+import { Form, Stack, Image, Row, Col } from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Navigation, SizeBox, TextInput, Line, Button } from "../../components";
+import {
+  Navigation,
+  SizeBox,
+  TextInput,
+  Line,
+  Button,
+  Container,
+} from "../../components";
 import RemoveIcon from "@mui/icons-material/Remove";
 import useGetCartItems from "../../hooks/useActiveItem";
 import { BASE_URL } from "../../services/ApiClient";
@@ -16,6 +23,7 @@ import * as S from "./style";
 import ListItem from "../../components/ListItem";
 import { formatCurrency } from "../../utils/Money";
 import swal from "sweetalert";
+import { defaultThemes } from "../../constants/DefaultThemes";
 export default function Cart() {
   const [item, setItem] = useState([]);
   const [isHalf, setHalf] = useState(0);
@@ -139,7 +147,7 @@ export default function Cart() {
                   </S.Column>
                   <S.Column>
                     <Stack direction="horizontal">
-                      <S.Box>
+                      <S.Box color={defaultThemes.red}>
                         <IconButton
                           onClick={() => increment(item.cart_id)}
                           size="10"
@@ -150,7 +158,7 @@ export default function Cart() {
                       <S.StockBox>
                         <Subtitle>{item.noItem + " " + item.unit}</Subtitle>
                       </S.StockBox>
-                      <S.Box>
+                      <S.Box color={defaultThemes.red}>
                         <IconButton onClick={() => decrement(item.cart_id)}>
                           <RemoveIcon />
                         </IconButton>
@@ -183,7 +191,7 @@ export default function Cart() {
         <h3 style={{ textAlign: "right" }}>
           {formatCurrency(+displayTotal())}
         </h3>
-        <Button onClick={handleCheckout}>Checkout</Button>
+        <Button onClick={handleCheckout}>Place Order</Button>
       </Container>
     </>
   );

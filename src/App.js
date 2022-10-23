@@ -35,6 +35,7 @@ import Products from "./pages/Products";
 import SubscriptionList from "./pages/Admin/Subsription/SubcriptionList";
 import Category from "./pages/Admin/Category";
 import Reports from "./pages/MyShop/Reports";
+import ViewShopOrder from "./pages/MyShop/ViewShopOrder";
 
 require("./App.css");
 
@@ -66,6 +67,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/createshop" element={<CreateShop />} />
+          <Route path="/products" element={<Products />} />
         </Routes>
       );
     }
@@ -84,7 +86,10 @@ function App() {
           <Route path="/choosesubscription" element={<ChooseSubscription />} />
           <Route path="/vieworder/:id" element={<ViewOrder />} />
           <Route path="/reports" element={<Reports />} />
-
+          <Route
+            path="/viewordershop/:id/:reference"
+            element={<ViewShopOrder />}
+          />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );
@@ -96,7 +101,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route path="/viewproduct/:id" element={<ViewProduct />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/products/:id" element={<Products />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order" element={<MyOrder />} />
           <Route path="/vieworder/:id/:reference" element={<ViewOrder />} />

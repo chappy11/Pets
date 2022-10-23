@@ -16,7 +16,7 @@ export default function PaymentMethod(props) {
               purchase_units: [
                 {
                   amount: {
-                    value: 500,
+                    value: props.total,
                   },
                 },
               ],

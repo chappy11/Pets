@@ -19,7 +19,7 @@ export const Box = styled.div`
   height: 50px;
   justify-content: center;
   align-items: center;
-  background-color: darkgray;
+  background-color: ${(props) => props.color};
 `;
 
 export const StockBox = styled.div`

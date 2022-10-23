@@ -1,4 +1,4 @@
-import { Compress } from "@mui/icons-material";
+import { Compress, GetAppRounded } from "@mui/icons-material";
 import React, { useState, useEffect, useCallback } from "react";
 import { useMemo } from "react";
 import { ShopReport } from "../services/ShopReport";
@@ -62,7 +62,7 @@ export default function useGetAllSuccessTransaction() {
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
     setTransactions(filteredData);
-  }, [setTransactions]);
+  }, [setTransactions, transactions]);
 
   const getByWeek = useCallback(() => {
     const dateRange = getDateRange("w");
@@ -70,7 +70,7 @@ export default function useGetAllSuccessTransaction() {
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
     setTransactions(filteredData);
-  }, [setTransactions]);
+  }, [setTransactions, transactions]);
 
   const getByDays = useCallback(() => {
     const dateRange = getDateRange("d");
@@ -78,11 +78,10 @@ export default function useGetAllSuccessTransaction() {
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
     setTransactions(filteredData);
-  }, [setTransactions]);
+  }, [setTransactions, transactions]);
 
   const getByDateSearch = useCallback(
     (start, end) => {
-      console.log(start);
       if (start === null) {
         alertWarning("Please specify start date");
         return;
@@ -98,12 +97,9 @@ export default function useGetAllSuccessTransaction() {
         return;
       }
 
-      console.log(compareDate(start, end));
-
       const filtered = transactions.filter((val) =>
         isDateBetween(start, end, val.date_success)
       );
-      console.log(filtered);
       setTransactions(filtered);
     },
     [setTransactions, transactions]

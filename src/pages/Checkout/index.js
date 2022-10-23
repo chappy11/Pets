@@ -1,16 +1,8 @@
 import React, { useState } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Stack,
-  Image,
-  Button,
-} from "react-bootstrap";
+import { Row, Col, Form, Image } from "react-bootstrap";
 import useActiveItem from "../../hooks/useActiveItem";
 import { BASE_URL } from "../../services/ApiClient";
-import { Navigation, SizeBox } from "../../components";
+import { Navigation, SizeBox, Container, Button } from "../../components";
 import swal from "sweetalert";
 import { Orders } from "../../services/Orders";
 import { getItem, KEY } from "../../utils/storage";
@@ -81,6 +73,7 @@ export default function Checkout() {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         checkout={processCheckout}
+        total={parseFloat(getTotal())}
       />
       <Container>
         <h5>Confirm Order</h5>
@@ -123,7 +116,7 @@ export default function Checkout() {
         />
         <SizeBox height={30} />
         <h5>Total: {formatCurrency(parseFloat(displayTotal()))}</h5>
-        <Button onClick={handleCheckout}>Chekcout</Button>
+        <Button onClick={handleCheckout}>Confirm Order Now</Button>
       </Container>
     </>
   );

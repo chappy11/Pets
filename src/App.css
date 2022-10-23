@@ -5,12 +5,13 @@
 }
 
 body {
-  background: whitesmoke !important;
+  background: #eeeeee !important;
   background-repeat: no-repeat !important;
 }
 
 td {
   text-align: center;
+  vertical-align: middle;
 }
 
 th {
