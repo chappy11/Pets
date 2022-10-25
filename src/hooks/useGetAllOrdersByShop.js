@@ -37,8 +37,6 @@ export default function useGetAllOrdersByShop() {
         setDataCounts(dataCounts);
         return;
       }
-
-      alertError();
     } catch (e) {
       alertError();
     }

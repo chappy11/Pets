@@ -224,124 +224,123 @@ export default function CreateShop() {
             <SizeBox height={15} />
             <TextInput type="file" name="img" onChange={onImageChange} />
           </Col>
-          <S.CustomColumn  md="7">
+          <S.CustomColumn md="7">
             <div>
-            <HeaderText>
-              <StoreIcon /> Create Shop
-            </HeaderText>
-            <Line />
-            <SizeBox height={20} />
-            <HeaderText>Account Details</HeaderText>
-            <Row>
-              <Col>
-                <TextInput
-                  name="username"
-                  placeholder="Enter username"
-                  label="Username"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  type="password"
-                  name="cpassword"
-                  placeholder="Confirm Password"
-                  label="Confirm Password"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  type="password"
-                  name="password"
-                  placeholder="Enter password"
-                  label="Password"
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TextInput
-                  name="contact"
-                  placeholder="09XXXXXXXXX"
-                  label="Contact Number"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="email"
-                  placeholder="Enter your Email"
-                  label="Shop Email Address"
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
-            <SizeBox height={10} />
-            <SizeBox height={15} />
-            <HeaderText>Shop Details</HeaderText>
-            <TextInput
-              name="name"
-              placeholder="Enter shop name"
-              label="Shop Name"
-              onChange={onChange}
-            />
-            <SizeBox height={10} />
-            <TextInput
-              name="description"
-              placeholder="Enter shop description"
-              label="Shop Description"
-              onChange={onChange}
-            />
-            <TextInput
-              name="shippingFee"
-              type="number"
-              placeholder={user.shippingFee}
-              label="Shop Shipping Fee"
-              onChange={onChange}
-            />
-            <SizeBox height={15} />
-            <HeaderText>Personal Information</HeaderText>
-            <SizeBox height={12} />
-            <Row>
-              <Col>
-                <TextInput
-                  name="firstname"
-                  placeholder="Enter firstname"
-                  label="Firstname"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="middlename"
-                  placeholder="Enter middlename"
-                  label="Middlename"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="lastname"
-                  placeholder="Enter lastname"
-                  label="Lastname"
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
-            <SizeBox height={10} />
-            <TextInput
-              name="address"
-              label="Address"
-              placeholder="St. Brgy City"
-              onChange={onChange}
-            />
-            <SizeBox height={15} />
-            <Button onClick={handleClick}>Create Shop</Button>
+              <HeaderText>
+                <StoreIcon /> Create Shop
+              </HeaderText>
+              <Line />
+              <SizeBox height={20} />
+              <HeaderText>Account Details</HeaderText>
+              <Row>
+                <Col>
+                  <TextInput
+                    name="username"
+                    placeholder="Enter username"
+                    label="Username"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    type="password"
+                    name="password"
+                    placeholder="Enter password"
+                    label="Password"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    type="password"
+                    name="cpassword"
+                    placeholder="Confirm Password"
+                    label="Confirm Password"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <TextInput
+                    name="contact"
+                    placeholder="09XXXXXXXXX"
+                    label="Contact Number"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="email"
+                    placeholder="Enter your Email"
+                    label="Shop Email Address"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <SizeBox height={10} />
+              <SizeBox height={15} />
+              <HeaderText>Shop Details</HeaderText>
+              <TextInput
+                name="name"
+                placeholder="Enter shop name"
+                label="Shop Name"
+                onChange={onChange}
+              />
+              <SizeBox height={10} />
+              <TextInput
+                name="description"
+                placeholder="Enter shop description"
+                label="Shop Description"
+                onChange={onChange}
+              />
+              <TextInput
+                name="shippingFee"
+                type="number"
+                placeholder={user.shippingFee}
+                label="Shop Shipping Fee"
+                onChange={onChange}
+              />
+              <SizeBox height={15} />
+              <HeaderText>Personal Information</HeaderText>
+              <SizeBox height={12} />
+              <Row>
+                <Col>
+                  <TextInput
+                    name="firstname"
+                    placeholder="Enter firstname"
+                    label="Firstname"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="middlename"
+                    placeholder="Enter middlename"
+                    label="Middlename"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="lastname"
+                    placeholder="Enter lastname"
+                    label="Lastname"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <SizeBox height={10} />
+              <TextInput
+                name="address"
+                label="Address"
+                placeholder="St. Brgy City"
+                onChange={onChange}
+              />
+              <SizeBox height={15} />
+              <Button onClick={handleClick}>Create Shop</Button>
             </div>
           </S.CustomColumn>
-          
         </Row>
       </S.CustomContainer>
     </>
