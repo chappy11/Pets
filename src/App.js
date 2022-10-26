@@ -26,7 +26,7 @@ import Packed from "./pages/MyShop/Packed";
 import Deliver from "./pages/MyShop/Deliver";
 import "./App.css";
 import AllUser from "./pages/Admin/users/AllUsers";
-import LoadingOverlay from "react-loading-overlay";
+
 import ActiveUser from "./pages/Admin/users/ActiveUser";
 import AllShop from "./pages/Admin/shops/AllShop";
 import AllItems from "./pages/Admin/items/AllItems";

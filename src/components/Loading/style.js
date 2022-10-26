@@ -1,18 +1,6 @@
 import styled, { css } from "styled-components";
-import LoadingOverlay from "react-loading-overlay";
-import { defaultThemes } from "../../constants/DefaultThemes";
 
-export const StyledLoader = styled(LoadingOverlay)`
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  .MyLoader_overlay {
-    background: black;
-  }
-  &.MyLoader_wrapper--active {
-    overflow: hidden;
-  }
-`;
+import { defaultThemes } from "../../constants/DefaultThemes";
 
 export const DarkBackground = styled.div`
   /* Hidden by default */
