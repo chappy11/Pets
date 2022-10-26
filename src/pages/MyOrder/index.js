@@ -23,9 +23,9 @@ export default function MyOrder() {
     const user = await getItem(KEY.ACCOUNT);
     const res = await Orders.getuserorder(user.user_id);
 
-    // if (res.data.status == 1) {
-    //   setData(res.data.data);
-    // }
+    if (res.data.status == 1) {
+      setData(res.data.data);
+    }
   };
 
   const displayEmpty = useMemo(() => {
@@ -83,7 +83,7 @@ export default function MyOrder() {
                         (window.location.href = `/vieworder/${val.order_id}/${val.reference}`)
                       }
                     >
-                      View Order
+                      View Order Status
                     </Button>
                   </Container>
                 </Accordion.Body>
@@ -92,6 +92,7 @@ export default function MyOrder() {
             </>
           ))}
         </Accordion>
+        <SizeBox height={30} />
         {displayEmpty}
       </Container>
     </>

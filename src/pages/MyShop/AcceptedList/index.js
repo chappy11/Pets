@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Container, Table, Button } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 import { BASE_URL } from "../../../services/ApiClient";
 import Sidebar from "../components/Sidebar";
 import { Orders } from "../../../services/Orders";
@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { formatCurrency } from "../../../utils/Money";
 import HeaderText from "../../../components/HeaderText";
 import swal from "sweetalert";
-import { SizeBox } from "../../../components";
+import { Container, SizeBox } from "../../../components";
 
 export default function AcceptedList() {
   const [order, setOrder] = useState([]);

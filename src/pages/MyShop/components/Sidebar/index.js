@@ -51,7 +51,11 @@ export default function Sidebar(props) {
             <MenuItem icon={<DashboardIcon />}>
               Dashboard <Link to="/" />{" "}
             </MenuItem>
-            <MenuItem icon={<PersonOutlineIcon />}>Profile</MenuItem>
+            <MenuItem icon={<PersonOutlineIcon />}>
+              {" "}
+              <Link to="/profile" />
+              Profile
+            </MenuItem>
             <MenuItem icon={<InventoryIcon />}>
               Inventory <Link to="/myproduct" />
             </MenuItem>

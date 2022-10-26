@@ -36,6 +36,7 @@ import SubscriptionList from "./pages/Admin/Subsription/SubcriptionList";
 import Category from "./pages/Admin/Category";
 import Reports from "./pages/MyShop/Reports";
 import ViewShopOrder from "./pages/MyShop/ViewShopOrder";
+import Profiles from "./pages/Profiles";
 
 require("./App.css");
 
@@ -83,6 +84,7 @@ function App() {
           <Route path="/packed" element={<Packed />} />
           <Route path="/deliver" element={<Deliver />} />
           <Route path="/mysubscription" element={<Subscription />} />
+          <Route path="/profile" element={<Profiles />} />
           <Route path="/choosesubscription" element={<ChooseSubscription />} />
           <Route path="/vieworder/:id" element={<ViewOrder />} />
           <Route path="/reports" element={<Reports />} />
@@ -100,6 +102,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/viewproduct/:id" element={<ViewProduct />} />
+          <Route path="/profile" element={<Profiles />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/products" element={<Products />} />
           <Route path="/checkout" element={<Checkout />} />

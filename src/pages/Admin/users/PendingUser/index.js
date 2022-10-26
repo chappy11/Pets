@@ -44,7 +44,7 @@ export default function PendingUser() {
     const res = await User.updateStatus(payload);
 
     if (res.data.status == 1) {
-      swal("Succcess", "Successfully Approved", "success");
+      swal("Succcess", "Successfully Activated", "success");
       getUser();
     } else {
       swal("Error", "Something went wrong please try again later", "error");
@@ -88,7 +88,7 @@ export default function PendingUser() {
                     color={defaultThemes.primary}
                     onClick={() => handleApproved(val.user_id)}
                   >
-                    Approved
+                    Activate
                   </Button>
                   <SizeBox width={5} />
                 </td>

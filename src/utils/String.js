@@ -23,3 +23,11 @@ export const isMobileNumberValid = (mobile) => {
 
   return mobile.match(format);
 };
+
+export const displayStringMonth = (noMonths) => {
+  if (+noMonths > 1) {
+    return noMonths + " " + "months";
+  }
+
+  return noMonths + " " + "month";
+};

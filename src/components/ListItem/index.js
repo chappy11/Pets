@@ -7,9 +7,9 @@ export default function ListItem(props) {
       <Col>
         <S.Label>{props.label}</S.Label>
       </Col>
-      <Col>
+      <S.ValueContainer alignment={props ? props.alignment : "flex-start"}>
         <S.Value>{props.value}</S.Value>
-      </Col>
+      </S.ValueContainer>
     </Row>
   );
 }

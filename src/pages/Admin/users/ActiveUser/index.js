@@ -48,7 +48,6 @@ export default function ActiveUser(props) {
     }
   }
   const displayData = useMemo(() => {
-    console.log("GG");
     return data.map((val, i) => (
       <tr key={val.user_id}>
         <td>{val.createAt}</td>
