@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Accordion, Row, Col, Button, Image } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { Navigation, SizeBox, Container } from "../../components";
+import { Navigation, SizeBox, Container, Text } from "../../components";
 import HeaderText from "../../components/HeaderText";
 import Subtitle from "../../components/Subtitle";
 import ListItem from "../../components/ListItem";
@@ -76,6 +76,7 @@ export default function ViewOrder() {
                 </Accordion.Header>
                 <Accordion.Body>
                   <Container>
+                    <Text>Order Status:</Text>
                     <OrderStatus status={val.status} />
                     {val.status === "3" && (
                       <Button onClick={handleReceivedItems}>

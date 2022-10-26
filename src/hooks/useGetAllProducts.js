@@ -3,7 +3,7 @@ import { Product } from "../services/Product";
 
 export default function useGetAllProducts() {
   const [products, setProducts] = useState([]);
-
+  const [filteredProduct, setFilteredProduct] = useState([]);
   useEffect(() => {
     getProducts();
   }, []);
@@ -13,6 +13,7 @@ export default function useGetAllProducts() {
 
     if (response.data.status == 1) {
       setProducts(response.data.data);
+      setFilteredProduct(response.data.data);
     } else {
       setProducts([]);
     }
@@ -28,16 +29,14 @@ export default function useGetAllProducts() {
         filteredCategories.some((e) => e.category_id === val.category_id)
       );
 
-      setProducts(filteredProducts);
+      setFilteredProduct(filteredProducts);
     },
     [setProducts, products]
   );
 
-  useEffect(() => {
-    getProducts();
-  }, [filterByCategory]);
   return {
     products,
     filterByCategory,
+    filteredProduct,
   };
 }

@@ -71,3 +71,9 @@ export const Section = styled.section`
 export const CardBody = styled.div`
   background-color: ${defaultThemes.white};
 `;
+
+export const SeeMore = styled.p`
+  font-size: 18px;
+  text-align: center;
+  color: ${defaultThemes.secondary};
+`;

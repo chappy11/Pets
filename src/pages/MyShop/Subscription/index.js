@@ -16,7 +16,8 @@ export default function Subscription() {
   const { alertSuccess, alertError } = usePrompts();
   const [isLoading, setIsLoading] = useState(false);
   const [select, setSelect] = useState(null);
-  async function handleClick(sub_id) {
+
+  async function handleClick(sub_id, price_limit) {
     setIsLoading(true);
     const payload = {
       shop_id: user.shop_id,
@@ -24,9 +25,9 @@ export default function Subscription() {
     };
 
     const resp = await Shop.subscribe(payload);
-
+    const newUser = { ...resp.data.data, price_limit: price_limit };
     if (resp.data.status == 1) {
-      await localStorage.setItem("Account", JSON.stringify(resp.data.data));
+      await localStorage.setItem("Account", JSON.stringify(newUser));
       alertSuccess(resp.data.message);
       setSelect(sub_id);
       //   window.location.href = "/mysubscription";
@@ -40,7 +41,7 @@ export default function Subscription() {
     return subscriptions?.map((val, i) => (
       <Col md={4}>
         <S.Card
-          onClick={() => handleClick(val.subscription_id)}
+          onClick={() => handleClick(val.subscription_id, val.price_limit)}
           color={
             val.subscription_id === (select ? select : user?.subscription_id)
               ? defaultThemes.secondary

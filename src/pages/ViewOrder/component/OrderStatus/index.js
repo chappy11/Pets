@@ -1,33 +1,53 @@
 import React from "react";
 import { useMemo } from "react";
-import ListItem from "../../../../components/ListItem";
+import { Text } from "../../../../components";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import DepartureBoardIcon from "@mui/icons-material/DepartureBoard";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 export default function OrderStatus(props) {
   const displayStatus = useMemo(() => {
     if (props?.status === "0") {
-      return <ListItem label="Pending" value={<WarningAmberIcon />} />;
+      return (
+        <Text>
+          <WarningAmberIcon /> Pending
+        </Text>
+      );
     }
 
     if (props?.status === "1") {
-      return <ListItem label="Accepted" value={<SwipeRightIcon />} />;
+      return (
+        <Text>
+          <SwipeRightIcon /> Accepted
+        </Text>
+      );
     }
 
     if (props?.status === "2") {
       return (
-        <ListItem label="Ready for Delivery" value={<DepartureBoardIcon />} />
+        <Text>
+          <DepartureBoardIcon /> Ready for Delivery
+        </Text>
       );
     }
 
     if (props?.status === "3") {
       return (
-        <ListItem label="Out for delivery" value={<LocalShippingIcon />} />
+        <Text>
+          <LocalShippingIcon /> Out for delivery
+        </Text>
       );
     }
-  }, [props]);
+
+    if (props?.status === "5") {
+      return (
+        <Text color="#4BB543">
+          <ThumbUpAltIcon /> Received Order
+        </Text>
+      );
+    }
+  }, [props?.status]);
 
   return <>{displayStatus}</>;
 }

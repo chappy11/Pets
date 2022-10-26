@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { Container, Table, Button } from "react-bootstrap";
+import { useState, useMemo, useCallback } from "react";
+import { Table, Button } from "react-bootstrap";
 import { BASE_URL } from "../../../services/ApiClient";
 import Sidebar from "../components/Sidebar";
 import { Orders } from "../../../services/Orders";
@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { formatCurrency } from "../../../utils/Money";
 import HeaderText from "../../../components/HeaderText";
 import swal from "sweetalert";
-import { SizeBox } from "../../../components";
+import { SizeBox, Container } from "../../../components";
 
 export default function PendingList() {
   const [order, setOrder] = useState([]);
@@ -21,27 +21,49 @@ export default function PendingList() {
   const getData = async () => {
     const user = await getItem(KEY.ACCOUNT);
     const res = await Orders.getShopOrder(user.shop_id, "0");
-    console.log("DATA", res.data.data);
     if (res.data.status == 1) {
       setOrder(res.data.data);
     }
   };
 
-  const handleUpdate = async (id) => {
-    const payload = {
-      id,
-      status: "1",
-    };
-    const resp = await Orders.updateStatus(payload);
+  const handleUpdate = useCallback(
+    async (id) => {
+      const payload = {
+        id,
+        status: "1",
+      };
+      const resp = await Orders.updateStatus(payload);
 
-    if (resp.data.status == 1) {
-      getData();
-      swal("Success", resp.data.message, "success");
-      return;
-    }
+      if (resp.data.status == 1) {
+        swal("Success", resp.data.message, "success");
+        return;
+      }
 
-    swal("Error", resp.data.message, "error");
-  };
+      swal("Error", resp.data.message, "error");
+    },
+    [order, setOrder]
+  );
+
+  const displayTable = useMemo(() => {
+    return order.map((val, i) => (
+      <tr>
+        <td>{val.createAt}</td>
+
+        <td>{val.referenceNo}</td>
+        <td>{`${val.firstname} ${val.middlename} ${val.lastname}`}</td>
+        <td>{formatCurrency(parseFloat(val.shopordertotal))}</td>
+        <td>
+          <Button variant="dark" onClick={() => handleUpdate(val.shoporder_id)}>
+            Accept Order
+          </Button>
+        </td>
+      </tr>
+    ));
+  }, [order, setOrder]);
+
+  useEffect(() => {
+    getData();
+  }, [handleUpdate]);
   return (
     <>
       <Sidebar>
@@ -58,27 +80,7 @@ export default function PendingList() {
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              {order.map((val, i) => (
-                <tr>
-                  <td>{val.createAt}</td>
-
-                  <td>{val.referenceNo}</td>
-                  <td>
-                    {`${val.firstname} ${val.middlename} ${val.lastname}`}
-                  </td>
-                  <td>{formatCurrency(parseFloat(val.shopordertotal))}</td>
-                  <td>
-                    <Button
-                      variant="dark"
-                      onClick={() => handleUpdate(val.shoporder_id)}
-                    >
-                      Accept Order
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody>{displayTable}</tbody>
           </Table>
         </Container>
       </Sidebar>

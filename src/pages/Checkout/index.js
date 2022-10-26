@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Row, Col, Form, Image } from "react-bootstrap";
+import { Row, Col, Form, Image, Table } from "react-bootstrap";
 import useActiveItem from "../../hooks/useActiveItem";
 import { BASE_URL } from "../../services/ApiClient";
-import { Navigation, SizeBox, Container, Button } from "../../components";
+import { Navigation, SizeBox, Container, Button, Text } from "../../components";
 import swal from "sweetalert";
 import { Orders } from "../../services/Orders";
 import { getItem, KEY } from "../../utils/storage";
@@ -59,7 +59,9 @@ export default function Checkout() {
     };
     const res = await Orders.checkout(payload);
     if (res.data.status == 1) {
+      setIsOpen(false);
       swal("Success", "Order Created", "success");
+      window.location.href = "/order";
     } else {
       swal("Error", "Something went wrong", "error");
     }
@@ -78,26 +80,29 @@ export default function Checkout() {
       <Container>
         <h5>Confirm Order</h5>
         <SizeBox height={30} />
-        {item.map((val) => (
-          <>
-            <Row key={val.product_id}>
-              <Col>
-                <Image
-                  src={BASE_URL + val.productImage}
-                  width={100}
-                  height={100}
-                />
-              </Col>
-              <Col>
-                <h5 key={val?.shop_id}>{val.productName}</h5>
-              </Col>
-              <Col>
-                <p>{val.totalAmount}</p>
-              </Col>
-            </Row>
-            <SizeBox height={20} />
-          </>
-        ))}
+        <Table>
+          <tbody>
+            {item.map((val) => (
+              <>
+                <tr key={val.product_id}>
+                  <td>
+                    <Image
+                      src={BASE_URL + val.productImage}
+                      width={100}
+                      height={100}
+                    />
+                  </td>
+                  <td>
+                    <Text>{val.productName}</Text>
+                  </td>
+                  <td>
+                    <p>{val.totalAmount}</p>
+                  </td>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </Table>
 
         <p>Pay</p>
         <Form.Check

@@ -1,14 +1,11 @@
 import Sidebar from "../components/Sidebar";
+import { Table, Row, Col, ButtonGroup, Modal, Button } from "react-bootstrap";
 import {
-  Table,
-  Row,
-  Col,
-  Button,
-  ButtonGroup,
-  Modal,
-  Form,
-} from "react-bootstrap";
-import { SizeBox, TextInput } from "../../../components";
+  SizeBox,
+  TextInput,
+  Button as CustomButton,
+  Container,
+} from "../../../components";
 import { getItem, KEY } from "../../../utils/storage";
 import { Product as ProductAPi } from "../../../services/Product";
 import { BASE_URL } from "../../../services/ApiClient";
@@ -104,96 +101,98 @@ export default function Product() {
     }
 
     return (
-      <Button className="float-right" onClick={handleAddProduct}>
+      <CustomButton className="float-right" onClick={handleAddProduct}>
         Add New Product
-      </Button>
+      </CustomButton>
     );
   }, [user]);
 
   return (
     <Sidebar>
-      <SizeBox height={20} />
-      <Modal show={isOpen}>
-        <Modal.Header>
-          <Modal.Title>
-            {currentItem.type === "add" ? "Stock In" : "Stock Out"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <TextInput onChange={onChange} type="number" />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button className="btn btn-dark" onClick={updateStock}>
-            Save
-          </Button>
-          <Button className="btn btn-danger" onClick={() => setIsOpen(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Row>
-        <Col>
-          <h3>Products</h3>
-        </Col>
-        <Col className="flex justify-content-end align-items-end">
-          {isSubscribe}
-        </Col>
-      </Row>
-      <SizeBox height={20} />
-      <Table responsive={"md"} bordered={true}>
-        <thead>
-          <tr>
-            <th>Date Created</th>
-            <th>Image</th>
-            <th>Name</th>
-
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Date Updated</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((val, i) => (
+      <Container>
+        <SizeBox height={20} />
+        <Modal show={isOpen}>
+          <Modal.Header>
+            <Modal.Title>
+              {currentItem.type === "add" ? "Stock In" : "Stock Out"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <TextInput onChange={onChange} type="number" />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="btn btn-dark" onClick={updateStock}>
+              Save
+            </Button>
+            <Button className="btn btn-danger" onClick={() => setIsOpen(false)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Row>
+          <Col>
+            <h3>Products</h3>
+          </Col>
+          <S.JustifyEnd className="flex-1 justify-content-end align-items-end">
+            {isSubscribe}
+          </S.JustifyEnd>
+        </Row>
+        <SizeBox height={20} />
+        <Table responsive={"md"} bordered={true}>
+          <thead>
             <tr>
-              <td>{val.p_createdAt}</td>
-              <td>
-                <img
-                  src={BASE_URL + "" + val.productImage}
-                  alt="product"
-                  style={{ width: 50, height: 50 }}
-                />
-              </td>
-              <td>{val.productName}</td>
-              <td>
-                {val.stock} {val.unit}
-              </td>
-              <td>{val.price}</td>
-              <td>{itemAvailability(val.stock)}</td>
-              <td>{val.p_updateAt}</td>
-              <td>
-                <ButtonGroup className="me-2">
-                  <Button
-                    variant="success"
-                    size={"sm"}
-                    onClick={() => handleModal(val, "add")}
-                  >
-                    Stock In{" "}
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size={"sm"}
-                    onClick={() => handleModal(val, "out")}
-                  >
-                    Stock out
-                  </Button>
-                </ButtonGroup>
-              </td>
+              <th>Date Created</th>
+              <th>Image</th>
+              <th>Name</th>
+
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Date Updated</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {products.map((val, i) => (
+              <tr>
+                <td>{val.p_createdAt}</td>
+                <td>
+                  <img
+                    src={BASE_URL + "" + val.productImage}
+                    alt="product"
+                    style={{ width: 50, height: 50 }}
+                  />
+                </td>
+                <td>{val.productName}</td>
+                <td>
+                  {val.stock} {val.unit}
+                </td>
+                <td>{val.price}</td>
+                <td>{itemAvailability(val.stock)}</td>
+                <td>{val.p_updateAt}</td>
+                <td>
+                  <ButtonGroup className="me-2">
+                    <Button
+                      variant="success"
+                      size={"sm"}
+                      onClick={() => handleModal(val, "add")}
+                    >
+                      Stock In{" "}
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size={"sm"}
+                      onClick={() => handleModal(val, "out")}
+                    >
+                      Stock out
+                    </Button>
+                  </ButtonGroup>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Container>
     </Sidebar>
   );
 }

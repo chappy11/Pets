@@ -4,6 +4,8 @@ import { BASE_URL } from "../../../../services/ApiClient";
 import * as S from "./style";
 import { SizeBox, Container, Text } from "../../../../components";
 import { formatCurrency } from "../../../../utils/Money";
+import { Link } from "react-router-dom";
+import { defaultThemes } from "../../../../constants/DefaultThemes";
 
 const image = require("../../../../asset/pic1.jpg");
 
@@ -38,7 +40,10 @@ export default function ProductList() {
             </S.CustomizeCard>
           ))}
         </Row>
-        <Text>Show More</Text>
+        <SizeBox height={20} />
+        <S.SeeMore>
+          <a href="/products">See More</a>
+        </S.SeeMore>
       </Container>
     </S.Section>
   );

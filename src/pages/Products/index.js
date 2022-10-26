@@ -8,10 +8,10 @@ import { BASE_URL } from "../../services/ApiClient";
 import { formatCurrency } from "../../utils/Money";
 
 export default function Products() {
-  const { products, filterByCategory } = useGetAllProducts();
+  const { products, filterByCategory, filteredProduct } = useGetAllProducts();
 
   const display = useMemo(() => {
-    return products.map((val) => (
+    return filteredProduct.map((val) => (
       <S.CustomizeCard
         onClick={() =>
           (window.location.href = `/viewproduct/${val.product_id}`)
@@ -26,7 +26,7 @@ export default function Products() {
         <S.Subtitle>{formatCurrency(+val.price)}</S.Subtitle>
       </S.CustomizeCard>
     ));
-  }, [products]);
+  }, [products, filterByCategory, filteredProduct]);
   return (
     <>
       <Navigation />

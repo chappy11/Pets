@@ -24,6 +24,8 @@ import ListItem from "../../components/ListItem";
 import { formatCurrency } from "../../utils/Money";
 import swal from "sweetalert";
 import { defaultThemes } from "../../constants/DefaultThemes";
+import { useMemo } from "react";
+import Empty from "../../components/Empty";
 export default function Cart() {
   const [item, setItem] = useState([]);
   const [isHalf, setHalf] = useState(0);
@@ -31,6 +33,10 @@ export default function Cart() {
   useEffect(() => {
     getCart();
   }, []);
+
+  const displayEmpty = useMemo(() => {
+    return item.length < 1 && <Empty type="cart" />;
+  }, [item]);
 
   const getCart = async () => {
     const user = await getItem(KEY.ACCOUNT);
@@ -188,10 +194,15 @@ export default function Cart() {
             ))}
           </>
         ))}
-        <h3 style={{ textAlign: "right" }}>
-          {formatCurrency(+displayTotal())}
-        </h3>
-        <Button onClick={handleCheckout}>Place Order</Button>
+        {item.length > 0 && (
+          <>
+            <h3 style={{ textAlign: "right" }}>
+              {formatCurrency(+displayTotal())}
+            </h3>
+            <Button onClick={handleCheckout}>Place Order</Button>
+          </>
+        )}
+        {displayEmpty}
       </Container>
     </>
   );
