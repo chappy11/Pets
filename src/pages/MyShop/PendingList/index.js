@@ -52,6 +52,7 @@ export default function PendingList() {
         <td>{val.referenceNo}</td>
         <td>{`${val.firstname} ${val.middlename} ${val.lastname}`}</td>
         <td>{formatCurrency(parseFloat(val.shopordertotal))}</td>
+        <td>{formatCurrency(parseFloat(val.shoporderpaid))}</td>
         <td>
           <Button variant="dark" onClick={() => handleUpdate(val.shoporder_id)}>
             Accept Order
@@ -77,6 +78,7 @@ export default function PendingList() {
                 <th>Reference Number</th>
                 <th>Customer Name</th>
                 <th>Total Amount</th>
+                <th>Total Paid</th>
                 <th>Action</th>
               </tr>
             </thead>

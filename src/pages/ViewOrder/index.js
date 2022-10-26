@@ -27,7 +27,7 @@ export default function ViewOrder() {
 
   const getData = async () => {
     const res = await Orders.getorderbyShop(params.id);
-
+    console.log("RESPONSE", res.data.data);
     if (res.data.status == 1) {
       setData(res.data.data);
     }
@@ -76,16 +76,14 @@ export default function ViewOrder() {
                 </Accordion.Header>
                 <Accordion.Body>
                   <Container>
+                    <Text>
+                      {val.paid != val.totalAmount && val.status !== "5"
+                        ? `You have current balance of ${val.paid}`
+                        : ""}
+                    </Text>
                     <Text>Order Status:</Text>
                     <OrderStatus status={val.status} />
-                    {val.status === "3" && (
-                      <Button onClick={handleReceivedItems}>
-                        Received Order
-                      </Button>
-                    )}
-                    {/* <HeaderText>
-                      {formatCurrency(parseFloat(val.totalAmount))}
-                    </HeaderText> */}
+
                     {val.items.map((item, i) => (
                       <>
                         <Row>

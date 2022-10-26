@@ -26,10 +26,11 @@ import swal from "sweetalert";
 import { defaultThemes } from "../../constants/DefaultThemes";
 import { useMemo } from "react";
 import Empty from "../../components/Empty";
+import usePrompts from "../../hooks/usePrompts";
 export default function Cart() {
   const [item, setItem] = useState([]);
   const [isHalf, setHalf] = useState(0);
-
+  const { alertWarning } = usePrompts();
   useEffect(() => {
     getCart();
   }, []);
@@ -106,6 +107,16 @@ export default function Cart() {
   }
 
   function handleCheckout() {
+    const allItems = [];
+    item.forEach((val, i) => {
+      const filtered = val.data.filter((x) => x.item_status === "1");
+      allItems.push(...filtered);
+    });
+
+    if (allItems.length < 1) {
+      alertWarning("Please check you item to be order");
+      return;
+    }
     window.location.href = "/checkout";
   }
 

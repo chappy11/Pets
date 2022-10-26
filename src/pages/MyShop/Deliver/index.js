@@ -1,19 +1,20 @@
 import React from "react";
 import { useState } from "react";
-import { Table, Button } from "react-bootstrap";
-import { BASE_URL } from "../../../services/ApiClient";
+import { Table } from "react-bootstrap";
+
 import Sidebar from "../components/Sidebar";
 import { Orders } from "../../../services/Orders";
 import { getItem, KEY } from "../../../utils/storage";
 import { useEffect } from "react";
 import { formatCurrency } from "../../../utils/Money";
 import HeaderText from "../../../components/HeaderText";
-import swal from "sweetalert";
-import { Container, SizeBox } from "../../../components";
+
+import { Container, SizeBox, Button } from "../../../components";
+import usePrompts from "../../../hooks/usePrompts";
 
 export default function Deliver() {
   const [order, setOrder] = useState([]);
-
+  const { alertSuccess, alertError } = usePrompts();
   useEffect(() => {
     getData();
   }, []);
@@ -21,11 +22,36 @@ export default function Deliver() {
   const getData = async () => {
     const user = await getItem(KEY.ACCOUNT);
     const res = await Orders.getShopOrder(user.shop_id, "3");
-    console.log("DATA", res.data.data);
+
     if (res.data.status == 1) {
       setOrder(res.data.data);
     }
   };
+
+  const updateStatus = async (payload) => {
+    try {
+      const resp = await Orders.updateStatus(payload);
+
+      if (resp.data.status == "1") {
+        getData();
+        alertSuccess(resp.data.message);
+        return;
+      }
+
+      alertError(resp.data.message);
+    } catch (e) {
+      alertError();
+    }
+  };
+
+  function handleReceivedItems(order_id) {
+    const payload = {
+      id: order_id,
+      status: "5",
+    };
+
+    updateStatus(payload);
+  }
 
   return (
     <>
@@ -41,6 +67,8 @@ export default function Deliver() {
                 <th>Customer Name</th>
                 <th>Total Amount</th>
                 <th>Status</th>
+                <th>Paid</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +83,12 @@ export default function Deliver() {
                   <td>{formatCurrency(parseFloat(val.shopordertotal))}</td>
                   <td>
                     {val.shop_order_status !== "5" ? "On Deliver" : "Recieved"}
+                  </td>
+                  <td>{formatCurrency(+val.shoporderpaid)}</td>
+                  <td>
+                    <Button onClick={() => handleReceivedItems(val.order_id)}>
+                      Order Receive
+                    </Button>
                   </td>
                 </tr>
               ))}

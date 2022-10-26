@@ -9,7 +9,7 @@ const PAYPAL = require("../../../../../asset/paypal.png");
 export default function PaymentMethod(props) {
   const { isOpen, setIsOpen, subscribe } = props;
   return (
-    <Modal show={isOpen}>
+    <Modal show={isOpen} onHide={() => setIsOpen(false)}>
       <Modal.Header>PayWith</Modal.Header>
 
       <SizeBox height={20} />
