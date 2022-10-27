@@ -18,7 +18,7 @@ import useGetAllOrdersByShop from "../../hooks/useGetAllOrdersByShop";
 export default function MyShop() {
   const { totalSales } = useGetAllSuccessTransaction();
   const { orders, dataCounts } = useGetAllOrdersByShop();
-  console.log(dataCounts);
+  console.log(totalSales);
   return (
     <Sidebar>
       <Container>

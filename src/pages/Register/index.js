@@ -103,6 +103,8 @@ export default function Register() {
       alertWarning("Mobile Number is Invalid");
     } else if (!emailIsvalid(user.email)) {
       alertWarning("Email is Invalid");
+    } else if (user.password.length < 8) {
+      alertWarning("Password should be 8 characters");
     } else {
       try {
         setIsLoading(true);
@@ -215,128 +217,128 @@ export default function Register() {
 
             <TextInput type="file" name="img" onChange={onImageChange} />
           </Col>
-          <S.CustomeColumn lg="7" >
+          <S.CustomeColumn lg="7">
             <div>
-            <SizeBox height={50} />
-            <HeaderText>
-              <Pets color={defaultThemes.secondary} /> Sign up
-            </HeaderText>
-            <Line />
-            <SizeBox height={20} />
-            <Text>
-              If you're a shop owner you can register your shop here{" "}
-              <a href="/createshop">Create Shop</a>
-            </Text>
-            <SizeBox height={20} />
-            <HeaderText>Account Details</HeaderText>
-            <Row>
-              <Col>
-                <TextInput
-                  name="username"
-                  placeholder="Enter username"
-                  label="Username"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="password"
-                  type="password"
-                  placeholder="Enter password"
-                  label="Password"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="cpassword"
-                  type="password"
-                  placeholder="Confirm Password"
-                  label="Confirm Password"
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
-            <SizeBox height={10} />
-            <Row>
-              <Col>
-                <TextInput
-                  name="email"
-                  placeholder="Enter email"
-                  label="Email"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="contact"
-                  placeholder="Enter contact number"
-                  label="Contact Number"
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
-            <SizeBox height={18} />
-            <HeaderText>Personal Information</HeaderText>
-            <Row>
-              <Col>
-                <TextInput
-                  name="firstname"
-                  placeholder="Enter firstname"
-                  label="Firstname"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="middlename"
-                  placeholder="Enter middlename"
-                  label="Middlename"
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <TextInput
-                  name="lastname"
-                  placeholder="Enter lastname"
-                  label="Lastname"
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
-            <SizeBox height={10} />
-            <Row>
-              <Col>
-                <Form.Label>Gender</Form.Label>
-                <Form.Select name="gender" onChange={onChange}>
-                  <option value="">Choose</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </Form.Select>
-              </Col>
-              <Col>
-                <TextInput
-                  label="Birthdate"
-                  type="date"
-                  name="birthdate"
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
-            <SizeBox height={10} />
-            <TextInput
-              name="address"
-              label="Address"
-              placeholder="St. Brgy City"
-              onChange={onChange}
-            />
-            <SizeBox height={15} />
-            <Row>
-              <Col>
-                {" "}
-                <Button onClick={validaDate}>Register</Button>{" "}
-              </Col>
-            </Row>
+              <SizeBox height={50} />
+              <HeaderText>
+                <Pets color={defaultThemes.secondary} /> Sign up
+              </HeaderText>
+              <Line />
+              <SizeBox height={20} />
+              <Text>
+                If you're a shop owner you can register your shop here{" "}
+                <a href="/createshop">Create Shop</a>
+              </Text>
+              <SizeBox height={20} />
+              <HeaderText>Account Details</HeaderText>
+              <Row>
+                <Col>
+                  <TextInput
+                    name="username"
+                    placeholder="Enter username"
+                    label="Username"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="password"
+                    type="password"
+                    placeholder="Enter password"
+                    label="Password"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="cpassword"
+                    type="password"
+                    placeholder="Confirm Password"
+                    label="Confirm Password"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <SizeBox height={10} />
+              <Row>
+                <Col>
+                  <TextInput
+                    name="email"
+                    placeholder="Enter email"
+                    label="Email"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="contact"
+                    placeholder="Enter contact number"
+                    label="Contact Number"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <SizeBox height={18} />
+              <HeaderText>Personal Information</HeaderText>
+              <Row>
+                <Col>
+                  <TextInput
+                    name="firstname"
+                    placeholder="Enter firstname"
+                    label="Firstname"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="middlename"
+                    placeholder="Enter middlename"
+                    label="Middlename"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="lastname"
+                    placeholder="Enter lastname"
+                    label="Lastname"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <SizeBox height={10} />
+              <Row>
+                <Col>
+                  <Form.Label>Gender</Form.Label>
+                  <Form.Select name="gender" onChange={onChange}>
+                    <option value="">Choose</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </Form.Select>
+                </Col>
+                <Col>
+                  <TextInput
+                    label="Birthdate"
+                    type="date"
+                    name="birthdate"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <SizeBox height={10} />
+              <TextInput
+                name="address"
+                label="Address"
+                placeholder="St. Brgy City"
+                onChange={onChange}
+              />
+              <SizeBox height={15} />
+              <Row>
+                <Col>
+                  {" "}
+                  <Button onClick={validaDate}>Register</Button>{" "}
+                </Col>
+              </Row>
             </div>
           </S.CustomeColumn>
         </S.CustomRow>

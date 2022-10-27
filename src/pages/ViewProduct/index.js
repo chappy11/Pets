@@ -167,7 +167,7 @@ export default function ViewProduct() {
     if (res.data.status == 1) {
       swal("Succes", "Successfully Added to you Cart", "success");
     } else {
-      swal("Oops", "Something went wrong", "error");
+      swal("Oops", res.data.message, "error");
     }
   }
 

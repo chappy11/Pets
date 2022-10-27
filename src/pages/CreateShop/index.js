@@ -107,6 +107,8 @@ export default function CreateShop() {
       );
     } else if (user.password !== user.cpassword) {
       alertWarning("Password do not match");
+    } else if (user.password.length < 8) {
+      alertWarning("Password should be 8 characters");
     } else {
       try {
         setIsLoading(true);

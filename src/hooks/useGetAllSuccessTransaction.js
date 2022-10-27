@@ -16,6 +16,7 @@ import usePrompts from "./usePrompts";
 
 export default function useGetAllSuccessTransaction() {
   const [transactions, setTransactions] = useState([]);
+  const [filteredTransaction, setFilteredTransaction] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalSales, setTotalSales] = useState(null);
   const { alertError, alertWarning } = usePrompts();
@@ -30,53 +31,84 @@ export default function useGetAllSuccessTransaction() {
       const account = await getItem(KEY.ACCOUNT);
       const res = await ShopReport.getShopReports(account?.shop_id);
       const sales = {
-        all: getTotalSales("", res.data.data),
-        day: getTotalSales("d", res.data.data),
-        week: getTotalSales("w", res.data.data),
-        month: getTotalSales("M", res.data.data),
+        all: getAllTotalSales(res.data.data),
+        day: getSalesByDay(res.data.data),
+        week: getSalesByWeek(res.data.data),
+        month: getSalesByMonth(res.data.data),
       };
-      console.log("RFES", res.data.data);
       setTotalSales(sales);
       setIsLoading(false);
       setTransactions(res.data.data);
+      setFilteredTransaction(res.data.data);
     } catch (error) {
       console.log(error);
       alertError();
     }
   };
 
-  const getTotalSales = (range, data) => {
+  const getAllTotalSales = (data) => {
     let total = 0;
-    const dateRange = getDateRange(range);
-    const current = dayjs(new Date());
-    if (data?.length > 0) {
-      let filterd = [];
 
-      if (range !== "d") {
-        filterd = data.filter((val) =>
-          isDateBetween(
-            dateRange.firstDate,
-            dateRange.lastDate,
-            val.date_success
-          )
-        );
-      }
-
-      filterd = data.filter(
-        (val) =>
-          standarDateFormat(current) == standarDateFormat(val.date_success)
-      );
-
-      const list = range === "" ? data : filterd;
-
-      list.forEach((element) => {
-        total += parseFloat(element.order_total_amout);
-      });
-
-      return total;
+    if (data?.length < 1) {
+      return 0;
     }
 
-    return 0;
+    data?.forEach((element) => {
+      total += parseFloat(element.order_total_amout);
+    });
+
+    return total;
+  };
+
+  const getSalesByDay = (data) => {
+    const current = dayjs(new Date());
+    let total = 0;
+    if (data?.length < 1) {
+      return 0;
+    }
+    const filteredData = data?.filter(
+      (val) =>
+        standarDateFormat(current.toString()) ===
+        standarDateFormat(val.date_success)
+    );
+
+    filteredData?.forEach((element) => {
+      total += parseFloat(element.order_total_amout);
+    });
+
+    return total;
+  };
+
+  const getSalesByWeek = (data) => {
+    const range = getDateRange("w");
+    let total = 0;
+    if (data?.length < 1) {
+      return 0;
+    }
+    const filterdData = data?.filter((val) =>
+      isDateBetween(range.firstDate, range.lastDate, val.date_success)
+    );
+    filterdData?.forEach((element) => {
+      total += parseFloat(element.order_total_amout);
+    });
+
+    return total;
+  };
+
+  const getSalesByMonth = (data) => {
+    const range = getDateRange("M");
+    let total = 0;
+    if (data?.length < 1) {
+      return 0;
+    }
+    const filterdData = data?.filter((val) =>
+      isDateBetween(range.firstDate, range.lastDate, val.date_success)
+    );
+    filterdData?.forEach((element) => {
+      total += parseFloat(element.order_total_amout);
+    });
+
+    return total;
   };
 
   const getByMonth = () => {
@@ -84,14 +116,15 @@ export default function useGetAllSuccessTransaction() {
     const filteredData = transactions.filter((val) =>
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
-    setTransactions(filteredData);
+    filteredTransaction(filteredData);
   };
+
   const getByWeek = () => {
     const dateRange = getDateRange("w");
     const filteredData = transactions.filter((val) =>
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
-    setTransactions(filteredData);
+    setFilteredTransaction(filteredData);
   };
 
   const getByDays = () => {
@@ -102,7 +135,7 @@ export default function useGetAllSuccessTransaction() {
         standarDateFormat(current) === standarDateFormat(val.date_success)
     );
 
-    setTransactions(filteredData);
+    setFilteredTransaction(filteredData);
   };
 
   const getByDateSearch = useCallback(
@@ -121,19 +154,27 @@ export default function useGetAllSuccessTransaction() {
         alertWarning("Invalid date sequence");
         return;
       }
+      const endDate = standarDateFormat(dayjs().add(1, "day"));
+      const startDate = standarDateFormat(start);
+      const isDateIsEqual = startDate === standarDateFormat(end);
 
-      const filtered = transactions.filter((val) =>
-        isDateBetween(start, end, val.date_success)
-      );
-      setTransactions(filtered);
+      const filtered = transactions.filter((val) => {
+        if (isDateIsEqual) {
+          return startDate === standarDateFormat(val.date_success);
+        } else {
+          return isDateBetween(startDate, endDate, val.date_success);
+        }
+      });
+      console.log(filtered);
+      setFilteredTransaction(filtered);
     },
-    [setTransactions, transactions]
+    [filteredTransaction, setFilteredTransaction]
   );
 
   const getSales = useMemo(() => {
     let total = 0;
-    if (transactions?.length > 0) {
-      transactions.forEach((val) => {
+    if (filteredTransaction?.length > 0) {
+      filteredTransaction.forEach((val) => {
         total += parseFloat(val.order_total_amout);
       });
 
@@ -141,7 +182,7 @@ export default function useGetAllSuccessTransaction() {
     }
 
     return formatCurrency(0);
-  }, [setTransactions, transactions]);
+  }, [setFilteredTransaction, filteredTransaction]);
 
   return {
     transactions,
@@ -151,6 +192,7 @@ export default function useGetAllSuccessTransaction() {
     getByWeek,
     totalSales,
     getByDateSearch,
+    filteredTransaction,
     getData,
     getSales,
   };

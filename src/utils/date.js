@@ -18,7 +18,9 @@ export const getDateRange = (type) => {
 export const compareDate = (start, end) => {
   const startDate = standarDateFormat(start);
   const endDate = standarDateFormat(end);
-
+  if (start === end) {
+    return true;
+  }
   const isValid = dayjs(start).isBefore(dayjs(end), "d");
 
   return isValid;

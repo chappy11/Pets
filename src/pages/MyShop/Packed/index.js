@@ -70,6 +70,15 @@ export default function Packed() {
                   <td>{formatCurrency(parseFloat(val.shopordertotal))}</td>
                   <td>
                     <Button
+                      onClick={() =>
+                        (window.location.href = `/viewordershop/${val.order_id}/${val.shopReference}`)
+                      }
+                    >
+                      View
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
                       variant="dark"
                       onClick={() => handleUpdate(val.shoporder_id)}
                     >

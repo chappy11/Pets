@@ -10,6 +10,7 @@ import {
   Title,
   Text,
 } from "../../../components";
+import { useReactToPrint } from "react-to-print";
 import useGetAllSuccessTransaction from "../../../hooks/useGetAllSuccessTransaction";
 import * as S from "./style";
 import { defaultThemes } from "../../../constants/DefaultThemes";
@@ -17,11 +18,13 @@ import { formatCurrency } from "../../../utils/Money";
 import { useMemo, useState } from "react";
 import { formatDisplayDate } from "../../../utils/date";
 import { Link } from "react-router-dom";
+import { useRef } from "react";
 
 export default function Reports() {
   const {
     transactions,
     isLoading,
+    filteredTransaction,
     getSales,
     getByDays,
     getByWeek,
@@ -30,7 +33,10 @@ export default function Reports() {
     getByDateSearch,
     getData,
   } = useGetAllSuccessTransaction();
-
+  const compref = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => compref.current,
+  });
   const [dates, setDates] = useState({
     start: "",
     end: "",
@@ -126,7 +132,7 @@ export default function Reports() {
           </Col>
         </Row>
         <SizeBox height={12} />
-        <Table variant="bordered">
+        <Table variant="bordered" ref={compref}>
           <thead>
             <tr>
               <th>Reference No.</th>
@@ -137,7 +143,7 @@ export default function Reports() {
           </thead>
 
           <tbody>
-            {transactions?.map((val) => (
+            {filteredTransaction?.map((val) => (
               <tr>
                 <td>{val.shopReference}</td>
                 <td>{formatDisplayDate(val.date_success)}</td>
@@ -157,6 +163,7 @@ export default function Reports() {
           <S.NoItemFound>No Item Found</S.NoItemFound>
         ) : null}
         <Text>{getSales}</Text>
+        <Button onClick={() => handlePrint()}>Print</Button>
       </Container>
     </Sidebar>
   );

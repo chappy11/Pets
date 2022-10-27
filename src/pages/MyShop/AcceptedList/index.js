@@ -55,6 +55,7 @@ export default function AcceptedList() {
                 <th>Reference Number</th>
                 <th>Customer Name</th>
                 <th>Total Amount</th>
+                <th>View</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -68,6 +69,17 @@ export default function AcceptedList() {
                     {`${val.firstname} ${val.middlename} ${val.lastname}`}
                   </td>
                   <td>{formatCurrency(parseFloat(val.shopordertotal))}</td>
+                  <td>
+                    <td>
+                      <Button
+                        onClick={() =>
+                          (window.location.href = `/viewordershop/${val.order_id}/${val.shopReference}`)
+                        }
+                      >
+                        View
+                      </Button>
+                    </td>
+                  </td>
                   <td>
                     <Button
                       variant="dark"

@@ -68,6 +68,7 @@ export default function Deliver() {
                 <th>Total Amount</th>
                 <th>Status</th>
                 <th>Paid</th>
+                <th>View</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -85,6 +86,17 @@ export default function Deliver() {
                     {val.shop_order_status !== "5" ? "On Deliver" : "Recieved"}
                   </td>
                   <td>{formatCurrency(+val.shoporderpaid)}</td>
+                  <td>
+                    <td>
+                      <Button
+                        onClick={() =>
+                          (window.location.href = `/viewordershop/${val.order_id}/${val.shopReference}`)
+                        }
+                      >
+                        View
+                      </Button>
+                    </td>
+                  </td>
                   <td>
                     <Button onClick={() => handleReceivedItems(val.order_id)}>
                       Order Receive
