@@ -2,14 +2,22 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Accordion, Row, Col, Button, Image } from "react-bootstrap";
+
 import { useParams } from "react-router-dom";
-import { Navigation, SizeBox, Container, Text } from "../../components";
+import {
+  Navigation,
+  SizeBox,
+  Container,
+  Text,
+  Button as CustomButton,
+} from "../../components";
 import HeaderText from "../../components/HeaderText";
 import Subtitle from "../../components/Subtitle";
 import ListItem from "../../components/ListItem";
 import { Orders } from "../../services/Orders";
 import { formatCurrency } from "../../utils/Money";
 import { BASE_URL } from "../../services/ApiClient";
+import * as S from "./style";
 
 import OrderStatus from "./component/OrderStatus";
 import usePrompts from "../../hooks/usePrompts";
@@ -30,6 +38,22 @@ export default function ViewOrder() {
     console.log("RESPONSE", res.data.data);
     if (res.data.status == 1) {
       setData(res.data.data);
+    }
+  };
+
+  const cancelOrder = async (shop_id) => {
+    try {
+      const payload = {
+        shop_id: shop_id,
+        order_id: params.id,
+      };
+      const resp = await Orders.cancelOrder(payload);
+
+      if (resp.data.status == "1") {
+        alertSuccess(resp.data.message);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -58,6 +82,10 @@ export default function ViewOrder() {
     updateStatus(payload);
   }
 
+  function handleCancel(shop_id) {
+    cancelOrder(shop_id);
+  }
+
   return (
     <>
       <Navigation />
@@ -76,14 +104,31 @@ export default function ViewOrder() {
                 </Accordion.Header>
                 <Accordion.Body>
                   <Container>
-                    <Text>
-                      {val.paid != val.totalAmount && val.status !== "5"
-                        ? `You have current balance of ${val.paid}`
-                        : ""}
-                    </Text>
-                    <Text>Order Status:</Text>
-                    <OrderStatus status={val.status} />
-
+                    <S.InfoContainer>
+                      <S.Container alignment="flex-start">
+                        <Text>
+                          {val.paid != val.totalAmount && val.status !== "5"
+                            ? `You have current balance of ${formatCurrency(
+                                val.totalAmount - val.paid
+                              )}`
+                            : ""}
+                        </Text>
+                        <Text>Order Status:</Text>
+                        <OrderStatus status={val.status} />
+                      </S.Container>
+                      <S.Container alignment="flex-end">
+                        {val.status === "0" && data[0].payment_method === "0" && (
+                          <div>
+                            <CustomButton
+                              color="red"
+                              onClick={() => handleCancel(val.shop_id)}
+                            >
+                              Cancel Order
+                            </CustomButton>
+                          </div>
+                        )}
+                      </S.Container>
+                    </S.InfoContainer>
                     {val.items.map((item, i) => (
                       <>
                         <Row>

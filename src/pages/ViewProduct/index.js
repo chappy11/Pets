@@ -22,7 +22,7 @@ import { defaultThemes } from "../../constants/DefaultThemes";
 import Subtitle from "../../components/Subtitle";
 import usePrompts from "../../hooks/usePrompts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
+import StorefrontIcon from "@mui/icons-material/Storefront";
 import { Box, BoxContainer, ItemRow } from "./style";
 import { Add, Remove } from "@mui/icons-material";
 import * as S from "./style";
@@ -31,6 +31,7 @@ import { Review } from "../../services/Review";
 export default function ViewProduct() {
   const [data, setData] = useState(null);
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const [noItems, setNoItems] = useState(1);
   const { user } = useGetUserFromStorage();
   const { alertError, alertWarning, alertSuccess } = usePrompts();
@@ -135,39 +136,46 @@ export default function ViewProduct() {
     createReview();
   }
   async function handleAddToCart() {
-    if (!user) {
-      swal("You Should Login First", {
-        buttons: {
-          cancel: "Cancel",
-          catch: {
-            text: "Login",
-            value: "login",
+    try {
+      setIsLoading(true);
+      if (!user) {
+        swal("You Should Login First", {
+          buttons: {
+            cancel: "Cancel",
+            catch: {
+              text: "Login",
+              value: "login",
+            },
           },
-        },
-      }).then((value) => {
-        switch (value) {
-          case "login":
-            window.location.href = "/login";
-            break;
+        }).then((value) => {
+          switch (value) {
+            case "login":
+              window.location.href = "/login";
+              break;
 
-          default:
-        }
-      });
+            default:
+          }
+        });
 
-      return;
-    }
+        return;
+      }
 
-    const payload = {
-      user_id: user.user_id,
-      product_id: data.product_id,
-      no_item: parseInt(noItems),
-    };
+      const payload = {
+        user_id: user.user_id,
+        product_id: data.product_id,
+        no_item: parseInt(noItems),
+      };
 
-    const res = await Carts.addToCart(payload);
-    if (res.data.status == 1) {
-      swal("Succes", "Successfully Added to you Cart", "success");
-    } else {
-      swal("Oops", res.data.message, "error");
+      const res = await Carts.addToCart(payload);
+      if (res.data.status == 1) {
+        swal("Succes", "Successfully Added to you Cart", "success");
+      } else {
+        swal("Oops", res.data.message, "error");
+      }
+    } catch (e) {
+      alertError();
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -234,7 +242,7 @@ export default function ViewProduct() {
 
   return (
     <>
-      <Navigation />
+      <Navigation isFetch={isLoading} />
       <SizeBox height={10} />
       <Container>
         <SizeBox height={50} />
@@ -270,9 +278,21 @@ export default function ViewProduct() {
               <Text color={defaultThemes.secondary}>Description</Text>
               {data?.productDescription}
               <SizeBox height={20} />
-              <Button onClick={handleAddToCart}>
-                <ShoppingCartIcon /> Add to Cart
-              </Button>
+              <S.BoxContainer>
+                <Button onClick={handleAddToCart}>
+                  <ShoppingCartIcon /> Add to Cart
+                </Button>
+                <SizeBox width={20} />
+                <Button
+                  color={defaultThemes.secondary}
+                  onClick={() =>
+                    (window.location.href = `/viewprofile/${data?.shop_id}`)
+                  }
+                >
+                  <StorefrontIcon />
+                  Visit shop
+                </Button>
+              </S.BoxContainer>
             </S.InfoContainer>
           </S.Column>
         </ItemRow>

@@ -41,8 +41,10 @@ export default function Subscription() {
     };
 
     const resp = await Shop.subscribe(payload);
-    const newUser = { ...resp.data.data, price_limit: price_limit };
+
     if (resp.data.status == 1) {
+      const newUser = { ...resp.data.data, ...paylaod };
+      console.log("This is new user", newUser);
       await localStorage.setItem("Account", JSON.stringify(newUser));
       alertSuccess(resp.data.message);
       setSelect(sub_id);

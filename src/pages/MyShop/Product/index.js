@@ -96,8 +96,13 @@ export default function Product() {
   };
 
   const isSubscribe = useMemo(() => {
-    if (user?.subscription_id == 0) {
-      return <p>You can only sell items if you subscribe to the application</p>;
+    if (!user?.subscription_id || user?.subscription_id.toString() == "0") {
+      return (
+        <p>
+          You can only sell items if you subscribe to the application{" "}
+          <a href="/mysubscription">Subscribe now</a>
+        </p>
+      );
     }
 
     return (
@@ -105,7 +110,7 @@ export default function Product() {
         Add New Product
       </CustomButton>
     );
-  }, [user]);
+  }, [user?.subscription_id]);
 
   return (
     <Sidebar>

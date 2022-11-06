@@ -51,4 +51,15 @@ export const Orders = {
 
     return data;
   },
+
+  cancelOrder: async (payload) => {
+    const headers = {
+      "Content-Type": "text/plain",
+    };
+    const data = await axios.post(OrderApi("cancelorder"), payload, {
+      headers,
+    });
+
+    return data;
+  },
 };

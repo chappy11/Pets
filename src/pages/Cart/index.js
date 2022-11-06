@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Form, Stack, Image, Row, Col } from "react-bootstrap";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import {
-  Navigation,
-  SizeBox,
-  TextInput,
-  Line,
-  Button,
-  Container,
-} from "../../components";
+import { Navigation, SizeBox, Button, Container } from "../../components";
 import RemoveIcon from "@mui/icons-material/Remove";
 import useGetCartItems from "../../hooks/useActiveItem";
 import { BASE_URL } from "../../services/ApiClient";
@@ -29,8 +23,10 @@ import Empty from "../../components/Empty";
 import usePrompts from "../../hooks/usePrompts";
 export default function Cart() {
   const [item, setItem] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isHalf, setHalf] = useState(0);
-  const { alertWarning } = usePrompts();
+  const { alertWarning, alertError, alertSuccess } = usePrompts();
+
   useEffect(() => {
     getCart();
   }, []);
@@ -40,13 +36,33 @@ export default function Cart() {
   }, [item]);
 
   const getCart = async () => {
-    const user = await getItem(KEY.ACCOUNT);
-    const resp = await Carts.mycart(user?.user_id);
+    try {
+      setIsLoading(true);
+      const user = await getItem(KEY.ACCOUNT);
+      const resp = await Carts.mycart(user?.user_id);
 
-    if (resp.data.status == 1) {
-      setItem(resp.data.data);
-    } else {
-      setItem([]);
+      if (resp.data.status == 1) {
+        setItem(resp.data.data);
+      } else {
+        setItem([]);
+      }
+    } catch (e) {
+      alertError();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const removeCart = async (cart_id) => {
+    try {
+      const resp = await Carts.removedCartItem(cart_id);
+
+      if (resp.data.status == 1) {
+        getCart();
+        alertSuccess(resp.data.message);
+      }
+    } catch (e) {
+      alertError();
     }
   };
 
@@ -120,9 +136,13 @@ export default function Cart() {
     window.location.href = "/checkout";
   }
 
+  function handleRemove(cart_id) {
+    removeCart(cart_id);
+  }
+
   return (
     <>
-      <Navigation />
+      <Navigation isFetch={isLoading} />
       <SizeBox height={20} />
 
       <Container style={{ paddingLeft: "15%", paddingRight: "15%" }}>
@@ -198,6 +218,17 @@ export default function Cart() {
                         checked={item.item_status === "1"}
                       />
                     </S.TotalAmountContainer>
+                  </S.Column>
+                  <S.Column>
+                    <div>
+                      <SizeBox height={15} />
+                      <IconButton
+                        color="error"
+                        onClick={() => handleRemove(item.cart_id)}
+                      >
+                        <DeleteIcon color="red" />
+                      </IconButton>
+                    </div>
                   </S.Column>
                 </S.LineRow>
                 <SizeBox height={20} />

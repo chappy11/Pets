@@ -64,6 +64,7 @@ export default function CreateShop() {
 
   async function openVerification() {
     setIsOpen(false);
+    console.log(user.username);
     if (
       user.username === "" ||
       user.password === "" ||
@@ -78,6 +79,8 @@ export default function CreateShop() {
       user.address === ""
     ) {
       alertWarning("Please fillout all fields");
+    } else if (!/^([a-zA-Z0-9_-]+)$/.test(user.username)) {
+      alertWarning("Username should not include whitespaces");
     } else if (!img) {
       alertWarning("Please choose your logo");
     } else if (!emailIsvalid(user.email)) {
@@ -120,7 +123,7 @@ export default function CreateShop() {
           code: sixDigit,
         };
         const res = await Email.emailVerification(payload);
-        console.log("Response", res);
+
         if (res.data.status == 1) {
           alertSuccess("We send you a verification code");
           await setIsOpen(true);
@@ -296,13 +299,7 @@ export default function CreateShop() {
                 label="Shop Description"
                 onChange={onChange}
               />
-              <TextInput
-                name="shippingFee"
-                type="number"
-                placeholder={user.shippingFee}
-                label="Shop Shipping Fee"
-                onChange={onChange}
-              />
+
               <SizeBox height={15} />
               <HeaderText>Personal Information</HeaderText>
               <SizeBox height={12} />

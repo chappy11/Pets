@@ -37,6 +37,8 @@ import Category from "./pages/Admin/Category";
 import Reports from "./pages/MyShop/Reports";
 import ViewShopOrder from "./pages/MyShop/ViewShopOrder";
 import Profiles from "./pages/Profiles";
+import Message from "./pages/Message";
+import VisitProfile from "./pages/VisitProfile";
 
 require("./App.css");
 
@@ -88,6 +90,7 @@ function App() {
           <Route path="/choosesubscription" element={<ChooseSubscription />} />
           <Route path="/vieworder/:id" element={<ViewOrder />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/message/:id" element={<Message />} />
           <Route
             path="/viewordershop/:id/:reference"
             element={<ViewShopOrder />}
@@ -107,7 +110,9 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order" element={<MyOrder />} />
+          <Route path="/message/:id" element={<Message />} />
           <Route path="/vieworder/:id/:reference" element={<ViewOrder />} />
+          <Route path="/viewprofile/:id" element={<VisitProfile />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );

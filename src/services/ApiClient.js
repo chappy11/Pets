@@ -49,3 +49,7 @@ export const ShopReportApi = (method) => {
 export const ReviewApi = (method) => {
   return `${BASE_URL}review/${method}`;
 };
+
+export const MessagesApi = (method) => {
+  return `${BASE_URL}message/${method}`;
+};

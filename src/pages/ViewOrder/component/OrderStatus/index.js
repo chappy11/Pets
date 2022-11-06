@@ -48,6 +48,10 @@ export default function OrderStatus(props) {
         </Text>
       );
     }
+
+    if (props?.status === "4") {
+      return <Text color="red">Cancel Order</Text>;
+    }
   }, [props?.status]);
 
   return <>{displayStatus}</>;

@@ -7,6 +7,8 @@ import swal from "sweetalert";
 import useGetUserFromStorage from "../../../../hooks/useGetUserFromStorage";
 import { Product } from "../../../../services/Product";
 import usePrompts from "../../../../hooks/usePrompts";
+import * as S from "./style";
+
 const UNIT = ["pcs", "kg"];
 
 export default function AddProduct() {
@@ -82,15 +84,21 @@ export default function AddProduct() {
         <Container>
           <SizeBox height={20} />
           <Title>Sell New Product</Title>
+          <SizeBox height={20} />
           <Row>
             <Col>
-              {img && (
-                <Image
-                  width={200}
-                  height={200}
-                  src={URL.createObjectURL(img)}
-                />
-              )}
+              <S.ImageContainer>
+                {img ? (
+                  <Image
+                    width={200}
+                    height={200}
+                    src={URL.createObjectURL(img)}
+                  />
+                ) : (
+                  <S.GreyBox />
+                )}
+              </S.ImageContainer>
+
               <TextInput type="file" onChange={onChangeImage} />
             </Col>
             <Col>
@@ -108,7 +116,7 @@ export default function AddProduct() {
                 label="Product Description"
               />
               <SizeBox height={15} />
-              <Form.Label>Product Category</Form.Label>
+              <S.Label>Product Category</S.Label>
               <Form.Select name="category_id" onChange={onChange}>
                 <option value={""}>
                   {data.category_id === "" && "Choose Category"}
@@ -120,7 +128,7 @@ export default function AddProduct() {
                 ))}
               </Form.Select>
               <SizeBox height={15} />
-              <Form.Label>Unit</Form.Label>
+              <S.Label>Unit</S.Label>
               <Form.Select name="unit" onChange={onChange}>
                 <option value={""}>{data.unit === "" && "Choose Unit"}</option>
                 {UNIT.map((val, index) => (
