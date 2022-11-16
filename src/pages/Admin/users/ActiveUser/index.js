@@ -49,28 +49,26 @@ export default function ActiveUser(props) {
   }
   const displayData = useMemo(() => {
     return data.map((val, i) => (
-      <tr key={val.user_id}>
-        <td>{val.createAt}</td>
-        <td>
-          <S.NameContainer>
-            <Avatar src={BASE_URL + val.profilePic} />
-            <SizeBox width={10} />
-            {val.firstname + " " + val.middlename + " " + val.lastname}
-          </S.NameContainer>
-        </td>
+      <tr>
+        <td>{val.user_id}</td>
+        <td>{val.username}</td>
+        <td>{val.firstname + " " + val.middlename + " " + val.lastname}</td>
         <td>{val.email}</td>
-        <td>{val.contact}</td>
-        <td>{val.gender}</td>
         <td>
-          <Button>View</Button>
+          <Button
+            onClick={() => (window.location.href = `/customer/${val.user_id}`)}
+          >
+            View
+          </Button>
         </td>
         <td>
           <Button
+            color={defaultThemes.primary}
             onClick={() => handleDeactivate(val.user_id)}
-            color={defaultThemes.secondary}
           >
-            Deactivate
+            Activate
           </Button>
+          <SizeBox width={5} />
         </td>
       </tr>
     ));
@@ -82,15 +80,16 @@ export default function ActiveUser(props) {
         <Container>
           <HeaderText>Active User</HeaderText>
           <Table>
-            <tr>
-              <th>Create Date</th>
-              <th>Fullname</th>
-              <th>Email</th>
-              <th>Mobile Number</th>
-              <th>Gender</th>
-              <th>View</th>
-              <th>Action</th>
-            </tr>
+            <thead>
+              <tr>
+                <td>User ID</td>
+                <td>Username</td>
+                <td>Name</td>
+                <td>Email</td>
+                <td>View</td>
+                <td>Actions</td>
+              </tr>
+            </thead>
             <tbody>{displayData}</tbody>
           </Table>
         </Container>

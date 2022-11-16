@@ -53,4 +53,25 @@ export const User = {
 
     return data;
   },
+
+  getuser: async (id, type) => {
+    const data = await axios.get(UserApi(`getuser/${id}/${type}`));
+
+    return data;
+  },
+
+  getLogs: async () => {
+    const data = await axios.get(UserApi("getlogs"));
+
+    return data;
+  },
+
+  changePass: async (payload) => {
+    const headers = {
+      "Content-Type": "text/plain",
+    };
+    const data = await axios.post(UserApi("changepass"), payload, { headers });
+
+    return data;
+  },
 };

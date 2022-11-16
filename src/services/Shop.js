@@ -19,4 +19,9 @@ export const Shop = {
 
     return resp;
   },
+
+  getActiveShop: async () => {
+    const data = await axios.get(ShopApi("getactive"));
+    return data;
+  },
 };

@@ -62,7 +62,7 @@ export default function Navigation(props) {
 
   const displayLinks = useMemo(() => {
     return (data ? NAVATION : NO_SESSION).map((val, index) => (
-      <S.CustomNav href={val.url}>
+      <S.CustomNav href={val.url} key={index}>
         {val.name}
         {val.id == 300 && <CustomBadge value={count} />}
       </S.CustomNav>

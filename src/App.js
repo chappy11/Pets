@@ -9,6 +9,7 @@ import Product from "./pages/MyShop/Product";
 import Admin from "./pages/Admin";
 import PendingUser from "./pages/Admin/users/PendingUser";
 import PendingShop from "./pages/Admin/shops/PendingShop";
+import ActiveShop from "./pages/Admin/shops/ActiveShop";
 import Subscription from "./pages/MyShop/Subscription";
 import ChooseSubscription from "./pages/MyShop/ChooseSubscription";
 import ViewProduct from "./pages/ViewProduct";
@@ -39,6 +40,12 @@ import ViewShopOrder from "./pages/MyShop/ViewShopOrder";
 import Profiles from "./pages/Profiles";
 import Message from "./pages/Message";
 import VisitProfile from "./pages/VisitProfile";
+import Canceled from "./pages/MyShop/Canceled";
+import ViewCustomer from "./pages/Admin/ViewCustomer";
+import ViewShop from "./pages/Admin/ViewShop";
+import Logs from "./pages/Admin/Logs";
+import ForgotPassword from "./pages/ForgotPassword";
+import Otp from "./pages/Otp";
 
 require("./App.css");
 
@@ -60,7 +67,7 @@ function App() {
 
     setCurrentSession(user);
   };
-
+  console.log(currentSession);
   const displayRoutes = useCallback(() => {
     if (!currentSession) {
       return (
@@ -71,11 +78,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/createshop" element={<CreateShop />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/forgotpassword/:id" element={<ForgotPassword />} />
+          <Route path="/otp" element={<Otp />} />
         </Routes>
       );
     }
-
-    if (currentSession.user_roles == 1) {
+    if (currentSession?.user_roles == 1) {
       return (
         <Routes>
           <Route path="/" element={<MyShop />} />
@@ -85,6 +93,7 @@ function App() {
           <Route path="/accepted" element={<AcceptedList />} />
           <Route path="/packed" element={<Packed />} />
           <Route path="/deliver" element={<Deliver />} />
+          <Route path="/canceled" element={<Canceled />} />
           <Route path="/mysubscription" element={<Subscription />} />
           <Route path="/profile" element={<Profiles />} />
           <Route path="/choosesubscription" element={<ChooseSubscription />} />
@@ -99,8 +108,7 @@ function App() {
         </Routes>
       );
     }
-
-    if (currentSession.user_roles == 2) {
+    if (currentSession?.user_roles == 2) {
       return (
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -117,8 +125,7 @@ function App() {
         </Routes>
       );
     }
-
-    if (currentSession.user_roles == 0 || currentSession.user_roles == 3) {
+    if (currentSession?.user_roles == 0 || currentSession?.user_roles == 3) {
       return (
         <Routes>
           <Route path="/" element={<Admin />} />
@@ -127,9 +134,13 @@ function App() {
           <Route path="/activeuser" element={<ActiveUser />} />
           <Route path="/shops" element={<AllShop />} />
           <Route path="/pendingshops" element={<PendingShop />} />
+          <Route path="/activeshops" element={<ActiveShop />} />
           <Route path="/items" element={<AllItems />} />
           <Route path="/subscriptions" element={<SubscriptionList />} />
           <Route path="/category" element={<Category />} />
+          <Route path="/customer/:id" element={<ViewCustomer />} />
+          <Route path="/shop/:id" element={<ViewShop />} />
+          <Route path="/logs" element={<Logs />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );
@@ -143,7 +154,7 @@ function App() {
           "AXXPiHrCffEqkk7hesxLl7tUUylTSC_QTJcf1NYFpiSbSzk54crEZHrmC9PevPMtny4bhUQUPM4cs7l5",
       }}
     >
-      <BrowserRouter>{displayRoutes()}</BrowserRouter>;
+      <BrowserRouter>{displayRoutes()}</BrowserRouter>
     </PayPalScriptProvider>
   );
 }

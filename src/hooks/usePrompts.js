@@ -30,7 +30,9 @@ export default function usePrompts() {
     }).then((val) => {
       if (val === "okay") {
         data?.onConfirm?.();
+        return;
       }
+      data?.onConfirm?.();
     });
   };
   return {

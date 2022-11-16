@@ -1,23 +1,23 @@
 export const KEY = {
-    ACCOUNT:'Account',
-}
+  ACCOUNT: "Account",
+};
 
+export const save = (data) => {
+  const payload = JSON.stringify(data);
 
-export const save = (data)=>{
-    const payload = JSON.stringify(data);
-    
-    localStorage.setItem(KEY.ACCOUNT,payload);
-}
+  localStorage.setItem(KEY.ACCOUNT, payload);
+};
 
-export const getItem = async(key) =>{
-    const data = await localStorage.getItem(key);
-    if(data){
-        return JSON.parse(data)
-    }
+export const getItem = async (key) => {
+  const data = await localStorage.getItem(key);
 
-    return null;
-}
+  if (data) {
+    return JSON.parse(data);
+  }
 
-export const remove = () =>{
-    localStorage.clear();
-}
+  return null;
+};
+
+export const remove = () => {
+  localStorage.clear();
+};

@@ -3,6 +3,7 @@ import "react-pro-sidebar/dist/css/styles.css";
 import { Row, Col, Navbar, Container, Nav } from "react-bootstrap";
 import React from "react";
 import { Link } from "react-router-dom";
+import Mail from "@mui/icons-material/Mail";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -17,7 +18,7 @@ import * as S from "./style";
 import { SizeBox } from "../../../../components";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import { blue } from "@mui/material/colors";
-import { Assessment } from "@mui/icons-material";
+import { Assessment, Cancel } from "@mui/icons-material";
 
 export default function Sidebar(props) {
   function handleLogout() {
@@ -56,6 +57,11 @@ export default function Sidebar(props) {
               <Link to="/profile" />
               Profile
             </MenuItem>
+            <MenuItem icon={<Mail />}>
+              {" "}
+              <Link to="/message/0" />
+              Profile
+            </MenuItem>
             <MenuItem icon={<InventoryIcon />}>
               Inventory <Link to="/myproduct" />
             </MenuItem>
@@ -78,6 +84,10 @@ export default function Sidebar(props) {
                 {" "}
                 <Link to="/deliver" />
                 Delivered
+              </MenuItem>
+              <MenuItem icon={<Cancel />}>
+                <Link to={"/canceled"} />
+                Canceled Order
               </MenuItem>
             </SubMenu>
             <MenuItem icon={<Assessment />}>

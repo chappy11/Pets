@@ -68,6 +68,13 @@ export default function PendingShop() {
         <td>{val.createAt}</td>
         <td>{val.shopEmail}</td>
         <td>
+          <Button
+            onClick={() => (window.location.href = `/shop/${val.user_id}`)}
+          >
+            View
+          </Button>
+        </td>
+        <td>
           <Button onClick={() => handleApproved(val.user_id)}>Approved</Button>
         </td>
       </tr>
@@ -86,6 +93,7 @@ export default function PendingShop() {
               <td>Shop Owner</td>
               <td>Date Created</td>
               <td>Shop Email</td>
+              <td>View</td>
               <td>Action</td>
             </tr>
           </thead>

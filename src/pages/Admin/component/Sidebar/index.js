@@ -2,6 +2,7 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Row, Col } from "react-bootstrap";
 import React from "react";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import { Link } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 import { SizeBox } from "../../../../components";
@@ -81,6 +82,10 @@ export default function Sidebar(props) {
               <MenuItem icon={<CategoryIcon />}>
                 <Link to={"/category"} />
                 Manage Categories
+              </MenuItem>
+              <MenuItem icon={<FolderCopyIcon />}>
+                <Link to="/logs" />
+                User Logs
               </MenuItem>
               <MenuItem onClick={handleLogout} icon={<Logout />}>
                 Logout

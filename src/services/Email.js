@@ -14,4 +14,14 @@ export const Email = {
       console.log(e);
     }
   },
+
+  sendOtp: async (payload) => {
+    const headers = {
+      "Content-Type": "text/plain",
+    };
+
+    const res = await axios.post(EmailApi("sendOtp"), payload, { headers });
+    console.log("REs", res);
+    return res;
+  },
 };

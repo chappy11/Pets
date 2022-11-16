@@ -4,12 +4,17 @@ import {
   Button,
   TextInput,
   HeaderText,
+  Text,
+  Container,
 } from "../../components";
 import * as S from "./style";
 import { useState } from "react";
 import { User } from "../../services/User";
 import swal from "sweetalert";
 import { KEY, save } from "../../utils/storage";
+import Password from "../../components/Password";
+import { browserName } from "react-device-detect";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [account, setAccount] = useState({
@@ -25,7 +30,12 @@ export default function Login() {
     if (account.username === "" || account.password === "") {
       swal("Warning", "Fill out all fields");
     } else {
-      const response = await User.login(account);
+      const payload = {
+        ...account,
+        browserName: browserName,
+      };
+
+      const response = await User.login(payload);
       console.log(response.data);
       if (response.data.status == 1) {
         localStorage.setItem("Account", JSON.stringify(response.data.data));
@@ -65,15 +75,19 @@ export default function Login() {
             onChange={onChange}
           />
           <SizeBox height={15} />
-          <TextInput
+          <Password
             name="password"
             placeholder="Enter Password"
             label="Password"
-            type="password"
             onChange={onChange}
           />
           <SizeBox height={20} />
           <Button onClick={() => handleLogin()}>Login</Button>
+          <Container>
+            <Text textAlign="center">
+              Forgot Password? <Link to="/otp">Click here</Link>
+            </Text>
+          </Container>
         </S.FormCotainer>
       </S.Container>
     </>

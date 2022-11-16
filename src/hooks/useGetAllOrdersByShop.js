@@ -34,6 +34,7 @@ export default function useGetAllOrdersByShop() {
           success: getFilteredByStatus("5", resp.data.data).length,
           cancel: getFilteredByStatus("4", resp.data.data).length,
         };
+
         setDataCounts(dataCounts);
         return;
       }

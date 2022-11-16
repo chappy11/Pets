@@ -21,7 +21,7 @@ export default function Packed() {
   const getData = async () => {
     const user = await getItem(KEY.ACCOUNT);
     const res = await Orders.getShopOrder(user.shop_id, "2");
-    console.log("DATA", res.data.data);
+
     if (res.data.status == 1) {
       setOrder(res.data.data);
     }

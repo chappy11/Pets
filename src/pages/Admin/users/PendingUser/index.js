@@ -79,7 +79,11 @@ export default function PendingUser() {
                 </td>
                 <td>{val.email}</td>
                 <td>
-                  <Button onClick={() => (window.location.href = "/")}>
+                  <Button
+                    onClick={() =>
+                      (window.location.href = `/customer/${val.user_id}`)
+                    }
+                  >
                     View
                   </Button>
                 </td>
