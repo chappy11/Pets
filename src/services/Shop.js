@@ -29,7 +29,8 @@ export const Shop = {
     const headers = {
       "Content-Type": "multipart/form-data",
     };
-    const resp = await axios.post(ShopApi("updatepic", formdata, { headers }));
+
+    const resp = await axios.post(ShopApi("updatepic"), formdata, { headers });
 
     return resp;
   },

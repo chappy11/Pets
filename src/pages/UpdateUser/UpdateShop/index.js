@@ -49,15 +49,17 @@ export default function UpdateShop() {
         alertWarning("You must upload profile picture");
         return;
       }
-      const formdata = new FormData();
-      formdata.append("logo", profile);
+      var formdata = new FormData();
       formdata.append("id", user?.shop_id);
-
+      formdata.append("shopLogo", profile);
       const resp = await Shop.updateLogo(formdata);
 
       if (resp.data.status == "1") {
+        await save(resp.data.data[0]);
+        setProfile(null);
+        // window.location.reload();
         alertSuccess(resp.data.message);
-        await save(resp.data.data);
+
         return;
       }
     } catch (e) {
