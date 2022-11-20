@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Container,
+  Button,
   HeaderText,
   ListItem,
   Navigation,
@@ -78,6 +78,10 @@ export default function Customer(props) {
           <ListItem label="Birthdate" alignment="flex-end" value={birthdate} />
           <SizeBox height={10} />
           <ListItem label="Address" alignment="flex-end" value={addresss} />
+          <SizeBox height={20} />
+          <Button onClick={() => (window.location.href = "/update")}>
+            Update Profile
+          </Button>
         </S.Information>
       </S.MainContainer>
     </>

@@ -15,6 +15,8 @@ export default function TextInput(props) {
         disabled={props.disabled}
         className="input-sm"
         style={props.style}
+        as={props?.as}
+        rows={props?.rows}
       />
     </>
   );

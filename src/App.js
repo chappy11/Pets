@@ -46,6 +46,8 @@ import ViewShop from "./pages/Admin/ViewShop";
 import Logs from "./pages/Admin/Logs";
 import ForgotPassword from "./pages/ForgotPassword";
 import Otp from "./pages/Otp";
+import UpdateUser from "./pages/UpdateUser";
+import UpdateShop from "./pages/UpdateUser/UpdateShop";
 
 require("./App.css");
 
@@ -98,6 +100,7 @@ function App() {
           <Route path="/profile" element={<Profiles />} />
           <Route path="/choosesubscription" element={<ChooseSubscription />} />
           <Route path="/vieworder/:id" element={<ViewOrder />} />
+          <Route path="/update" element={<UpdateShop />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/message/:id" element={<Message />} />
           <Route
@@ -121,6 +124,7 @@ function App() {
           <Route path="/message/:id" element={<Message />} />
           <Route path="/vieworder/:id/:reference" element={<ViewOrder />} />
           <Route path="/viewprofile/:id" element={<VisitProfile />} />
+          <Route path="/update" element={<UpdateUser />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );

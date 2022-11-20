@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import { getItem, KEY } from "../utils/storage";
 
-export default function useGetUserFromStorage(){
-    const [user,setUser] = useState(null);
+export default function useGetUserFromStorage(props) {
+  const [user, setUser] = useState(null);
 
-    useEffect(()=>{
-        getUser();
-    },[])
+  useEffect(() => {
+    getUser();
+  }, []);
 
-    const getUser = async()=>{
-        const data = await getItem(KEY.ACCOUNT);
-        console.log(data);
-        if(data){
-            setUser(data);
-            return;
-        }
+  useEffect(() => {
+    getUser();
+  }, [props?.isRefresh]);
 
-        return null;
-
+  const getUser = async () => {
+    const data = await getItem(KEY.ACCOUNT);
+    if (data) {
+      setUser(data);
+      return;
     }
-    return{
-        user
-    };
+
+    return null;
+  };
+  return {
+    user,
+  };
 }

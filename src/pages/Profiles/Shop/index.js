@@ -1,4 +1,5 @@
 import {
+  Button,
   Container,
   HeaderText,
   ListItem,
@@ -98,6 +99,10 @@ export default function Shop(props) {
               alignment="flex-end"
               value={formatPassword(password)}
             />
+            <SizeBox height={20} />
+            <Button onClick={() => (window.location.href = "/update")}>
+              Update Shop
+            </Button>
           </Col>
         </Row>
         <SizeBox height={25} />

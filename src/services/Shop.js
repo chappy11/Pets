@@ -24,4 +24,13 @@ export const Shop = {
     const data = await axios.get(ShopApi("getactive"));
     return data;
   },
+
+  updateLogo: async (formdata) => {
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
+    const resp = await axios.post(ShopApi("updatepic", formdata, { headers }));
+
+    return resp;
+  },
 };

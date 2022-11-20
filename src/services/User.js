@@ -74,4 +74,16 @@ export const User = {
 
     return data;
   },
+
+  update: async (id, payload) => {
+    const headers = {
+      "Content-Type": "text/plain",
+    };
+
+    const resp = await axios.post(UserApi(`update/${id}`), payload, {
+      headers,
+    });
+
+    return resp;
+  },
 };
