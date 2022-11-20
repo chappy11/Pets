@@ -60,7 +60,7 @@ export default function Sidebar(props) {
             <MenuItem icon={<Mail />}>
               {" "}
               <Link to="/message/0" />
-              Profile
+              Inbox
             </MenuItem>
             <MenuItem icon={<InventoryIcon />}>
               Inventory <Link to="/myproduct" />
