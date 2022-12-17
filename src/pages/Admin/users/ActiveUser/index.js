@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Table } from "react-bootstrap";
-import { Button, HeaderText, SizeBox } from "../../../../components";
+import { Button, HeaderText, Print, SizeBox } from "../../../../components";
 import Container from "../../../../components/Container";
 import { defaultThemes } from "../../../../constants/DefaultThemes";
 import usePrompts from "../../../../hooks/usePrompts";
@@ -12,10 +12,13 @@ import { BASE_URL } from "../../../../services/ApiClient";
 import { User } from "../../../../services/User";
 import Sidebar from "../../component/Sidebar";
 import * as S from "./style";
+import useGetUserFromStorage from "../../../../hooks/useGetUserFromStorage";
 
 export default function ActiveUser(props) {
   const [data, setData] = useState([]);
   const { alertSuccess, alertError } = usePrompts();
+  const [isPrint, setIsPrint] = useState(false);
+  const { user } = useGetUserFromStorage();
   useEffect(() => {
     getData();
   }, []);
@@ -47,6 +50,7 @@ export default function ActiveUser(props) {
       alertError();
     }
   }
+
   const displayData = useMemo(() => {
     return data.map((val, i) => (
       <tr>
@@ -74,11 +78,18 @@ export default function ActiveUser(props) {
     ));
   }, [data]);
 
-  return (
-    <>
-      <Sidebar>
-        <Container>
-          <HeaderText>Active User</HeaderText>
+  const printData = useMemo(() => {
+    if (isPrint) {
+      return (
+        <Print
+          fullName={
+            user?.firstname + " " + user?.middlename + " " + user?.lastname
+          }
+          cancelText={"Cancel"}
+          onCancel={() => setIsPrint(false)}
+        >
+          <HeaderText>Active Users</HeaderText>
+          <SizeBox height={20} />
           <Table>
             <thead>
               <tr>
@@ -86,12 +97,59 @@ export default function ActiveUser(props) {
                 <td>Username</td>
                 <td>Name</td>
                 <td>Email</td>
-                <td>View</td>
-                <td>Actions</td>
               </tr>
             </thead>
-            <tbody>{displayData}</tbody>
+            <tbody>
+              {data.map((val, i) => (
+                <tr>
+                  <td>{val.user_id}</td>
+                  <td>{val.username}</td>
+                  <td>
+                    {val.firstname + " " + val.middlename + " " + val.lastname}
+                  </td>
+                  <td>{val.email}</td>
+                </tr>
+              ))}
+            </tbody>
           </Table>
+        </Print>
+      );
+    }
+  }, [isPrint]);
+
+  return (
+    <>
+      <Sidebar>
+        <Container>
+          {printData}
+          {!isPrint && (
+            <>
+              <SizeBox height={20} />
+              <S.Headers>
+                <S.ItemContainer>
+                  <HeaderText>Active Users</HeaderText>
+                </S.ItemContainer>
+                <S.ItemContainer justification="flex-end">
+                  <Button onClick={() => setIsPrint(true)}>Print</Button>
+                </S.ItemContainer>
+              </S.Headers>
+              <SizeBox height={20} />
+
+              <Table>
+                <thead>
+                  <tr>
+                    <td>User ID</td>
+                    <td>Username</td>
+                    <td>Name</td>
+                    <td>Email</td>
+                    <td>View</td>
+                    <td>Actions</td>
+                  </tr>
+                </thead>
+                <tbody>{displayData}</tbody>
+              </Table>
+            </>
+          )}
         </Container>
       </Sidebar>
     </>

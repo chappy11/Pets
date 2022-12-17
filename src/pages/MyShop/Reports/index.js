@@ -9,8 +9,9 @@ import {
   TextInput,
   Title,
   Text,
+  Print,
+  HeaderText,
 } from "../../../components";
-import { useReactToPrint } from "react-to-print";
 import useGetAllSuccessTransaction from "../../../hooks/useGetAllSuccessTransaction";
 import * as S from "./style";
 import { defaultThemes } from "../../../constants/DefaultThemes";
@@ -18,12 +19,11 @@ import { formatCurrency } from "../../../utils/Money";
 import { useMemo, useState } from "react";
 import { formatDisplayDate } from "../../../utils/date";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
 
 export default function Reports() {
   const {
     transactions,
-    isLoading,
     filteredTransaction,
     getSales,
     getByDays,
@@ -33,10 +33,8 @@ export default function Reports() {
     getByDateSearch,
     getData,
   } = useGetAllSuccessTransaction();
-  const compref = useRef(null);
-  const handlePrint = useReactToPrint({
-    content: () => compref.current,
-  });
+  const { user } = useGetUserFromStorage();
+  const [isPrint, setIsPrint] = useState(false);
   const [dates, setDates] = useState({
     start: "",
     end: "",
@@ -79,6 +77,47 @@ export default function Reports() {
     }
   }, [totalSales]);
 
+  const displayForPrint = useMemo(() => {
+    if (isPrint) {
+      return (
+        <Print
+          fullName={
+            user?.ownerFirstName +
+            " " +
+            user?.ownerMiddleName +
+            " " +
+            user?.ownerLastName
+          }
+          cancelText={"Cancel"}
+          onCancel={() => setIsPrint(false)}
+        >
+          <SizeBox height={10} />
+          <HeaderText>Sales Report</HeaderText>
+          <SizeBox height={15} />
+          <Table variant="bordered">
+            <thead>
+              <tr>
+                <th>Reference No.</th>
+                <th>Date</th>
+                <th>Total Amount</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredTransaction?.map((val) => (
+                <tr>
+                  <td>{val.shopReference}</td>
+                  <td>{formatDisplayDate(val.date_success)}</td>
+                  <td>{val.order_total_amout}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Print>
+      );
+    }
+  }, [isPrint]);
+
   function handleGenerate() {
     getByDateSearch(dates.start, dates.end);
   }
@@ -94,76 +133,82 @@ export default function Reports() {
   return (
     <Sidebar>
       <Container>
-        <Title>Reports</Title>
-        <SizeBox height={20} />
-        {displaySales}
-        <SizeBox height={10} />
-        <Row>
-          <Col>
-            <TextInput
-              type="date"
-              name="start"
-              onChange={onChange}
-              value={dates.start}
-            />
-          </Col>
-          <Col>
-            {" "}
-            <TextInput
-              type="date"
-              name="end"
-              onChange={onChange}
-              value={dates.end}
-            />
-          </Col>
-          <Col>
+        {displayForPrint}
+        {!isPrint && (
+          <>
+            <Title>Reports</Title>
+            <SizeBox height={20} />
+            {displaySales}
+            <SizeBox height={10} />
             <Row>
               <Col>
-                <SizeBox height={15} />
-                <Button onClick={() => handleGenerate()}>Generate</Button>
+                <TextInput
+                  type="date"
+                  name="start"
+                  onChange={onChange}
+                  value={dates.start}
+                />
               </Col>
               <Col>
-                <SizeBox height={15} />
-                <Button color="red" onClick={() => handleReset()}>
-                  Reset
-                </Button>
+                {" "}
+                <TextInput
+                  type="date"
+                  name="end"
+                  onChange={onChange}
+                  value={dates.end}
+                />
+              </Col>
+              <Col>
+                <Row>
+                  <Col>
+                    <SizeBox height={15} />
+                    <Button onClick={() => handleGenerate()}>Generate</Button>
+                  </Col>
+                  <Col>
+                    <SizeBox height={15} />
+                    <Button color="red" onClick={() => handleReset()}>
+                      Reset
+                    </Button>
+                  </Col>
+                </Row>
               </Col>
             </Row>
-          </Col>
-        </Row>
-        <SizeBox height={12} />
-        <Table variant="bordered" ref={compref}>
-          <thead>
-            <tr>
-              <th>Reference No.</th>
-              <th>Date</th>
-              <th>Total Amount</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+            <SizeBox height={12} />
 
-          <tbody>
-            {filteredTransaction?.map((val) => (
-              <tr>
-                <td>{val.shopReference}</td>
-                <td>{formatDisplayDate(val.date_success)}</td>
-                <td>{val.order_total_amout}</td>
-                <td>
-                  <Link
-                    to={`/viewordershop/${val.order_id}/${val.shopReference}`}
-                  >
-                    View Order
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        {transactions?.length < 1 ? (
-          <S.NoItemFound>No Item Found</S.NoItemFound>
-        ) : null}
-        <Text>{getSales}</Text>
-        <Button onClick={() => handlePrint()}>Print</Button>
+            <Table variant="bordered">
+              <thead>
+                <tr>
+                  <th>Reference No.</th>
+                  <th>Date</th>
+                  <th>Total Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredTransaction?.map((val) => (
+                  <tr>
+                    <td>{val.shopReference}</td>
+                    <td>{formatDisplayDate(val.date_success)}</td>
+                    <td>{val.order_total_amout}</td>
+                    <td>
+                      <Link
+                        to={`/viewordershop/${val.order_id}/${val.shopReference}`}
+                      >
+                        View Order
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            {transactions?.length < 1 ? (
+              <S.NoItemFound>No Item Found</S.NoItemFound>
+            ) : null}
+            <Text>{getSales}</Text>
+            <Button onClick={() => setIsPrint(true)}>Print</Button>
+          </>
+        )}
       </Container>
     </Sidebar>
   );

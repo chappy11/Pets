@@ -9,7 +9,9 @@ import {
   Line,
   SizeBox,
   Container,
+  Print,
 } from "../../../../components";
+import useGetUserFromStorage from "../../../../hooks/useGetUserFromStorage";
 import usePrompts from "../../../../hooks/usePrompts";
 import { BASE_URL } from "../../../../services/ApiClient";
 import { User } from "../../../../services/User";
@@ -18,8 +20,9 @@ import * as S from "./style";
 
 export default function AllShop() {
   const [data, setData] = useState([]);
-  const { alertSuccess, alertError } = usePrompts();
-
+  const { alertError } = usePrompts();
+  const [isPrint, setIsPrint] = useState(false);
+  const { user } = useGetUserFromStorage();
   useEffect(() => {
     getData();
   }, []);
@@ -66,26 +69,91 @@ export default function AllShop() {
     ));
   }, [data]);
 
+  const displayPrint = useMemo(() => {
+    if (isPrint) {
+      return (
+        <>
+          <Print
+            fullName={
+              user?.firstname + " " + user?.middlename + " " + user?.lastname
+            }
+            cancelText={"Cancel"}
+            onCancel={() => setIsPrint(false)}
+          >
+            <HeaderText>All Shops</HeaderText>
+            <Table>
+              <thead>
+                <tr>
+                  <th>Shop Name</th>
+                  <th>Owner Name</th>
+                  <th>Date Created</th>
+                  <th>Shop Email</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {data.map((val, i) => (
+                  <tr key={val.user_id}>
+                    <td>
+                      <S.NameContainer>
+                        <Avatar src={BASE_URL + val.logo} />
+                        <SizeBox width={10} />
+                        {val.shopName}
+                      </S.NameContainer>
+                    </td>
+                    <td>
+                      {val.ownerFirstName +
+                        " " +
+                        val.ownerMiddleName +
+                        " " +
+                        val.ownerLastName}
+                    </td>
+                    <td>{val.createAt}</td>
+                    <td>{val.shopEmail}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Print>
+        </>
+      );
+    }
+  }, [isPrint]);
+
   return (
     <Sidebar>
       <Container>
-        <HeaderText>Shop List</HeaderText>
-        <SizeBox height={10} />
-        <Line />
-        <SizeBox height={20} />
-        <Table>
-          <thead>
-            <tr>
-              <th>Shop Name</th>
-              <th>Owner Name</th>
-              <th>Date Created</th>
-              <th>Shop Email</th>
-              <th>View</th>
-            </tr>
-          </thead>
+        {displayPrint}
+        {!isPrint && (
+          <>
+            <SizeBox height={20} />
+            <S.Headers>
+              <S.ItemContainer>
+                <HeaderText>Shop List</HeaderText>
+              </S.ItemContainer>
+              <S.ItemContainer justification="flex-end">
+                <Button onClick={() => setIsPrint(true)}>Print</Button>
+              </S.ItemContainer>
+            </S.Headers>
+            <SizeBox height={20} />
 
-          <tbody>{displayData}</tbody>
-        </Table>
+            <Line />
+            <SizeBox height={20} />
+            <Table>
+              <thead>
+                <tr>
+                  <th>Shop Name</th>
+                  <th>Owner Name</th>
+                  <th>Date Created</th>
+                  <th>Shop Email</th>
+                  <th>View</th>
+                </tr>
+              </thead>
+
+              <tbody>{displayData}</tbody>
+            </Table>
+          </>
+        )}
       </Container>
     </Sidebar>
   );

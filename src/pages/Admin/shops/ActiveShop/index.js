@@ -1,7 +1,14 @@
 import { Avatar } from "@mui/material";
 import React, { useState, useEffect, useMemo } from "react";
 import { Table } from "react-bootstrap";
-import { Container, SizeBox, Button } from "../../../../components";
+import {
+  Container,
+  SizeBox,
+  Button,
+  HeaderText,
+  Print,
+} from "../../../../components";
+import useGetUserFromStorage from "../../../../hooks/useGetUserFromStorage";
 import usePrompts from "../../../../hooks/usePrompts";
 import { BASE_URL } from "../../../../services/ApiClient";
 import { Shop } from "../../../../services/Shop";
@@ -11,7 +18,9 @@ import * as S from "./style";
 
 export default function ActiveShop() {
   const [data, setData] = useState([]);
+  const [isPrint, setIsPrint] = useState(false);
   const { alertSuccess, alertError } = usePrompts();
+  const { user } = useGetUserFromStorage();
   useEffect(() => {
     getData();
   }, []);
@@ -44,6 +53,58 @@ export default function ActiveShop() {
       alertError();
     }
   };
+
+  const printData = useMemo(() => {
+    if (isPrint) {
+      return (
+        <>
+          <Print
+            fullName={
+              user?.firstname + " " + user?.middlename + " " + user?.lastname
+            }
+            cancelText={"Cancel"}
+            onCancel={() => setIsPrint(false)}
+          >
+            <HeaderText alignText="center">Active Shops</HeaderText>
+            <SizeBox height={20} />
+            <Table>
+              <thead>
+                <tr>
+                  <td>Shop Name</td>
+                  <td>Shop Owner</td>
+                  <td>Date Created</td>
+                  <td>Shop Email</td>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((val) => (
+                  <tr key={val.user_id}>
+                    <td>
+                      <S.Container>
+                        <Avatar src={BASE_URL + val.logo} />
+                        <SizeBox width={20} />
+                        {val.shopName}
+                      </S.Container>
+                    </td>
+                    <td>
+                      {val.ownerFirstName +
+                        " " +
+                        val.ownerMiddleName +
+                        " " +
+                        val.ownerLastName}
+                    </td>
+                    <td>{val.createAt}</td>
+                    <td>{val.shopEmail}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Print>
+        </>
+      );
+    }
+  }, [isPrint]);
+
   const displayData = useMemo(() => {
     return data.map((val, i) => (
       <tr key={val.user_id}>
@@ -83,19 +144,34 @@ export default function ActiveShop() {
   return (
     <Sidebar>
       <Container>
-        <Table>
-          <thead>
-            <tr>
-              <td>Shop Name</td>
-              <td>Shop Owner</td>
-              <td>Date Created</td>
-              <td>Shop Email</td>
-              <td>View</td>
-              <td>Action</td>
-            </tr>
-          </thead>
-          <tbody>{displayData}</tbody>
-        </Table>
+        {printData}
+        {!isPrint && (
+          <>
+            <SizeBox height={20} />
+            <S.Headers>
+              <S.ItemContainer>
+                <HeaderText>Active Shops</HeaderText>
+              </S.ItemContainer>
+              <S.ItemContainer justification={"flex-end"}>
+                <Button onClick={() => setIsPrint(true)}>Print</Button>
+              </S.ItemContainer>
+            </S.Headers>
+            <SizeBox height={20} />
+            <Table>
+              <thead>
+                <tr>
+                  <td>Shop Name</td>
+                  <td>Shop Owner</td>
+                  <td>Date Created</td>
+                  <td>Shop Email</td>
+                  <td>View</td>
+                  <td>Action</td>
+                </tr>
+              </thead>
+              <tbody>{displayData}</tbody>
+            </Table>
+          </>
+        )}
       </Container>
     </Sidebar>
   );

@@ -14,7 +14,7 @@ export const HeaderImage = styled.img`
 `;
 
 export const HeaderText = styled.p`
-  font-size: 7em;
+  font-size: 8em;
   color: ${defaultThemes.secondary};
   font-weight: bold;
 `;
@@ -39,4 +39,18 @@ export const Column = styled(Col)`
 export const ColumnImage = styled(Col)`
   display: flex;
   align-items: center;
+`;
+
+export const HeaderButton = styled.button`
+  background: ${defaultThemes.secondary};
+  font-size: 20px;
+  border: none;
+  padding: 18px;
+  border-radius: 30px;
+  color: white;
+  width: 500px;
+
+  &:hover {
+    background-color: ${defaultThemes.primary};
+  }
 `;

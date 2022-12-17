@@ -10,15 +10,18 @@ import {
   Container,
   HeaderText,
   Line,
+  Print,
   SizeBox,
 } from "../../../../components";
+import useGetUserFromStorage from "../../../../hooks/useGetUserFromStorage";
 import { User } from "../../../../services/User";
 import Sidebar from "../../component/Sidebar";
 import * as S from "./style";
 
 export default function AllUser() {
   const [data, setData] = useState([]);
-
+  const [isPrint, setIsPrint] = useState(false);
+  const { user } = useGetUserFromStorage();
   useEffect(() => {
     getData();
   }, []);
@@ -63,39 +66,82 @@ export default function AllUser() {
             View
           </Button>
         </td>
-        {/* <td>
-        <Button onClick={() => handleApproved(val.user_id)}>
-          Approved
-        </Button>
-      </td> */}
       </tr>
     ));
   }, [data]);
+
+  const printData = useMemo(() => {
+    if (isPrint) {
+      return (
+        <Print
+          fullName={
+            user?.firstname + " " + user?.middlename + " " + user?.lastname
+          }
+          cancelText={"Cancel"}
+          onCancel={() => setIsPrint(false)}
+        >
+          <HeaderText>All Users</HeaderText>
+          <SizeBox height={20} />
+          <Table>
+            <thead>
+              <tr>
+                <td>User ID</td>
+                <td>Username</td>
+                <td>Name</td>
+                <td>Email</td>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((val, i) => (
+                <tr>
+                  <td>{val.user_id}</td>
+                  <td>{val.username}</td>
+                  <td>
+                    {val.firstname + " " + val.middlename + " " + val.lastname}
+                  </td>
+                  <td>{val.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Print>
+      );
+    }
+  }, [isPrint]);
 
   return (
     <>
       <Sidebar>
         <Container>
-          <SizeBox height={20} />
-          <HeaderText>
-            <People /> Users
-          </HeaderText>
-          <Line />
-          <SizeBox height={20} />
-          <Table>
-            <thead>
-              <tr>
-                <th>User Id</th>
-                <th>Username</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>{displayData}</tbody>
-          </Table>
-          {isNoDataFound}
+          {printData}
+          {!isPrint && (
+            <>
+              <SizeBox height={20} />
+              <S.Headers>
+                <S.ItemContainer>
+                  <HeaderText>All Users</HeaderText>
+                </S.ItemContainer>
+                <S.ItemContainer justification="flex-end">
+                  <Button onClick={() => setIsPrint(true)}>Print</Button>
+                </S.ItemContainer>
+              </S.Headers>
+              <SizeBox height={20} />
+
+              <Table>
+                <thead>
+                  <tr>
+                    <td>User ID</td>
+                    <td>Username</td>
+                    <td>Name</td>
+                    <td>Email</td>
+                    <td>View</td>
+                    <td>Actions</td>
+                  </tr>
+                </thead>
+                <tbody>{displayData}</tbody>
+              </Table>
+            </>
+          )}
         </Container>
       </Sidebar>
     </>

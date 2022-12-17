@@ -11,10 +11,10 @@ export const CustomNavbar = styled(Navbar)`
 
 export const CustomNav = styled(Nav.Link)`
   font-weight: bold;
-  font-size: 18px;
+  font-size: 22px;
 `;
 
 export const CustomBrand = styled(Navbar.Brand)`
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
 `;

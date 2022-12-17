@@ -8,13 +8,16 @@ import {
   Container,
 } from "../../components";
 import * as S from "./style";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { User } from "../../services/User";
 import swal from "sweetalert";
-import { KEY, save } from "../../utils/storage";
-import Password from "../../components/Password";
+
 import { browserName } from "react-device-detect";
 import { Link } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import { RemoveRedEye, VisibilityOff } from "@mui/icons-material";
+
+const img = require("../../asset/login-image.png");
 
 export default function Login() {
   const [account, setAccount] = useState({
@@ -22,9 +25,19 @@ export default function Login() {
     password: "",
   });
 
+  const [isShow, setIsShow] = useState(false);
+
   const onChange = (e) => {
     setAccount({ ...account, [e.target.name]: e.target.value });
   };
+
+  const inputType = useMemo(() => {
+    return isShow ? "text" : "password";
+  }, [isShow]);
+
+  const icon = useMemo(() => {
+    return isShow ? <VisibilityOff /> : <RemoveRedEye />;
+  }, [isShow]);
 
   const handleLogin = async () => {
     if (account.username === "" || account.password === "") {
@@ -65,29 +78,44 @@ export default function Login() {
       <Navigation />
       <S.Container>
         <S.FormCotainer>
-          <HeaderText>Welcome to Pet Society</HeaderText>
-          <SizeBox height={15} />
-          <TextInput
-            name="username"
-            placeholder="Enter Username"
-            label="Username"
-            type="text"
-            onChange={onChange}
-          />
-          <SizeBox height={15} />
-          <Password
-            name="password"
-            placeholder="Enter Password"
-            label="Password"
-            onChange={onChange}
-          />
-          <SizeBox height={20} />
-          <Button onClick={() => handleLogin()}>Login</Button>
-          <Container>
-            <Text textAlign="center">
-              Forgot Password? <Link to="/otp">Click here</Link>
-            </Text>
-          </Container>
+          <div>
+            <S.Text size={3}>Welcome to</S.Text>
+            <SizeBox height={15} />
+            <S.Text size={5}>Pet Society</S.Text>
+            <img src={img} alt="login" />
+          </div>
+        </S.FormCotainer>
+        <S.FormCotainer>
+          <S.InputContainer>
+            <HeaderText>Sign In</HeaderText>
+            <SizeBox height={15} />
+            <p>Username</p>
+            <S.Input
+              name="username"
+              placeholder="Enter Username"
+              label="Username"
+              type="text"
+              onChange={onChange}
+            />
+            <SizeBox height={40} />
+            <p>Password</p>
+            <S.Password>
+              <S.Input
+                type={inputType}
+                placeholder="Enter Password"
+                onChange={onChange}
+                name="password"
+              />
+              <IconButton onClick={() => setIsShow(!isShow)}>{icon}</IconButton>
+            </S.Password>
+            <SizeBox height={20} />
+            <Button onClick={() => handleLogin()}>Login</Button>
+            <Container>
+              <Text textAlign="center">
+                Forgot Password? <Link to="/otp">Click here</Link>
+              </Text>
+            </Container>
+          </S.InputContainer>
         </S.FormCotainer>
       </S.Container>
     </>

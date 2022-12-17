@@ -22,7 +22,7 @@ export default function Deliver() {
   const getData = async () => {
     const user = await getItem(KEY.ACCOUNT);
     const res = await Orders.getShopOrder(user.shop_id, "3");
-
+    console.log(res);
     if (res.data.status == 1) {
       setOrder(res.data.data);
     }
@@ -98,7 +98,9 @@ export default function Deliver() {
                     </td>
                   </td>
                   <td>
-                    <Button onClick={() => handleReceivedItems(val.order_id)}>
+                    <Button
+                      onClick={() => handleReceivedItems(val.shoporder_id)}
+                    >
                       Order Receive
                     </Button>
                   </td>

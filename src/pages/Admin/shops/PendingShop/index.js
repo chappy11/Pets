@@ -12,12 +12,16 @@ import {
   Container,
   HeaderText,
   Line,
+  Print,
 } from "../../../../components";
 import * as S from "./style";
 import { BASE_URL } from "../../../../services/ApiClient";
+import useGetUserFromStorage from "../../../../hooks/useGetUserFromStorage";
 
 export default function PendingShop() {
   const [shop, setShop] = useState([]);
+  const [isPrint, setIsPrint] = useState(false);
+  const { user } = useGetUserFromStorage();
 
   useEffect(() => {
     getShop();
@@ -81,24 +85,86 @@ export default function PendingShop() {
     ));
   }, [shop]);
 
+  const printData = useMemo(() => {
+    if (isPrint) {
+      return (
+        <Print
+          fullName={
+            user?.firstname + " " + user?.middlename + " " + user?.lastname
+          }
+          cancelText={"Cancel"}
+          onCancel={() => setIsPrint(false)}
+        >
+          <HeaderText>Inactive Shop</HeaderText>
+          <Table>
+            <thead>
+              <tr>
+                <td>Shop Name</td>
+                <td>Shop Owner</td>
+                <td>Date Created</td>
+                <td>Shop Email</td>
+                <td>View</td>
+                <td>Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              {shop.map((val, i) => (
+                <tr key={val.user_id}>
+                  <td>
+                    <S.NameContainer>
+                      <Avatar src={BASE_URL + val.logo} />
+                      <SizeBox width={10} />
+                      {val.shopName}
+                    </S.NameContainer>
+                  </td>
+                  <td>
+                    {val.ownerFirstName +
+                      " " +
+                      val.ownerMiddleName +
+                      " " +
+                      val.ownerLastName}
+                  </td>
+                  <td>{val.createAt}</td>
+                  <td>{val.shopEmail}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Print>
+      );
+    }
+  }, [isPrint]);
   return (
     <Sidebar>
       <Container>
-        <HeaderText>Pending List</HeaderText>
-        <Line />
-        <Table>
-          <thead>
-            <tr>
-              <td>Shop Name</td>
-              <td>Shop Owner</td>
-              <td>Date Created</td>
-              <td>Shop Email</td>
-              <td>View</td>
-              <td>Action</td>
-            </tr>
-          </thead>
-          <tbody>{displayData}</tbody>
-        </Table>
+        {printData}
+        {!isPrint && (
+          <>
+            <SizeBox height={20} />
+            <S.Headers>
+              <S.ItemContainer>
+                <HeaderText>Inactive Shop</HeaderText>
+              </S.ItemContainer>
+              <S.ItemContainer justification={"flex-end"}>
+                <Button onClick={() => setIsPrint(true)}>Print</Button>
+              </S.ItemContainer>
+            </S.Headers>
+            <SizeBox height={20} />
+            <Table>
+              <thead>
+                <tr>
+                  <td>Shop Name</td>
+                  <td>Shop Owner</td>
+                  <td>Date Created</td>
+                  <td>Shop Email</td>
+                  <td>View</td>
+                  <td>Action</td>
+                </tr>
+              </thead>
+              <tbody>{displayData}</tbody>
+            </Table>
+          </>
+        )}
       </Container>
     </Sidebar>
   );

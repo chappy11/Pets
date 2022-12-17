@@ -1,5 +1,8 @@
 import { Carousel } from "react-bootstrap";
 import * as S from "./style";
+import { Button, SizeBox } from "../../../../components";
+import { Icon } from "@mui/material";
+import { ArrowForward, WindowSharp } from "@mui/icons-material";
 
 const img = require("../../../../asset/header-image.png");
 
@@ -11,6 +14,12 @@ export default function Header() {
           <div>
             <S.HeaderText>Pet Society</S.HeaderText>
             <S.Subtitle>Your Pet, Our Passion</S.Subtitle>
+            <SizeBox height={15} />
+            <S.HeaderButton
+              onClick={() => (window.location.href = "/products")}
+            >
+              Shop Now <ArrowForward />
+            </S.HeaderButton>
           </div>
         </S.Column>
         <S.ColumnImage md="7">

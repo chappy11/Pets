@@ -11,6 +11,7 @@ import Container from "./Container";
 import Title from "./Title";
 import Subtitle from "./Subtitle";
 import DashBoardCard from "./DashBoardCard";
+import Print from "./Print";
 export {
   TextInput,
   Navigation,
@@ -25,4 +26,5 @@ export {
   Title,
   Subtitle,
   DashBoardCard,
+  Print,
 };

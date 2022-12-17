@@ -37,3 +37,7 @@ export const standarDateFormat = (date) => {
 export const formatDisplayDate = (date) => {
   return dayjs(date).format("MMM DD, YYYY hh:mm a");
 };
+
+export const getCurrentDate = () => {
+  return dayjs().format("MMM DD, YYYY hh:mm a");
+};

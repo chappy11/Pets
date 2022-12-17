@@ -4,13 +4,16 @@ import { BASE_URL } from "../../../../services/ApiClient";
 import * as S from "./style";
 import { SizeBox, Container, Text } from "../../../../components";
 import { formatCurrency } from "../../../../utils/Money";
-import { Link } from "react-router-dom";
-import { defaultThemes } from "../../../../constants/DefaultThemes";
+import { useMemo } from "react";
 
 const image = require("../../../../asset/pic1.jpg");
 
 export default function ProductList() {
   const { products } = useGetAllProducts();
+
+  const limitproducts = useMemo(() => {
+    return products.slice(0, 4);
+  }, [products]);
 
   return (
     <S.Section>
@@ -22,7 +25,7 @@ export default function ProductList() {
         <Row
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          {products.map((val, idx) => (
+          {limitproducts.map((val, idx) => (
             <S.CustomizeCard
               onClick={() =>
                 (window.location.href = `/viewproduct/${val.product_id}`)

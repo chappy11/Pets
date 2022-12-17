@@ -17,8 +17,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import * as S from "./style";
 import { SizeBox } from "../../../../components";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
-import { blue } from "@mui/material/colors";
-import { Assessment, Cancel } from "@mui/icons-material";
+import { Assessment, Cancel, MonetizationOn } from "@mui/icons-material";
 
 export default function Sidebar(props) {
   function handleLogout() {
@@ -33,7 +32,6 @@ export default function Sidebar(props) {
         <Navbar.Brand>Pet Society</Navbar.Brand>
       </Navbar>
       <Row style={{ width: "100vw", height: "100vh" }}>
-        {/* <Col   style={{width:'20vw'}} > */}
         <ProSidebar
           collapsedWidth={100}
           style={{
@@ -90,10 +88,17 @@ export default function Sidebar(props) {
                 Canceled Order
               </MenuItem>
             </SubMenu>
-            <MenuItem icon={<Assessment />}>
-              <Link to="/reports" />
-              Reports
-            </MenuItem>
+            <SubMenu icon={<Assessment />} title="Reports">
+              <MenuItem icon={<Assessment />}>
+                <Link to="/reports" />
+                Sales Reports
+              </MenuItem>
+              <MenuItem icon={<MonetizationOn />}>
+                <Link to="/inventoryreports" />
+                Inventory Reports
+              </MenuItem>
+            </SubMenu>
+
             <MenuItem icon={<SubscriptionsIcon />}>
               My Subscription <Link to="/mysubscription" />
             </MenuItem>
