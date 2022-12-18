@@ -18,7 +18,7 @@ import useGetAllOrdersByShop from "../../hooks/useGetAllOrdersByShop";
 export default function MyShop() {
   const { totalSales } = useGetAllSuccessTransaction();
   const { orders, dataCounts } = useGetAllOrdersByShop();
-  console.log(totalSales);
+
   return (
     <Sidebar>
       <Container>
@@ -60,42 +60,42 @@ export default function MyShop() {
             <DashBoardCard
               title={"Pending"}
               subtitle={dataCounts?.pending}
-              color={defaultThemes.secondary}
+              color={defaultThemes.pending}
             />
           </Col>
           <Col>
             <DashBoardCard
               title={"Accepted"}
               subtitle={dataCounts?.accepted}
-              color={defaultThemes.secondary}
+              color={defaultThemes.accepted}
             />
           </Col>
           <Col>
             <DashBoardCard
               title={"Packed"}
               subtitle={dataCounts?.packed}
-              color={defaultThemes.secondary}
+              color={defaultThemes.packed}
             />
           </Col>
           <Col>
             <DashBoardCard
               title={"On Delivery"}
               subtitle={dataCounts?.delivered}
-              color={defaultThemes.secondary}
+              color={defaultThemes.deliver}
             />
           </Col>
           <Col>
             <DashBoardCard
               title={"Received"}
               subtitle={dataCounts?.success}
-              color={defaultThemes.secondary}
+              color={defaultThemes.success}
             />
           </Col>
           <Col>
             <DashBoardCard
               title={"Canceled"}
               subtitle={dataCounts?.cancel}
-              color={defaultThemes.secondary}
+              color={defaultThemes.cancel}
             />
           </Col>
         </Row>

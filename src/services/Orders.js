@@ -62,4 +62,8 @@ export const Orders = {
 
     return data;
   },
+
+  getAllOrderByStatus: async (status) => {
+    const data = await axios.get(OrderApi(`getorderbystatus/${status}`));
+  },
 };
