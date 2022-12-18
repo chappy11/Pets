@@ -35,13 +35,20 @@ export default function Packed() {
     const resp = await Orders.updateStatus(payload);
 
     if (resp.data.status == 1) {
-      getData();
+      filterNewData(id);
       swal("Success", resp.data.message, "success");
       return;
     }
 
     swal("Error", resp.data.message, "error");
   };
+
+  const filterNewData = (id) => {
+    const newData = order.filter((val) => val.shoporder_id !== id);
+
+    setOrder(newData);
+  };
+
   return (
     <>
       <Sidebar>

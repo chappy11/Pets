@@ -36,6 +36,7 @@ export default function PendingList() {
       const resp = await Orders.updateStatus(payload);
 
       if (resp.data.status == 1) {
+        filterNewData(id);
         swal("Success", resp.data.message, "success");
         return;
       }
@@ -45,6 +46,11 @@ export default function PendingList() {
     [order, setOrder]
   );
 
+  const filterNewData = (id) => {
+    const newData = order.filter((val) => val.shoporder_id !== id);
+
+    setOrder(newData);
+  };
   const displayTable = useMemo(() => {
     return order.map((val, i) => (
       <tr>
@@ -76,6 +82,7 @@ export default function PendingList() {
   useEffect(() => {
     getData();
   }, [handleUpdate]);
+
   return (
     <>
       <Sidebar>

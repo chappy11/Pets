@@ -28,12 +28,17 @@ export default function Deliver() {
     }
   };
 
+  const filterNewData = (id) => {
+    const data = order.filter((val) => val.shoporder_id !== id);
+    setOrder(data);
+  };
+
   const updateStatus = async (payload) => {
     try {
       const resp = await Orders.updateStatus(payload);
 
       if (resp.data.status == "1") {
-        getData();
+        filterNewData(payload.id);
         alertSuccess(resp.data.message);
         return;
       }

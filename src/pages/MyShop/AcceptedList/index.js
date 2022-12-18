@@ -10,38 +10,60 @@ import { formatCurrency } from "../../../utils/Money";
 import HeaderText from "../../../components/HeaderText";
 import swal from "sweetalert";
 import { Container, SizeBox } from "../../../components";
+import { useCallback } from "react";
+import usePrompts from "../../../hooks/usePrompts";
 
 export default function AcceptedList() {
   const [order, setOrder] = useState([]);
+  const { alertError } = usePrompts();
+
+  const handleUpdate = useCallback(
+    async (id) => {
+      try {
+        const payload = {
+          id,
+          status: "2",
+        };
+        const resp = await Orders.updateStatus(payload);
+
+        if (resp.data.status == 1) {
+          filterNewData(id);
+          swal("Success", resp.data.message, "success");
+
+          return;
+        }
+
+        swal("Error", resp.data.message, "error");
+      } catch (e) {
+        console.log(e);
+        alertError();
+      }
+    },
+    [order, setOrder]
+  );
 
   useEffect(() => {
     getData();
   }, []);
 
+  useEffect(() => {
+    getData();
+  }, [handleUpdate]);
+
   const getData = async () => {
     const user = await getItem(KEY.ACCOUNT);
     const res = await Orders.getShopOrder(user.shop_id, "1");
-    console.log("DATA", res.data.data);
     if (res.data.status == 1) {
       setOrder(res.data.data);
     }
   };
 
-  const handleUpdate = async (id) => {
-    const payload = {
-      id,
-      status: "2",
-    };
-    const resp = await Orders.updateStatus(payload);
+  const filterNewData = (id) => {
+    const newOrder = order.filter((val) => val.shoporder_id !== id);
 
-    if (resp.data.status == 1) {
-      getData();
-      swal("Success", resp.data.message, "success");
-      return;
-    }
-
-    swal("Error", resp.data.message, "error");
+    setOrder(newOrder);
   };
+
   return (
     <>
       <Sidebar>

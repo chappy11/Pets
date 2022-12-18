@@ -24,7 +24,7 @@ import usePrompts from "../../hooks/usePrompts";
 export default function Cart() {
   const [item, setItem] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isHalf, setHalf] = useState(0);
+
   const { alertWarning, alertError, alertSuccess } = usePrompts();
 
   useEffect(() => {
