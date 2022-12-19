@@ -11,7 +11,7 @@ export default function OrderStatus(props) {
   const displayStatus = useMemo(() => {
     if (props?.status === "0") {
       return (
-        <Text>
+        <Text color={defaultThemes.pending}>
           <WarningAmberIcon /> Pending
         </Text>
       );
@@ -19,7 +19,7 @@ export default function OrderStatus(props) {
 
     if (props?.status === "1") {
       return (
-        <Text>
+        <Text color={defaultThemes.accepted}>
           <SwipeRightIcon /> Accepted
         </Text>
       );
@@ -27,7 +27,7 @@ export default function OrderStatus(props) {
 
     if (props?.status === "2") {
       return (
-        <Text>
+        <Text color={defaultThemes.packed}>
           <DepartureBoardIcon /> Ready for Delivery
         </Text>
       );
@@ -35,7 +35,7 @@ export default function OrderStatus(props) {
 
     if (props?.status === "3") {
       return (
-        <Text color={defaultThemes.secondary}>
+        <Text color={defaultThemes.deliver}>
           <LocalShippingIcon /> Out for delivery
         </Text>
       );
@@ -43,14 +43,14 @@ export default function OrderStatus(props) {
 
     if (props?.status === "5") {
       return (
-        <Text color="#4BB543">
+        <Text color={defaultThemes.success}>
           <ThumbUpAltIcon /> Received Order
         </Text>
       );
     }
 
     if (props?.status === "4") {
-      return <Text color="red">Cancel Order</Text>;
+      return <Text color={defaultThemes.cancel}>Cancel Order</Text>;
     }
   }, [props?.status]);
 

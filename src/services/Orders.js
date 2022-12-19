@@ -65,5 +65,13 @@ export const Orders = {
 
   getAllOrderByStatus: async (status) => {
     const data = await axios.get(OrderApi(`getorderbystatus/${status}`));
+
+    return data;
+  },
+
+  getCountAllStatuses: async () => {
+    const data = await axios.get(OrderApi(`getCountAllOrders`));
+
+    return data;
   },
 };

@@ -9,6 +9,7 @@ export const Card = styled.div`
   padding: 15px;
   cursor: pointer;
   border-radius: 5px;
+  margin: 15px;
 `;
 
 export const NumberText = styled.text`

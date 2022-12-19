@@ -40,36 +40,40 @@ export default function Login() {
   }, [isShow]);
 
   const handleLogin = async () => {
-    if (account.username === "" || account.password === "") {
-      swal("Warning", "Fill out all fields");
-    } else {
-      const payload = {
-        ...account,
-        browserName: browserName,
-      };
-
-      const response = await User.login(payload);
-      console.log(response.data);
-      if (response.data.status == 1) {
-        localStorage.setItem("Account", JSON.stringify(response.data.data));
-        if (response.data.data.user_roles === "1") {
-          console.log("SHOP");
-
-          swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "/";
-          });
-        } else if (response.data.data.user_roles === "2") {
-          swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "/";
-          });
-        } else if (response.data.data.user_roles == 0) {
-          swal("Success", response?.data.message, "success").then((res) => {
-            window.location.href = "/";
-          });
-        }
+    try {
+      if (account.username === "" || account.password === "") {
+        swal("Warning", "Fill out all fields");
       } else {
-        swal("Error", response.data.message, "error");
+        const payload = {
+          ...account,
+          browserName: browserName,
+        };
+
+        const response = await User.login(payload);
+        console.log(response.data);
+        if (response.data.status == 1) {
+          localStorage.setItem("Account", JSON.stringify(response.data.data));
+          if (response.data.data.user_roles === "1") {
+            console.log("SHOP");
+
+            swal("Success", response?.data.message, "success").then((res) => {
+              window.location.href = "/";
+            });
+          } else if (response.data.data.user_roles === "2") {
+            swal("Success", response?.data.message, "success").then((res) => {
+              window.location.href = "/";
+            });
+          } else if (response.data.data.user_roles == 0) {
+            swal("Success", response?.data.message, "success").then((res) => {
+              window.location.href = "/";
+            });
+          }
+        } else {
+          swal("Error", response.data.message, "error");
+        }
       }
+    } catch (e) {
+      console.log(e);
     }
   };
 
