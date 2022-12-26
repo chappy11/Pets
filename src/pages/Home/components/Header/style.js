@@ -15,13 +15,13 @@ export const HeaderImage = styled.img`
 
 export const HeaderText = styled.p`
   font-size: 8em;
-  color: ${defaultThemes.secondary};
+  color: ${defaultThemes.color001};
   font-weight: bold;
 `;
 
 export const Subtitle = styled.p`
   font-size: 3em;
-  color: ${defaultThemes.color001};
+  color: ${defaultThemes.secondary};
 `;
 
 export const HeaderContainer = styled(Row)`
@@ -42,7 +42,7 @@ export const ColumnImage = styled(Col)`
 `;
 
 export const HeaderButton = styled.button`
-  background: ${defaultThemes.secondary};
+  background: ${defaultThemes.color001};
   font-size: 20px;
   border: none;
   padding: 18px;

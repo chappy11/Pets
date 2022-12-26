@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { defaultThemes } from "../../constants/DefaultThemes";
 
 export const CustomNavbar = styled(Navbar)`
-  background-color: ${defaultThemes.secondary};
+  background-color: ${defaultThemes.color001};
   color: ${(props) => props.color};
   border-bottom: 1px solid whitesmoke;
   height: 100px;
