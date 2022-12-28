@@ -49,6 +49,7 @@ import Otp from "./pages/Otp";
 import UpdateUser from "./pages/UpdateUser";
 import UpdateShop from "./pages/UpdateUser/UpdateShop";
 import InventoryReports from "./pages/MyShop/InventoryReports";
+import SuccessList from "./pages/MyShop/SuccessList";
 
 require("./App.css");
 
@@ -97,6 +98,7 @@ function App() {
           <Route path="/packed" element={<Packed />} />
           <Route path="/deliver" element={<Deliver />} />
           <Route path="/canceled" element={<Canceled />} />
+          <Route path="/success" element={<SuccessList />} />
           <Route path="/mysubscription" element={<Subscription />} />
           <Route path="/profile" element={<Profiles />} />
           <Route path="/choosesubscription" element={<ChooseSubscription />} />

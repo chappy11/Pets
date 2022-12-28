@@ -14,6 +14,7 @@ import { Col, Row } from "react-bootstrap";
 import useGetAllSuccessTransaction from "../../hooks/useGetAllSuccessTransaction";
 import { formatCurrency } from "../../utils/Money";
 import useGetAllOrdersByShop from "../../hooks/useGetAllOrdersByShop";
+import * as S from "./style";
 
 export default function MyShop() {
   const { totalSales } = useGetAllSuccessTransaction();
@@ -22,34 +23,29 @@ export default function MyShop() {
   return (
     <Sidebar>
       <Container>
-        <Title>Dash Board</Title>
+        <S.HeaderText>
+          <HeaderText color={defaultThemes.white}>Dashboard</HeaderText>
+        </S.HeaderText>
         <Row>
-          <Col>
-            <DashBoardCard
-              title={"Total Income"}
-              subtitle={formatCurrency(+totalSales?.all)}
-              color={defaultThemes.secondary}
-            />
-          </Col>
           <Col>
             <DashBoardCard
               title={"Today Income"}
               subtitle={formatCurrency(+totalSales?.day)}
-              color={defaultThemes.secondary}
+              color={defaultThemes.color001}
             />
           </Col>
           <Col>
             <DashBoardCard
-              title={"This Week`"}
+              title={"This Week"}
               subtitle={formatCurrency(+totalSales?.week)}
-              color={defaultThemes.secondary}
+              color={defaultThemes.color001}
             />
           </Col>
           <Col>
             <DashBoardCard
               title={"This Month"}
               subtitle={formatCurrency(+totalSales?.month)}
-              color={defaultThemes.secondary}
+              color={defaultThemes.color001}
             />
           </Col>
         </Row>
@@ -58,43 +54,49 @@ export default function MyShop() {
         <Row>
           <Col>
             <DashBoardCard
-              title={"Pending"}
-              subtitle={dataCounts?.pending}
+              subtitle={"Pending Transaction"}
+              title={dataCounts?.pending}
               color={defaultThemes.pending}
+              onClick={() => (window.location.href = "/pending")}
             />
           </Col>
           <Col>
             <DashBoardCard
-              title={"Accepted"}
-              subtitle={dataCounts?.accepted}
+              subtitle={"Accepted"}
+              title={dataCounts?.accepted}
               color={defaultThemes.accepted}
+              onClick={() => (window.location.href = "/accepted")}
             />
           </Col>
           <Col>
             <DashBoardCard
-              title={"Packed"}
-              subtitle={dataCounts?.packed}
+              subtitle={"Packed"}
+              title={dataCounts?.packed}
               color={defaultThemes.packed}
+              onClick={() => (window.location.href = "/packed")}
             />
           </Col>
+        </Row>
+        <Row>
           <Col>
             <DashBoardCard
-              title={"On Delivery"}
-              subtitle={dataCounts?.delivered}
+              subtitle={"On Delivery"}
+              title={dataCounts?.delivered}
               color={defaultThemes.deliver}
+              onClick={() => (window.location.href = "/deliver")}
             />
           </Col>
           <Col>
             <DashBoardCard
-              title={"Received"}
-              subtitle={dataCounts?.success}
+              subtitle={"Received"}
+              title={dataCounts?.success}
               color={defaultThemes.success}
             />
           </Col>
           <Col>
             <DashBoardCard
-              title={"Canceled"}
-              subtitle={dataCounts?.cancel}
+              subtitle={"Canceled"}
+              title={dataCounts?.cancel}
               color={defaultThemes.cancel}
             />
           </Col>

@@ -1,14 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useMemo } from "react";
 import { Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import {
-  Container,
-  HeaderText,
-  SizeBox,
-  Title,
-  Text,
-} from "../../../components";
+import { Container, HeaderText, SizeBox, Text } from "../../../components";
 import useGetShopOrder from "../../../hooks/useGetShopOrder";
 import { BASE_URL } from "../../../services/ApiClient";
 import { formatCurrency } from "../../../utils/Money";

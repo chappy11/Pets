@@ -15,6 +15,7 @@ export const Card = styled.div`
 export const NumberText = styled.text`
   font-size: 25px;
   color: white;
+  font-weight: bold;
 `;
 
 export const Subtitle = styled.text`

@@ -13,6 +13,7 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import DepartureBoardIcon from "@mui/icons-material/DepartureBoard";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
 import * as S from "./style";
 import { SizeBox } from "../../../../components";
@@ -31,85 +32,94 @@ export default function Sidebar(props) {
         <SizeBox width={"50"} />
         <Navbar.Brand>Pet Society</Navbar.Brand>
       </Navbar>
+
       <Row style={{ width: "100vw", height: "100vh" }}>
-        <ProSidebar
-          collapsedWidth={100}
-          style={{
-            minWidth: 100,
-            background: "transparent",
-            overflowY: "auto",
-            height: "100%",
-            position: "fixed",
-          }}
-          collapse={true}
-          width={"15vw"}
-          color={"grey"}
-        >
-          <SizeBox height={50} />
-          <Menu style={{ background: "transparent" }}>
-            <MenuItem icon={<DashboardIcon />}>
-              Dashboard <Link to="/" />{" "}
-            </MenuItem>
-            <MenuItem icon={<PersonOutlineIcon />}>
-              {" "}
-              <Link to="/profile" />
-              Profile
-            </MenuItem>
-            <MenuItem icon={<Mail />}>
-              {" "}
-              <Link to="/message/0" />
-              Inbox
-            </MenuItem>
-            <MenuItem icon={<InventoryIcon />}>
-              Inventory <Link to="/myproduct" />
-            </MenuItem>
-            <SubMenu icon={<PointOfSaleIcon />} title="Orders">
-              <MenuItem icon={<PendingActionsIcon />}>
+        <Col md={2}>
+          <ProSidebar
+            collapsedWidth={100}
+            style={{
+              minWidth: 100,
+              background: "transparent",
+              overflowY: "auto",
+              height: "100%",
+              position: "fixed",
+            }}
+            collapse={true}
+            width={"15vw"}
+            color={"grey"}
+          >
+            <SizeBox height={50} />
+            <Menu style={{ background: "transparent" }}>
+              <MenuItem icon={<DashboardIcon />}>
+                Dashboard <Link to="/" />{" "}
+              </MenuItem>
+              <MenuItem icon={<PersonOutlineIcon />}>
                 {" "}
-                <Link to="/pending" />
-                Pending
+                <Link to="/profile" />
+                Profile
               </MenuItem>
-              <MenuItem icon={<SwipeRightIcon />}>
+              <MenuItem icon={<Mail />}>
                 {" "}
-                <Link to="/accepted" />
-                Accepted
+                <Link to="/message/0" />
+                Inbox
               </MenuItem>
-              <MenuItem icon={<DepartureBoardIcon />}>
-                <Link to="/packed" />
-                Ready For Delivery
+              <MenuItem icon={<InventoryIcon />}>
+                Inventory <Link to="/myproduct" />
               </MenuItem>
-              <MenuItem icon={<LocalShippingIcon />}>
-                {" "}
-                <Link to="/deliver" />
-                Delivered
-              </MenuItem>
-              <MenuItem icon={<Cancel />}>
-                <Link to={"/canceled"} />
-                Canceled Order
-              </MenuItem>
-            </SubMenu>
-            <SubMenu icon={<Assessment />} title="Reports">
-              <MenuItem icon={<Assessment />}>
-                <Link to="/reports" />
-                Sales Reports
-              </MenuItem>
-              <MenuItem icon={<MonetizationOn />}>
-                <Link to="/inventoryreports" />
-                Inventory Reports
-              </MenuItem>
-            </SubMenu>
+              <SubMenu icon={<PointOfSaleIcon />} title="Orders">
+                <MenuItem icon={<PendingActionsIcon />}>
+                  {" "}
+                  <Link to="/pending" />
+                  Pending
+                </MenuItem>
+                <MenuItem icon={<SwipeRightIcon />}>
+                  {" "}
+                  <Link to="/accepted" />
+                  Accepted
+                </MenuItem>
+                <MenuItem icon={<DepartureBoardIcon />}>
+                  <Link to="/packed" />
+                  Ready For Delivery
+                </MenuItem>
+                <MenuItem icon={<LocalShippingIcon />}>
+                  {" "}
+                  <Link to="/deliver" />
+                  Delivered
+                </MenuItem>
+                <MenuItem icon={<ThumbUpAltIcon />}>
+                  {" "}
+                  <Link to="/success" />
+                  Received Item
+                </MenuItem>
+                <MenuItem icon={<Cancel />}>
+                  <Link to={"/canceled"} />
+                  Canceled Order
+                </MenuItem>
+              </SubMenu>
+              <SubMenu icon={<Assessment />} title="Reports">
+                <MenuItem icon={<Assessment />}>
+                  <Link to="/reports" />
+                  Sales Reports
+                </MenuItem>
+                <MenuItem icon={<MonetizationOn />}>
+                  <Link to="/inventoryreports" />
+                  Inventory Reports
+                </MenuItem>
+              </SubMenu>
 
-            <MenuItem icon={<SubscriptionsIcon />}>
-              My Subscription <Link to="/mysubscription" />
-            </MenuItem>
-            <MenuItem icon={<LogoutIcon />} onClick={handleLogout}>
-              Logout
-            </MenuItem>
-          </Menu>
-        </ProSidebar>
-        {/* </Col> */}
-
-        <S.Body>{props.children}</S.Body>
+              <MenuItem icon={<SubscriptionsIcon />}>
+                My Subscription <Link to="/mysubscription" />
+              </MenuItem>
+              <MenuItem icon={<LogoutIcon />} onClick={handleLogout}>
+                Logout
+              </MenuItem>
+            </Menu>
+          </ProSidebar>
+        </Col>
+        <Col>
+          <SizeBox height={80} />
+          <S.Body>{props.children}</S.Body>
+        </Col>
       </Row>
     </>
   );

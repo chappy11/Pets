@@ -17,6 +17,7 @@ export const HeaderText = styled.p`
   font-size: 8em;
   color: ${defaultThemes.color001};
   font-weight: bold;
+  margin-bottom: 40px;
 `;
 
 export const Subtitle = styled.p`
