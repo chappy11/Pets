@@ -91,6 +91,7 @@ export default function MyShop() {
               subtitle={"Received"}
               title={dataCounts?.success}
               color={defaultThemes.success}
+              onClick={() => (window.location.href = "/success")}
             />
           </Col>
           <Col>
@@ -98,7 +99,8 @@ export default function MyShop() {
               subtitle={"Canceled"}
               title={dataCounts?.cancel}
               color={defaultThemes.cancel}
-            />
+              onClick={() => (window.location.href = "/canceled")}
+              />    
           </Col>
         </Row>
       </Container>
