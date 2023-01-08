@@ -94,8 +94,8 @@ export default function PendingShop() {
           }
           cancelText={"Cancel"}
           onCancel={() => setIsPrint(false)}
+          textHeader="List Of Inactive Shops"
         >
-          <HeaderText>Inactive Shop</HeaderText>
           <Table>
             <thead>
               <tr>
@@ -133,7 +133,8 @@ export default function PendingShop() {
         </Print>
       );
     }
-  }, [isPrint]);
+  }, [isPrint, shop]);
+
   return (
     <Sidebar>
       <Container>
@@ -143,7 +144,7 @@ export default function PendingShop() {
             <SizeBox height={20} />
             <S.Headers>
               <S.ItemContainer>
-                <HeaderText>Inactive Shop</HeaderText>
+                <HeaderText>List Of Inactive Shops</HeaderText>
               </S.ItemContainer>
               <S.ItemContainer justification={"flex-end"}>
                 <Button onClick={() => setIsPrint(true)}>Print</Button>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Container, HeaderText, SizeBox, Text } from "../../../components";
@@ -11,8 +11,12 @@ import * as S from "./style";
 
 export default function ViewShopOrder() {
   const { id, reference } = useParams();
-  const { data } = useGetShopOrder({ order_id: id });
+  const { data, getData } = useGetShopOrder();
   const formatFullname = `${data?.lastname}, ${data?.firstname} ${data?.middlename}`;
+
+  useEffect(() => {
+    getData(id);
+  }, []);
 
   const displayItem = useMemo(() => {
     return data?.order?.map((val) => (

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Table, Button } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { BASE_URL } from "../../../services/ApiClient";
 import Sidebar from "../components/Sidebar";
 import { Orders } from "../../../services/Orders";
@@ -9,9 +9,11 @@ import { useEffect } from "react";
 import { formatCurrency } from "../../../utils/Money";
 import HeaderText from "../../../components/HeaderText";
 import swal from "sweetalert";
-import { Container, SizeBox } from "../../../components";
+import { Container, SizeBox, Button } from "../../../components";
 import { useCallback } from "react";
 import usePrompts from "../../../hooks/usePrompts";
+import { defaultThemes } from "../../../constants/DefaultThemes";
+import { RemoveRedEye } from "@mui/icons-material";
 
 export default function AcceptedList() {
   const [order, setOrder] = useState([]);
@@ -97,14 +99,15 @@ export default function AcceptedList() {
                         onClick={() =>
                           (window.location.href = `/viewordershop/${val.order_id}/${val.shopReference}`)
                         }
+                        color={defaultThemes.pending}
                       >
-                        View
+                        <RemoveRedEye /> View
                       </Button>
                     </td>
                   </td>
                   <td>
                     <Button
-                      variant="dark"
+                      color={defaultThemes.packed}
                       onClick={() => handleUpdate(val.shoporder_id)}
                     >
                       Packed

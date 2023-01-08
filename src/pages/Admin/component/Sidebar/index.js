@@ -55,7 +55,6 @@ export default function Sidebar(props) {
                   Inactive Users <Link to="/pendinguser" />
                 </MenuItem>
                 <MenuItem>
-                  {" "}
                   <Link to="/activeuser" />
                   Acitive Users
                 </MenuItem>

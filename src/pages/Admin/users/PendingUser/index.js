@@ -71,10 +71,10 @@ export default function PendingUser() {
           }
           cancelText={"Cancel"}
           onCancel={() => setIsPrint(false)}
+          textHeader={"List Of Inactive Users"}
         >
-          <HeaderText>Inactive Users</HeaderText>
           <SizeBox height={20} />
-          <Table>
+          <Table variant="bordered">
             <thead>
               <tr>
                 <td>User ID</td>

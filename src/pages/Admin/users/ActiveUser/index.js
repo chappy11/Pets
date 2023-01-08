@@ -87,10 +87,10 @@ export default function ActiveUser(props) {
           }
           cancelText={"Cancel"}
           onCancel={() => setIsPrint(false)}
+          textHeader="List Of Active Users"
         >
-          <HeaderText>Active Users</HeaderText>
           <SizeBox height={20} />
-          <Table>
+          <Table variant="bordered">
             <thead>
               <tr>
                 <td>User ID</td>

@@ -79,9 +79,9 @@ export default function AllShop() {
             }
             cancelText={"Cancel"}
             onCancel={() => setIsPrint(false)}
+            textHeader="List of Shops"
           >
-            <HeaderText>All Shops</HeaderText>
-            <Table>
+            <Table variant="bordered">
               <thead>
                 <tr>
                   <th>Shop Name</th>
@@ -129,7 +129,7 @@ export default function AllShop() {
             <SizeBox height={20} />
             <S.Headers>
               <S.ItemContainer>
-                <HeaderText>Shop List</HeaderText>
+                <HeaderText>List Of Shops</HeaderText>
               </S.ItemContainer>
               <S.ItemContainer justification="flex-end">
                 <Button onClick={() => setIsPrint(true)}>Print</Button>

@@ -79,10 +79,10 @@ export default function AllUser() {
           }
           cancelText={"Cancel"}
           onCancel={() => setIsPrint(false)}
+          textHeader={"List Of Users"}
         >
-          <HeaderText>All Users</HeaderText>
           <SizeBox height={20} />
-          <Table>
+          <Table variant="bordered">
             <thead>
               <tr>
                 <td>User ID</td>

@@ -22,3 +22,14 @@ export const Title = styled.div`
   font-weight: bold;
   color: ${defaultThemes.secondary};
 `;
+
+export const UserName = styled.text`
+  text-align: center;
+  text-decoration: underline;
+  margin-left: 100px;
+`;
+
+export const Prepare = styled.text`
+  margin-right: 200px;
+  font-weight: bold;
+`;

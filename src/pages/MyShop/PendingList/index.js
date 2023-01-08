@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useMemo, useCallback } from "react";
-import { Table, Button } from "react-bootstrap";
-import { BASE_URL } from "../../../services/ApiClient";
+import { Table } from "react-bootstrap";
+
 import Sidebar from "../components/Sidebar";
 import { Orders } from "../../../services/Orders";
 import { getItem, KEY } from "../../../utils/storage";
@@ -9,8 +9,9 @@ import { useEffect } from "react";
 import { formatCurrency } from "../../../utils/Money";
 import HeaderText from "../../../components/HeaderText";
 import swal from "sweetalert";
-import { SizeBox, Container } from "../../../components";
+import { SizeBox, Container, Button } from "../../../components";
 import { defaultThemes } from "../../../constants/DefaultThemes";
+import { RemoveRedEye, SwipeRight } from "@mui/icons-material";
 
 export default function PendingList() {
   const [order, setOrder] = useState([]);
@@ -62,16 +63,20 @@ export default function PendingList() {
         <td>{formatCurrency(parseFloat(val.shoporderpaid))}</td>
         <td>
           <Button
-            color={defaultThemes.color001}
+            color={defaultThemes.pending}
             onClick={() =>
               (window.location.href = `/viewordershop/${val.order_id}/${val.shopReference}`)
             }
           >
-            View
+            <RemoveRedEye /> View
           </Button>
         </td>
         <td>
-          <Button variant="dark" onClick={() => handleUpdate(val.shoporder_id)}>
+          <Button
+            color={defaultThemes.accepted}
+            onClick={() => handleUpdate(val.shoporder_id)}
+          >
+            <SwipeRight />
             Accept Order
           </Button>
         </td>

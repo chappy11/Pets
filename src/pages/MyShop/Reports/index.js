@@ -16,10 +16,11 @@ import useGetAllSuccessTransaction from "../../../hooks/useGetAllSuccessTransact
 import * as S from "./style";
 import { defaultThemes } from "../../../constants/DefaultThemes";
 import { formatCurrency } from "../../../utils/Money";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { formatDisplayDate } from "../../../utils/date";
 import { Link } from "react-router-dom";
 import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
+import { Orders } from "../../../services/Orders";
 
 export default function Reports() {
   const {
@@ -43,6 +44,18 @@ export default function Reports() {
   const onChange = (e) => {
     setDates({ ...dates, [e.target.name]: e.target.value });
   };
+
+  const getTransction = useCallback(
+    async (order_id) => {
+      try {
+        const resp = await Orders.getOrderByShop(order_id, user?.shop_id);
+        return resp.data.data;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [transactions]
+  );
 
   const displaySales = useMemo(() => {
     if (totalSales) {
@@ -122,6 +135,10 @@ export default function Reports() {
     getByDateSearch(dates.start, dates.end);
   }
 
+  const getTrans = () => {
+    getTransction(1);
+  };
+
   function handleReset() {
     setDates({
       start: "",
@@ -174,39 +191,69 @@ export default function Reports() {
               </Col>
             </Row>
             <SizeBox height={12} />
-
-            <Table variant="bordered">
-              <thead>
-                <tr>
-                  <th>Reference No.</th>
-                  <th>Date</th>
-                  <th>Total Amount</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredTransaction?.map((val) => (
+            <Print
+              fullName={
+                user?.ownerFirstName +
+                " " +
+                user?.ownerMiddleName +
+                " " +
+                user?.ownerLastName
+              }
+            >
+              <Table variant="bordered">
+                <thead>
                   <tr>
-                    <td>{val.shopReference}</td>
-                    <td>{formatDisplayDate(val.date_success)}</td>
-                    <td>{val.order_total_amout}</td>
-                    <td>
-                      <Link
-                        to={`/viewordershop/${val.order_id}/${val.shopReference}`}
-                      >
-                        View Order
-                      </Link>
-                    </td>
+                    <th>Reference No.</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Order item</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+
+                <tbody>
+                  {filteredTransaction?.map((val) => (
+                    <>
+                      <tr key={val.order_id}>
+                        <td>{val.referenceNo}</td>
+                        <td>{formatDisplayDate(val.date_success)}</td>
+                        <td>{val.order_total_amout}</td>
+                        <td>
+                          <Table>
+                            <thead>
+                              <tr>
+                                <th>Item Name</th>
+                                <th>Item Sold</th>
+                                <th>Stock</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.productName}</td>
+                                  <td>{item.orderItemNo}</td>
+                                  <td>{item.stock}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
+                  <tr>
+                    <td>
+                      <Text>Total</Text>
+                    </td>
+                    <td></td>
+                    <td> {getSales}</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Print>
             {transactions?.length < 1 ? (
               <S.NoItemFound>No Item Found</S.NoItemFound>
             ) : null}
-            <Text>{getSales}</Text>
-            <Button onClick={() => setIsPrint(true)}>Print</Button>
           </>
         )}
       </Container>

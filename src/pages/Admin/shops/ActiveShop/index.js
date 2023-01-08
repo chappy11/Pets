@@ -64,10 +64,10 @@ export default function ActiveShop() {
             }
             cancelText={"Cancel"}
             onCancel={() => setIsPrint(false)}
+            textHeader="List Of Active Shops"
           >
-            <HeaderText alignText="center">Active Shops</HeaderText>
             <SizeBox height={20} />
-            <Table>
+            <Table variant="bordered">
               <thead>
                 <tr>
                   <td>Shop Name</td>
@@ -150,7 +150,7 @@ export default function ActiveShop() {
             <SizeBox height={20} />
             <S.Headers>
               <S.ItemContainer>
-                <HeaderText>Active Shops</HeaderText>
+                <HeaderText>List Of Active Shops</HeaderText>
               </S.ItemContainer>
               <S.ItemContainer justification={"flex-end"}>
                 <Button onClick={() => setIsPrint(true)}>Print</Button>
