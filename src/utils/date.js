@@ -27,7 +27,7 @@ export const compareDate = (start, end) => {
 };
 
 export const isDateBetween = (start, end, current) => {
-  return dayjs(current).isBetween(start, end, "[)");
+  return dayjs(current).isBetween(start, end, "day", "[]");
 };
 
 export const standarDateFormat = (date) => {

@@ -64,7 +64,7 @@ export default function Sidebar(props) {
                 Inbox
               </MenuItem>
               <MenuItem icon={<InventoryIcon />}>
-                Inventory <Link to="/myproduct" />
+                Products <Link to="/myproduct" />
               </MenuItem>
               <SubMenu icon={<PointOfSaleIcon />} title="Orders">
                 <MenuItem icon={<PendingActionsIcon />}>

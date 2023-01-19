@@ -8,7 +8,6 @@ import {
   SizeBox,
   TextInput,
   Title,
-  Text,
   Print,
   HeaderText,
 } from "../../../components";
@@ -17,7 +16,7 @@ import * as S from "./style";
 import { defaultThemes } from "../../../constants/DefaultThemes";
 import { formatCurrency } from "../../../utils/Money";
 import { useMemo, useState, useCallback, useEffect } from "react";
-import { formatDisplayDate } from "../../../utils/date";
+import { formatDisplayDate, standarDateFormat } from "../../../utils/date";
 import { Link } from "react-router-dom";
 import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
 import { Orders } from "../../../services/Orders";
@@ -45,17 +44,23 @@ export default function Reports() {
     setDates({ ...dates, [e.target.name]: e.target.value });
   };
 
-  const getTransction = useCallback(
-    async (order_id) => {
-      try {
-        const resp = await Orders.getOrderByShop(order_id, user?.shop_id);
-        return resp.data.data;
-      } catch (e) {
-        console.log(e);
+  const dateRange = useMemo(() => {
+    if (filteredTransaction) {
+      const size = filteredTransaction.length - 1;
+      console.log(dates);
+      if (dates.start && dates.end) {
+        return (
+          standarDateFormat(dates.start) + " - " + standarDateFormat(dates.end)
+        );
       }
-    },
-    [transactions]
-  );
+
+      return (
+        standarDateFormat(filteredTransaction[size]?.date_success) +
+        " - " +
+        standarDateFormat(filteredTransaction[0]?.date_success)
+      );
+    }
+  }, [filteredTransaction]);
 
   const displaySales = useMemo(() => {
     if (totalSales) {
@@ -135,10 +140,6 @@ export default function Reports() {
     getByDateSearch(dates.start, dates.end);
   }
 
-  const getTrans = () => {
-    getTransction(1);
-  };
-
   function handleReset() {
     setDates({
       start: "",
@@ -146,6 +147,110 @@ export default function Reports() {
     });
     getData();
   }
+
+  const displayTable = useMemo(() => {
+    return (
+      <Print
+        fullName={
+          user?.ownerFirstName +
+          " " +
+          user?.ownerMiddleName +
+          " " +
+          user?.ownerLastName
+        }
+        dateRange={dateRange}
+      >
+        <Table variant="bordered">
+          <thead>
+            <tr>
+              <th>Reference No.</th>
+              <th>Date</th>
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Order</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filteredTransaction?.map((val) => (
+              <>
+                <tr key={val.order_id}>
+                  <td>{val.referenceNo}</td>
+                  <td>{val.date_success}</td>
+                  <td>
+                    {" "}
+                    <Table>
+                      <tbody>
+                        {val.order_item.map((item, i) => (
+                          <tr>
+                            <td>{item.productName}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <SizeBox height={23} />
+                  </td>
+                  <td>
+                    {" "}
+                    <Table>
+                      <tbody>
+                        {val.order_item.map((item, i) => (
+                          <tr>
+                            <td>{item.orderItemNo}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <SizeBox height={23} />
+                  </td>
+                  <td>
+                    <Table>
+                      <tbody>
+                        {val.order_item.map((item, i) => (
+                          <tr>
+                            <td>{item.price}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <SizeBox height={23} />
+                  </td>
+                  <td>
+                    {" "}
+                    <Table>
+                      <tbody>
+                        {val.order_item.map((item, i) => (
+                          <tr>
+                            <td>{item.orderItemAmount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <b>{val.order_total_amout}</b>
+                  </td>
+                </tr>
+              </>
+            ))}
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                {" "}
+                <b>Total Sales</b>{" "}
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                {" "}
+                <b>{getSales}</b>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </Print>
+    );
+  }, [filteredTransaction]);
 
   return (
     <Sidebar>
@@ -199,14 +304,17 @@ export default function Reports() {
                 " " +
                 user?.ownerLastName
               }
+              dateRange={dateRange}
             >
               <Table variant="bordered">
                 <thead>
                   <tr>
                     <th>Reference No.</th>
                     <th>Date</th>
-                    <th>Total Amount</th>
-                    <th>Order item</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total Order</th>
                   </tr>
                 </thead>
 
@@ -215,43 +323,79 @@ export default function Reports() {
                     <>
                       <tr key={val.order_id}>
                         <td>{val.referenceNo}</td>
-                        <td>{formatDisplayDate(val.date_success)}</td>
-                        <td>{val.order_total_amout}</td>
+                        <td>{val.date_success}</td>
                         <td>
+                          {" "}
                           <Table>
-                            <thead>
-                              <tr>
-                                <th>Item Name</th>
-                                <th>Item Sold</th>
-                                <th>Stock</th>
-                              </tr>
-                            </thead>
                             <tbody>
                               {val.order_item.map((item, i) => (
                                 <tr>
                                   <td>{item.productName}</td>
-                                  <td>{item.orderItemNo}</td>
-                                  <td>{item.stock}</td>
                                 </tr>
                               ))}
                             </tbody>
                           </Table>
+                          <SizeBox height={23} />
+                        </td>
+                        <td>
+                          {" "}
+                          <Table>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.orderItemNo}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                          <SizeBox height={23} />
+                        </td>
+                        <td>
+                          <Table>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.price}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                          <SizeBox height={23} />
+                        </td>
+                        <td>
+                          {" "}
+                          <Table>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.orderItemAmount}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                          <b>{val.order_total_amout}</b>
                         </td>
                       </tr>
                     </>
                   ))}
                   <tr>
+                    <td></td>
+                    <td></td>
                     <td>
-                      <Text>Total</Text>
+                      {" "}
+                      <b>Total Sales</b>{" "}
                     </td>
                     <td></td>
-                    <td> {getSales}</td>
                     <td></td>
+                    <td>
+                      {" "}
+                      <b>{getSales}</b>
+                    </td>
                   </tr>
                 </tbody>
               </Table>
             </Print>
-            {transactions?.length < 1 ? (
+            {filteredTransaction?.length < 1 ? (
               <S.NoItemFound>No Item Found</S.NoItemFound>
             ) : null}
           </>

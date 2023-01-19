@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useMemo } from "react";
 import { useReactToPrint } from "react-to-print";
 import Button from "../Button";
 import Text from "../Text";
@@ -14,6 +14,10 @@ export default function Print(props) {
     content: () => compref.current,
   });
   const { user } = useGetUserFromStorage();
+
+  const displayDate = useMemo(() => {
+    return props.dateRange && <p>Date Range: {props.dateRange}</p>;
+  }, [props.dateRange]);
 
   return (
     <div>
@@ -32,16 +36,17 @@ export default function Print(props) {
         </S.Header>
 
         <SizeBox height={10} />
+        {displayDate}
         {props.children}
         <S.Header>
-          <S.SideContainer></S.SideContainer>
-          <S.SideContainer justification="flex-end">
+          <S.SideContainer>
             <div>
               <S.Prepare>Prepared By :</S.Prepare>
               <SizeBox height={20} />
               <S.UserName> {" " + props?.fullName + " "}</S.UserName>
             </div>
           </S.SideContainer>
+          <S.SideContainer></S.SideContainer>
         </S.Header>
       </S.Container>
 

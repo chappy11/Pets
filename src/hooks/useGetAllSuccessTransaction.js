@@ -113,10 +113,11 @@ export default function useGetAllSuccessTransaction() {
 
   const getByMonth = () => {
     const dateRange = getDateRange("M");
+
     const filteredData = transactions.filter((val) =>
       isDateBetween(dateRange.firstDate, dateRange.lastDate, val.date_success)
     );
-    filteredTransaction(filteredData);
+    setFilteredTransaction(filteredData);
   };
 
   const getByWeek = () => {
@@ -129,11 +130,11 @@ export default function useGetAllSuccessTransaction() {
 
   const getByDays = () => {
     const dateRange = getDateRange("d");
-    const current = dayjs(new Date());
-    const filteredData = transactions.filter(
-      (val) =>
-        standarDateFormat(current) === standarDateFormat(val.date_success)
-    );
+    const current = dayjs();
+    console.log(standarDateFormat(current));
+    const filteredData = transactions.filter((val) => {
+      return standarDateFormat(current) === standarDateFormat(val.date_success);
+    });
 
     setFilteredTransaction(filteredData);
   };
@@ -154,10 +155,9 @@ export default function useGetAllSuccessTransaction() {
         alertWarning("Invalid date sequence");
         return;
       }
-      const endDate = standarDateFormat(dayjs().add(1, "day"));
+      const endDate = standarDateFormat(dayjs(end).add(1, "day"));
       const startDate = standarDateFormat(start);
       const isDateIsEqual = startDate === standarDateFormat(end);
-
       const filtered = transactions.filter((val) => {
         if (isDateIsEqual) {
           return startDate === standarDateFormat(val.date_success);
@@ -165,10 +165,10 @@ export default function useGetAllSuccessTransaction() {
           return isDateBetween(startDate, endDate, val.date_success);
         }
       });
-      console.log(filtered);
+      console.log(filtered.length);
       setFilteredTransaction(filtered);
     },
-    [filteredTransaction, setFilteredTransaction]
+    [filteredTransaction, transactions, setFilteredTransaction]
   );
 
   const getSales = useMemo(() => {

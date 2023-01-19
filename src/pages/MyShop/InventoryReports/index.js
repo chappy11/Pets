@@ -1,91 +1,282 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Table } from "react-bootstrap";
-import { Container, HeaderText, Print, SizeBox } from "../../../components";
-import { getItem, KEY } from "../../../utils/storage";
+import React from "react";
 import Sidebar from "../components/Sidebar";
-import { Product as ProductAPi } from "../../../services/Product";
-import { BASE_URL } from "../../../services/ApiClient";
+import { Row, Table, Col } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  DashBoardCard,
+  SizeBox,
+  TextInput,
+  Title,
+  Print,
+  HeaderText,
+} from "../../../components";
+import useGetAllSuccessTransaction from "../../../hooks/useGetAllSuccessTransaction";
+import * as S from "./style";
+import { defaultThemes } from "../../../constants/DefaultThemes";
+import { formatCurrency } from "../../../utils/Money";
+import { useMemo, useState, useCallback, useEffect } from "react";
+import { formatDisplayDate, standarDateFormat } from "../../../utils/date";
+import { Link } from "react-router-dom";
 import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
+import { Orders } from "../../../services/Orders";
 
 export default function InventoryReports() {
-  const [products, setProducts] = useState([]);
+  const {
+    transactions,
+    filteredTransaction,
+    getSales,
+    getByDays,
+    getByWeek,
+    getByMonth,
+    totalSales,
+    getByDateSearch,
+    getData,
+  } = useGetAllSuccessTransaction();
   const { user } = useGetUserFromStorage();
+  const [isPrint, setIsPrint] = useState(false);
+  const [dates, setDates] = useState({
+    start: "",
+    end: "",
+  });
 
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  const getProducts = async () => {
-    const shopData = await getItem(KEY.ACCOUNT);
-
-    const response = await ProductAPi.getProductByShopId(shopData.shop_id);
-
-    if (response.data.status == "1") {
-      setProducts(response.data.data);
-    }
+  const onChange = (e) => {
+    setDates({ ...dates, [e.target.name]: e.target.value });
   };
 
-  const itemAvailability = useCallback((stock) => {
-    if (stock == "0") {
-      return <p style={{ color: "red" }}>Sold Out</p>;
-    }
+  const dateRange = useMemo(() => {
+    if (filteredTransaction) {
+      const size = filteredTransaction.length - 1;
+      console.log(dates);
+      if (dates.start && dates.end) {
+        return (
+          standarDateFormat(dates.start) + " - " + standarDateFormat(dates.end)
+        );
+      }
 
-    return <p style={{ color: "green" }}>Available</p>;
-  }, []);
-  return (
-    <Sidebar>
-      <Container>
-        <SizeBox height={10} />
+      return (
+        standarDateFormat(filteredTransaction[size]?.date_success) +
+        " - " +
+        standarDateFormat(filteredTransaction[0]?.date_success)
+      );
+    }
+  }, [filteredTransaction]);
+
+  const displaySales = useMemo(() => {
+    if (totalSales) {
+      return (
+        <Row>
+          <Col>
+            <DashBoardCard
+              onClick={() => getByDays()}
+              color={defaultThemes.secondary}
+              title="Today Sales"
+              subtitle={formatCurrency(totalSales?.day)}
+            />
+          </Col>
+          <Col>
+            <DashBoardCard
+              onClick={() => getByWeek()}
+              color={defaultThemes.secondary}
+              title="This Week"
+              subtitle={formatCurrency(totalSales?.week)}
+            />
+          </Col>
+          <Col>
+            <DashBoardCard
+              onClick={() => getByMonth()}
+              color={defaultThemes.secondary}
+              title="This Month"
+              subtitle={formatCurrency(totalSales?.month + 0)}
+            />
+          </Col>
+        </Row>
+      );
+    }
+  }, [totalSales]);
+
+  const displayForPrint = useMemo(() => {
+    if (isPrint) {
+      return (
         <Print
           fullName={
             user?.ownerFirstName +
-            " " +
             " " +
             user?.ownerMiddleName +
             " " +
             user?.ownerLastName
           }
+          cancelText={"Cancel"}
+          onCancel={() => setIsPrint(false)}
         >
-          <HeaderText>Inventory Reports</HeaderText>
-
           <SizeBox height={10} />
-
-          <Table responsive={"md"} bordered={true}>
+          <HeaderText>Sales Report</HeaderText>
+          <SizeBox height={15} />
+          <Table variant="bordered">
             <thead>
               <tr>
-                <th>Date Created</th>
-                <th>Image</th>
-                <th>Name</th>
-
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Date Updated</th>
+                <th>Reference No.</th>
+                <th>Date</th>
+                <th>Total Amount</th>
               </tr>
             </thead>
+
             <tbody>
-              {products.map((val, i) => (
+              {filteredTransaction?.map((val) => (
                 <tr>
-                  <td>{val.p_createdAt}</td>
-                  <td>
-                    <img
-                      src={BASE_URL + "" + val.productImage}
-                      alt="product"
-                      style={{ width: 50, height: 50 }}
-                    />
-                  </td>
-                  <td>{val.productName}</td>
-                  <td>
-                    {val.stock} {val.unit}
-                  </td>
-                  <td>{val.price}</td>
-                  <td>{itemAvailability(val.stock)}</td>
-                  <td>{val.p_updateAt}</td>
+                  <td>{val.shopReference}</td>
+                  <td>{formatDisplayDate(val.date_success)}</td>
+                  <td>{val.order_total_amout}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </Print>
+      );
+    }
+  }, [isPrint]);
+
+  function handleGenerate() {
+    getByDateSearch(dates.start, dates.end);
+  }
+
+  function handleReset() {
+    setDates({
+      start: "",
+      end: "",
+    });
+    getData();
+  }
+
+  return (
+    <Sidebar>
+      <Container>
+        {displayForPrint}
+        {!isPrint && (
+          <>
+            <Title>Reports</Title>
+            <SizeBox height={20} />
+            {displaySales}
+            <SizeBox height={10} />
+            <Row>
+              <Col>
+                <TextInput
+                  type="date"
+                  name="start"
+                  onChange={onChange}
+                  value={dates.start}
+                />
+              </Col>
+              <Col>
+                {" "}
+                <TextInput
+                  type="date"
+                  name="end"
+                  onChange={onChange}
+                  value={dates.end}
+                />
+              </Col>
+              <Col>
+                <Row>
+                  <Col>
+                    <SizeBox height={15} />
+                    <Button onClick={() => handleGenerate()}>Generate</Button>
+                  </Col>
+                  <Col>
+                    <SizeBox height={15} />
+                    <Button color="red" onClick={() => handleReset()}>
+                      Reset
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <SizeBox height={12} />
+            <Print
+              fullName={
+                user?.ownerFirstName +
+                " " +
+                user?.ownerMiddleName +
+                " " +
+                user?.ownerLastName
+              }
+              dateRange={dateRange}
+            >
+              <Table variant="bordered">
+                <thead>
+                  <tr>
+                    <th>Reference No.</th>
+                    <th>Date</th>
+                    <th>Product Name</th>
+                    <th>Available</th>
+                    <th>Stock</th>
+                    <th>Total Stock</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredTransaction?.map((val) => (
+                    <>
+                      <tr key={val.order_id}>
+                        <td>{val.referenceNo}</td>
+                        <td>{val.date_success}</td>
+                        <td>
+                          {" "}
+                          <Table>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.productName}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </td>
+                        <td>
+                          {" "}
+                          <Table>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.stock}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </td>
+                        <td>
+                          <Table>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.orderItemNo}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </td>
+                        <td>
+                          {" "}
+                          <Table>
+                            <tbody>
+                              {val.order_item.map((item, i) => (
+                                <tr>
+                                  <td>{item.stock_history}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              </Table>
+            </Print>
+            {transactions?.length < 1 ? (
+              <S.NoItemFound>No Item Found</S.NoItemFound>
+            ) : null}
+          </>
+        )}
       </Container>
     </Sidebar>
   );
