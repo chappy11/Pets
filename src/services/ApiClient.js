@@ -53,3 +53,7 @@ export const ReviewApi = (method) => {
 export const MessagesApi = (method) => {
   return `${BASE_URL}message/${method}`;
 };
+
+export const MessageConnectionApi = (method) => {
+  return `${BASE_URL}messageconnection/${method}`;
+};
