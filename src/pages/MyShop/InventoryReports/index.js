@@ -209,7 +209,7 @@ export default function InventoryReports() {
                     <th>Date</th>
                     <th>Product Name</th>
                     <th>Available</th>
-                    <th>Stock</th>
+                    <th>Sold</th>
                     <th>Total Stock</th>
                   </tr>
                 </thead>
