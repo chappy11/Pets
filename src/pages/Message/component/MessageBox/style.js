@@ -3,7 +3,6 @@ import { defaultThemes } from "../../../../constants/DefaultThemes";
 
 export const Container = styled.div`
   background: white;
-  padding: 10px;
 `;
 
 export const MessageContainer = styled.div`
@@ -22,18 +21,17 @@ export const Label = styled.p`
 
 export const Message = styled.div`
   align-self: ${(props) => props.alignment};
-  margin:0px 10px;
+  margin: 0px 10px;
 `;
 
 export const Msg = styled.div`
   background: ${(props) => props.background};
-  padding: 10px;
   border-radius: 10px;
 `;
 
 export const MsgText = styled.p`
-  text-align: center;
-  vertical-align: middle;
+  padding: 10px;
+
   color: white;
 `;
 

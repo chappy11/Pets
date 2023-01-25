@@ -50,6 +50,7 @@ import UpdateUser from "./pages/UpdateUser";
 import UpdateShop from "./pages/UpdateUser/UpdateShop";
 import InventoryReports from "./pages/MyShop/InventoryReports";
 import SuccessList from "./pages/MyShop/SuccessList";
+import About from "./pages/About";
 
 require("./App.css");
 
@@ -84,6 +85,8 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/forgotpassword/:id" element={<ForgotPassword />} />
           <Route path="/otp" element={<Otp />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       );
     }

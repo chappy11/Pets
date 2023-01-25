@@ -305,6 +305,7 @@ export default function Reports() {
                 user?.ownerLastName
               }
               dateRange={dateRange}
+              textHeader="Sales Reports"
             >
               <Table variant="bordered">
                 <thead>

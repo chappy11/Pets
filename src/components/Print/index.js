@@ -7,6 +7,7 @@ import * as S from "./style";
 import { getCurrentDate } from "../../utils/date";
 import useGetUserFromStorage from "../../hooks/useGetUserFromStorage";
 import HeaderText from "../HeaderText";
+import { Col, Row } from "react-bootstrap";
 
 export default function Print(props) {
   const compref = useRef(null);
@@ -26,17 +27,19 @@ export default function Print(props) {
         <Text alignText="center">{user?.shopAddress}</Text>
         <Text alignText="center">{user?.shopContact}</Text>
         <SizeBox height={20} />
+        <HeaderText textAlign="center" color="grey">
+          {props?.textHeader}
+        </HeaderText>
+        <SizeBox height={40} />
         <S.Header>
-          <S.SideContainer>
-            <HeaderText>{props?.textHeader}</HeaderText>
-          </S.SideContainer>
+          <S.SideContainer>{displayDate}</S.SideContainer>
           <S.SideContainer justification="flex-end">
             <Text alignText={"right"}>Date: {getCurrentDate()}</Text>
           </S.SideContainer>
         </S.Header>
 
         <SizeBox height={10} />
-        {displayDate}
+
         {props.children}
         <S.Header>
           <S.SideContainer>

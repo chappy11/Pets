@@ -201,6 +201,7 @@ export default function InventoryReports() {
                 user?.ownerLastName
               }
               dateRange={dateRange}
+              textHeader="Inventory Reports"
             >
               <Table variant="bordered">
                 <thead>

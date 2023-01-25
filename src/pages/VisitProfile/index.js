@@ -1,5 +1,6 @@
 import { Button, HeaderText, Text, TextInput } from "../../components";
 import { useState } from "react";
+import { MessageConnection } from "../../services/MessageConnection";
 import * as S from "./style";
 import { Navigation, SizeBox, ListItem } from "../../components";
 import { useParams } from "react-router-dom";
@@ -25,13 +26,15 @@ export default function VisitProfile() {
       const user = await getItem(KEY.ACCOUNT);
 
       const payload = {
-        sender_id: user?.user_id,
-        reciever_id: data?.user_id,
-        message: message,
+        message,
+        customer_id: user?.customer_id,
+        shop_id: data?.shop_id,
+        sender: user?.user_roles,
       };
-      const resp = await Messages.createMessage(payload);
-      if (resp) {
-        alertSuccess("Success");
+
+      const resp = await MessageConnection.sendmessage(payload);
+      if (resp.data.status == 1) {
+        alertSuccess("Success sent");
       }
     } catch (e) {
       alertError();

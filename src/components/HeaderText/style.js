@@ -5,4 +5,5 @@ export const Text = styled.p`
   font-size: 22px;
   color: ${(props) => props.color};
   vertical-align: center;
+  text-align: ${(props) => props.textAlign};
 `;

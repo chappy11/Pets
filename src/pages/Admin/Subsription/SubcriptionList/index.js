@@ -66,9 +66,6 @@ export default function SubscriptionList() {
         <td>{formatCurrency(+val.price_limit)}</td>
         <td>{val.sub_date_created}</td>
         <td>
-          <Link to="/">View</Link>{" "}
-        </td>
-        <td>
           <Button
             color={defaultThemes.secondary}
             onClick={() => handleOpenUpdate(val.subscription_id)}
@@ -197,7 +194,7 @@ export default function SubscriptionList() {
               <th>Price</th>
               <th>Price Limit</th>
               <th>Date Created</th>
-              <th>View</th>
+
               <th>Action</th>
             </tr>
           </thead>
