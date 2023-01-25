@@ -12,36 +12,35 @@ import useGetAllReciever from "../../../../hooks/useGetAllReciever";
 import { BASE_URL } from "../../../../services/ApiClient";
 import { ListItemButton } from "@mui/material";
 export default function MessageList(props) {
-  const { data } = useGetAllReciever();
+  const { data,isCustomer } = useGetAllReciever();
 
   const display = useMemo(() => {
-    return data.map((val, i) => (
+    return data?.map((val, i) =>{ 
+      const logo = isCustomer ?   val.logo : val.profilePic;
+      const name = isCustomer ?  val.shopName :  val.firstname+" "+val.middlename+" "+val.lastname;
+
+   
+      return(
       <>
         <ListItemButton
-          selected={props.reciever_id === val.reciever_id}
+           selected={props.conn_id === val.conn_id}
           alignItems="flex-start"
-          onClick={() => (window.location.href = "/message/" + val.reciever_id)}
+          onClick={() => (window.location.href = "/message/" + val.conn_id)}
         >
           <ListItemAvatar>
             <Avatar
               alt="Remy Sharp"
-              src={
-                val.shop_id ? BASE_URL + val.logo : BASE_URL + val.profilePic
-              }
+              src={logo}
             />
           </ListItemAvatar>
           <ListItemText
-            primary={
-              val.shop_id
-                ? val.shopName
-                : val.firstName + "" + val.middleName + "" + val.lastName
-            }
-            secondary={<React.Fragment>{val.message}</React.Fragment>}
+            primary={name}
+           // secondary={<React.Fragment>{val.message}</React.Fragment>}
           />
         </ListItemButton>
         <Divider variant="inset" component="li" />
       </>
-    ));
+    )});
   }, [data]);
 
   return (

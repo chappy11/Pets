@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Messages } from "../services/Messages";
+import { MessageConnection } from "../services/MessageConnection";
+
 import { getItem, KEY } from "../utils/storage";
 
 export default function useGetConvo(props) {
   const [data, setData] = useState([]);
   const [isRefetch, setIsRefetch] = useState(false);
-
+  const [roles,setRoles] = useState(0);
   useEffect(() => {
     getData();
   }, []);
@@ -17,8 +18,12 @@ export default function useGetConvo(props) {
 
   const getData = async () => {
     try {
+     
       const user = await getItem(KEY.ACCOUNT);
-      const resp = await Messages.getConvo(user.user_id, props);
+      setRoles(user?.user_roles);
+      const resp = await  MessageConnection.getConvo(props,user?.user_roles);
+      console.log("RES",resp)
+      
       setData(resp.data.data);
     } catch (e) {
       console.log(e);
@@ -27,5 +32,6 @@ export default function useGetConvo(props) {
   return {
     data,
     setIsRefetch,
+    roles,
   };
 }

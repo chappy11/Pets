@@ -22,6 +22,7 @@ export const Label = styled.p`
 
 export const Message = styled.div`
   align-self: ${(props) => props.alignment};
+  margin:0px 10px;
 `;
 
 export const Msg = styled.div`

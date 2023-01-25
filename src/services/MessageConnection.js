@@ -13,7 +13,19 @@ export const MessageConnection = {
 
     return resp;
   },
-  getCustomerMessage:()=>{
-    
+  getCustomerMessage:async(customer_id)=>{
+    const resp = await axios.get(MessageConnectionApi(`getcustomermessages/${customer_id}`));
+
+    return resp;
+  },
+  getShopMessages:async(shop_id)=>{
+    const resp = await axios.get(MessageConnectionApi(`getshopmessages/${shop_id}`));
+
+    return resp;
+  },
+  getConvo:async(conn_id,roles)=>{
+    const resp = await axios.get(MessageConnectionApi(`convos/${conn_id}/${roles}`));
+
+    return resp;
   }
 };
