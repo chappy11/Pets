@@ -68,7 +68,7 @@ export default function Otp() {
         title: "Validated",
         type: "success",
         onConfirm: () =>
-          (window.location.href = `/forgotpassword/${data.user_id}`),
+          (window.location.href = `/forgotpassword/${data[0].user_id}`),
       });
       return;
     }
