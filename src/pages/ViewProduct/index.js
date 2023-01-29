@@ -240,6 +240,22 @@ export default function ViewProduct() {
     ));
   }, [reviews, setReviews]);
 
+  const displayStock = useMemo(() => {
+    if (data?.stock > 0) {
+      return data?.stock + " " + data?.unit + " available";
+    }
+
+    return "Out Of Stock";
+  }, [data?.stock]);
+
+  const isDisAbled = useMemo(() => {
+    if (data?.stock < 1) {
+      return true;
+    }
+
+    return false;
+  }, [data?.stock]);
+
   return (
     <>
       <Navigation isFetch={isLoading} />
@@ -263,10 +279,7 @@ export default function ViewProduct() {
               </HeaderText>
               <Line />
               <SizeBox height={10} />
-              <ListItem
-                label={"Stock"}
-                value={data?.stock + " " + data?.unit + " available"}
-              />
+              <ListItem label={"Stock"} value={displayStock} />
               <SizeBox height={10} />
               <ListItem
                 label="Price"
@@ -279,7 +292,7 @@ export default function ViewProduct() {
               {data?.productDescription}
               <SizeBox height={20} />
               <S.BoxContainer>
-                <Button onClick={handleAddToCart}>
+                <Button onClick={handleAddToCart} disabled={isDisAbled}>
                   <ShoppingCartIcon /> Add to Cart
                 </Button>
                 <SizeBox width={20} />
