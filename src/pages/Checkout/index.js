@@ -16,9 +16,11 @@ import { getItem, KEY } from "../../utils/storage";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { formatCurrency } from "../../utils/Money";
 import PaymentMethod from "./components/PaymentMethod";
+import usePrompts from "../../hooks/usePrompts";
 
 export default function Checkout() {
   const { item } = useActiveItem();
+  const { alertWithCallBack, alertError } = usePrompts();
   const [isHalf, setIsHalf] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -83,8 +85,12 @@ export default function Checkout() {
     const res = await Orders.checkout(payload);
     if (res.data.status == 1) {
       setIsOpen(false);
-      swal("Success", "Order Created", "success");
-      window.location.href = "/order";
+      alertWithCallBack({
+        title: "Success",
+        type: "success",
+        message: "Successfully Ordered",
+        onConfirm: () => (window.location.href = "/order"),
+      });
     } else {
       swal("Error", "Something went wrong", "error");
     }

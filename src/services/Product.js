@@ -52,4 +52,12 @@ export const Product = {
 
     return data;
   },
+  updateInfo: async (payload) => {
+    const headers = {
+      "Content-Type": "text/plain",
+    };
+    const data = await axios.post(ItemApi("updateInfo"), payload, { headers });
+
+    return data;
+  },
 };

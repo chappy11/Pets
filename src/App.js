@@ -51,6 +51,7 @@ import UpdateShop from "./pages/UpdateUser/UpdateShop";
 import InventoryReports from "./pages/MyShop/InventoryReports";
 import SuccessList from "./pages/MyShop/SuccessList";
 import About from "./pages/About";
+import ProductId from "./pages/MyShop/Product/ProductId";
 
 require("./App.css");
 
@@ -110,6 +111,7 @@ function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/message/:id" element={<Message />} />
           <Route path="/inventoryreports" element={<InventoryReports />} />
+          <Route path="/viewproduct/:id" element={<ProductId />} />
           <Route
             path="/viewordershop/:id/:reference"
             element={<ViewShopOrder />}

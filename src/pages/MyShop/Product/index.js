@@ -15,6 +15,7 @@ import useModal from "../../../hooks/useModal";
 import swal from "sweetalert";
 import UpdateStock from "../components/UpdateStock";
 import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
+import { Link } from "react-router-dom";
 
 export default function Product() {
   const [products, setProducts] = useState([]);
@@ -168,7 +169,11 @@ export default function Product() {
                     style={{ width: 50, height: 50 }}
                   />
                 </td>
-                <td>{val.productName}</td>
+                <td>
+                  <Link to={`/viewproduct/${val.product_id}`}>
+                    {val.productName}
+                  </Link>
+                </td>
                 <td>
                   {val.stock} {val.unit}
                 </td>
