@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "http://192.168.68.171/petsociety/";
+export const BASE_URL = "http://localhost/petsociety/";
 
 const headers = {
   "Content-Type": "text/plain",
