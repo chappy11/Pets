@@ -1,11 +1,13 @@
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Row, Col } from "react-bootstrap";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import { Link } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 import { SizeBox } from "../../../../components";
+
+import NotifIcon from "@mui/icons-material/Notifications";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import {
   GridView,
@@ -16,12 +18,31 @@ import {
 } from "@mui/icons-material";
 import CategoryIcon from "@mui/icons-material/Category";
 import * as S from "./style";
+import { getItem, KEY } from "../../../../utils/storage";
+import { Notification } from "../../../../services/Notification";
 
 export default function Sidebar(props) {
+  const [notifCount, setNotifCount] = useState(0);
   function handleLogout() {
-    window.localStorage.clear();
+    localStorage.clear();
     window.location.href = "/";
   }
+
+  useEffect(() => {
+    getNotif();
+  }, []);
+
+  const getNotif = async () => {
+    try {
+      const user = await getItem(KEY.ACCOUNT);
+      const resp = await Notification.getUnRead(user?.user_id);
+
+      setNotifCount(resp.data.count);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
@@ -46,6 +67,10 @@ export default function Sidebar(props) {
             <Menu style={{ background: "transparent" }}>
               <MenuItem icon={<GridView />}>
                 Dashboard <Link to="/" />{" "}
+              </MenuItem>
+              <MenuItem icon={<NotifIcon />}>
+                Notification <Link to="/notification" />
+                {notifCount > 0 && <S.Badge>{notifCount}</S.Badge>}
               </MenuItem>
               <SubMenu icon={<PeopleAltIcon />} title="Manage Users">
                 <MenuItem>

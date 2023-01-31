@@ -181,22 +181,24 @@ export default function Product() {
                 <td>{itemAvailability(val.stock)}</td>
                 <td>{val.p_updateAt}</td>
                 <td>
-                  <ButtonGroup className="me-2">
-                    <Button
-                      variant="success"
-                      size={"sm"}
-                      onClick={() => handleModal(val, "add")}
-                    >
-                      Stock In{" "}
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size={"sm"}
-                      onClick={() => handleModal(val, "out")}
-                    >
-                      Stock out
-                    </Button>
-                  </ButtonGroup>
+                  {val.category_id !== "1" && (
+                    <ButtonGroup className="me-2">
+                      <Button
+                        variant="success"
+                        size={"sm"}
+                        onClick={() => handleModal(val, "add")}
+                      >
+                        Stock In{" "}
+                      </Button>
+                      <Button
+                        variant="danger"
+                        size={"sm"}
+                        onClick={() => handleModal(val, "out")}
+                      >
+                        Stock out
+                      </Button>
+                    </ButtonGroup>
+                  )}
                 </td>
               </tr>
             ))}

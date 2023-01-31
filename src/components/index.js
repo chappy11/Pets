@@ -12,6 +12,7 @@ import Title from "./Title";
 import Subtitle from "./Subtitle";
 import DashBoardCard from "./DashBoardCard";
 import Print from "./Print";
+import NotificationItem from "./NotificationItem";
 export {
   TextInput,
   Navigation,
@@ -27,4 +28,5 @@ export {
   Subtitle,
   DashBoardCard,
   Print,
+  NotificationItem,
 };

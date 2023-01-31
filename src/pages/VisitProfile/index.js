@@ -112,6 +112,19 @@ export default function VisitProfile() {
             alignment="flex-end"
             value={data?.shopContact}
           />
+          <SizeBox height={20} />
+          <HeaderText>Contact Person</HeaderText>
+          <SizeBox height={20} />
+          <ListItem
+            label="Name"
+            alignment="flex-end"
+            value={data?.contactPersonFname + " " + data?.contactPersonLname}
+          />
+          <ListItem
+            label="Contact Number"
+            alignment="flex-end"
+            value={data?.contactPersonNumber}
+          />
         </S.Information>
       </S.MainContainer>
     </>

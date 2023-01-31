@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useMemo, useCallback } from "react";
-import { Table } from "react-bootstrap";
+import { Form, Modal, Table } from "react-bootstrap";
 
 import Sidebar from "../components/Sidebar";
 import { Orders } from "../../../services/Orders";
@@ -12,10 +12,17 @@ import swal from "sweetalert";
 import { SizeBox, Container, Button } from "../../../components";
 import { defaultThemes } from "../../../constants/DefaultThemes";
 import { RemoveRedEye, SwipeRight } from "@mui/icons-material";
+import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
+import usePrompts from "../../../hooks/usePrompts";
 
 export default function PendingList() {
   const [order, setOrder] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentId, setCurrentId] = useState(0);
+  const [currentShopOrderId, setCurrentShopOrderId] = useState("");
+  const [remarks, setRemarks] = useState("");
+  const { user } = useGetUserFromStorage();
+  const { alertSuccess, alertError } = usePrompts();
   useEffect(() => {
     getData();
   }, []);
@@ -35,7 +42,6 @@ export default function PendingList() {
         status: "1",
       };
       const resp = await Orders.updateStatus(payload);
-
       if (resp.data.status == 1) {
         filterNewData(id);
         swal("Success", resp.data.message, "success");
@@ -80,19 +86,74 @@ export default function PendingList() {
             Accept Order
           </Button>
         </td>
+        <td>
+          <Button
+            onClick={() => handleClickDecline(val.shoporder_id, val.order_id)}
+            color="red"
+          >
+            Decline
+          </Button>
+        </td>
       </tr>
     ));
   }, [order, setOrder]);
 
   useEffect(() => {
     getData();
-  }, [handleUpdate]);
+  }, []);
+
+  function handleClickDecline(shoporder_id, order_id) {
+    setCurrentId(order_id);
+    setCurrentShopOrderId(shoporder_id);
+    setIsOpen(true);
+  }
+
+  async function handleClick() {
+    const payload = {
+      order_id: currentId,
+      shop_id: user?.shop_id,
+      remarks: remarks,
+      cancelBy: "shop",
+    };
+
+    if (remarks == "") {
+      alertError("Fill out all fields");
+      return;
+    }
+
+    const resp = await Orders.cancelOrder(payload);
+
+    if (resp.data.status == "1") {
+      filterNewData(currentShopOrderId);
+      setIsOpen(false);
+      alertSuccess();
+    } else {
+      alertError();
+    }
+  }
 
   return (
     <>
       <Sidebar>
         <Container>
           <SizeBox height={20} />
+          <Modal show={isOpen}>
+            <Modal.Header>Reason for declining {currentId}</Modal.Header>
+            <Modal.Body>
+              <Form.Control
+                as="textarea"
+                row={3}
+                placeholder="Your Reason..."
+                onChange={(e) => setRemarks(e.target.value)}
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={() => handleClick()}>Confirm</Button>
+              <Button onClick={() => setIsOpen(false)} color="red">
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
           <HeaderText>Pending List</HeaderText>
           <Table responsive={"md"} bordered={true}>
             <thead>

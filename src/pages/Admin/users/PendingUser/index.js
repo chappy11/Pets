@@ -41,25 +41,30 @@ export default function PendingUser() {
       }
     } catch (e) {
       alertError();
-      isLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleApproved = async (user_id) => {
-    setIsLoading(true);
-    const payload = {
-      user_id: user_id,
-      status: 1,
-    };
-    const res = await User.updateStatus(payload);
+    try {
+      setIsLoading(true);
+      const payload = {
+        user_id: user_id,
+        status: 1,
+      };
+      const res = await User.updateStatus(payload);
 
-    if (res.data.status == 1) {
-      swal("Succcess", "Successfully Activated", "success");
-      getUser();
-    } else {
-      swal("Error", "Something went wrong please try again later", "error");
+      if (res.data.status == 1) {
+        swal("Succcess", "Successfully Activated", "success");
+        getUser();
+      } else {
+        swal("Error", "Something went wrong please try again later", "error");
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const printData = useMemo(() => {
@@ -153,6 +158,7 @@ export default function PendingUser() {
                     </td>
                     <td>
                       <Button
+                        isLoading={isLoading}
                         color={defaultThemes.primary}
                         onClick={() => handleApproved(val.user_id)}
                       >

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Carts } from "../../services/Cart";
+import { Notification } from "../../services/Notification";
 import { getItem, KEY } from "../../utils/storage";
 import CustomBadge from "./Badge";
 import * as S from "./style";
@@ -26,6 +27,11 @@ const NAVATION = [
     name: "Inbox",
     url: "/message/0",
   },
+  {
+    id: 700,
+    name: "Notification",
+    url: "/notification",
+  },
 ];
 
 const NO_SESSION = [
@@ -43,6 +49,7 @@ const NO_SESSION = [
 
 export default function Navigation(props) {
   const [data, setData] = useState(null);
+  const [notifCount, setNotifCount] = useState(0);
   const [count, setCount] = useState(0);
   const { isFetch } = props;
   useEffect(() => {
@@ -50,14 +57,28 @@ export default function Navigation(props) {
   }, []);
 
   useEffect(() => {
+    getCount();
+  }, []);
+  useEffect(() => {
     fetch();
   }, [isFetch]);
 
   const fetch = async () => {
     const user = await getItem(KEY.ACCOUNT);
-    const res = await Carts.mycart(user.user_id);
+    const res = await Carts.mycart(user?.user_id);
     setCount(res.data.count);
     setData(user);
+  };
+
+  const getCount = async () => {
+    try {
+      const user = await getItem(KEY.ACCOUNT);
+      const res = await Notification.getUnRead(user?.user_id);
+
+      setNotifCount(res.data.count);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const displayLinks = useMemo(() => {
@@ -65,6 +86,7 @@ export default function Navigation(props) {
       <S.CustomNav href={val.url} key={index}>
         {val.name}
         {val.id == 300 && <CustomBadge value={count} />}
+        {val.id == 700 && <CustomBadge value={notifCount} />}
       </S.CustomNav>
     ));
   }, [data, isFetch]);

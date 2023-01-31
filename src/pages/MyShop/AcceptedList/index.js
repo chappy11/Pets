@@ -50,7 +50,7 @@ export default function AcceptedList() {
 
   useEffect(() => {
     getData();
-  }, [handleUpdate]);
+  }, []);
 
   const getData = async () => {
     const user = await getItem(KEY.ACCOUNT);

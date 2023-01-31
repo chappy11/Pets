@@ -25,6 +25,8 @@ export default function ProductId() {
     name: "",
     description: "",
   });
+
+  const [currentImage, setCurrentImage] = useState(null);
   useEffect(() => {
     getData();
   }, []);
@@ -34,6 +36,7 @@ export default function ProductId() {
 
     if (resp?.data?.status == "1") {
       setData(resp?.data?.data);
+      setCurrentImage(resp?.data?.data?.productImage);
     } else {
       alertError();
     }
@@ -71,7 +74,20 @@ export default function ProductId() {
     }
     alertError();
   };
-  console.log(inputs);
+
+  const displayPetInfo = useMemo(() => {
+    if (data?.category_id == "1") {
+      return (
+        <>
+          <ListItem label="Type" value={data?.type} />
+          <SizeBox height={10} />
+          <ListItem label="Breed" value={data?.breed} />
+          <SizeBox height={10} />
+        </>
+      );
+    }
+  }, [data]);
+
   const displayData = useMemo(() => {
     if (isUpdate) {
       return (
@@ -103,7 +119,9 @@ export default function ProductId() {
         <HeaderText>{data?.productName}</HeaderText>
         <p>{data?.productDescription}</p>
         <SizeBox height={30} />
+        {displayPetInfo}
         <ListItem label={"Stock"} value={data?.stock + " " + data?.unit} />
+        <SizeBox height={10} />
         <ListItem
           label={"Price"}
           value={formatCurrency(parseFloat(data?.price))}
@@ -112,6 +130,36 @@ export default function ProductId() {
       </>
     );
   }, [isUpdate, inputs, data]);
+
+  const displayImage = useMemo(() => {
+    if (data?.category_id == "1") {
+      return (
+        <>
+          <S.Image src={BASE_URL + currentImage} width="330" height={350} />
+          <SizeBox height={10} />
+          <Row>
+            <Col>
+              <S.Image
+                src={BASE_URL + data?.productImage}
+                width="150"
+                height="150"
+                onClick={() => setCurrentImage(data?.productImage)}
+              />
+            </Col>
+            <Col>
+              <S.Image
+                src={BASE_URL + data?.documentImg}
+                width="150"
+                height="150"
+                onClick={() => setCurrentImage(data?.documentImg)}
+              />
+            </Col>
+          </Row>
+        </>
+      );
+    }
+    <S.Image src={BASE_URL + currentImage} width="330" height={350} />;
+  }, [data, currentImage]);
 
   const displayButton = useMemo(() => {
     if (isUpdate) {
@@ -133,9 +181,7 @@ export default function ProductId() {
     <Sidebar>
       <Container>
         <S.Container>
-          <div>
-            <S.Image src={BASE_URL + data?.productImage} />
-          </div>
+          <div>{displayImage}</div>
           <SizeBox width={50} />
           <S.Info>
             {displayData}

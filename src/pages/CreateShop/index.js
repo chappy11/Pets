@@ -47,6 +47,9 @@ export default function CreateShop() {
     description: "",
     address: "",
     shippingFee: 35,
+    cfirstname: "",
+    clastname: "",
+    cNumber: "",
   });
 
   const [shop, setShop] = useState({});
@@ -76,7 +79,10 @@ export default function CreateShop() {
       user.lastname === "" ||
       user.name === "" ||
       user.description === "" ||
-      user.address === ""
+      user.address === "" ||
+      user?.cfirstname === "" ||
+      user?.clastname === "" ||
+      user?.cNumber === ""
     ) {
       alertWarning("Please fillout all fields");
     } else if (!/^([a-zA-Z0-9_-]+)$/.test(user.username)) {
@@ -128,8 +134,11 @@ export default function CreateShop() {
           alertSuccess("We send you a verification code");
           await setIsOpen(true);
           return;
+        } else {
+          alertWarning(res.data.message);
         }
       } catch (e) {
+        console.log(e);
         alertError();
       } finally {
         setIsLoading(false);
@@ -142,30 +151,37 @@ export default function CreateShop() {
       alertError("Invalid code please check you email again");
       return;
     }
-    const formdata = new FormData();
-    formdata.append("username", user.username);
-    formdata.append("password", user.password);
-    formdata.append("firstname", user.firstname);
-    formdata.append("middlename", user.middlename);
-    formdata.append("lastname", user.lastname);
-    formdata.append("shopDescription", user.description);
-    formdata.append("shopName", user.name);
-    formdata.append("address", user.address);
-    formdata.append("shopEmail", user.email);
-    formdata.append("contact", user.contact);
-    formdata.append("shopLogo", img);
-
-    const response = await User.createshop(formdata);
-    if (response.data.status == 1) {
-      alertWithCallBack({
-        title: "Registered",
-        message: "Successfully Registered",
-        icon: "success",
-        btnTextConfirm: "Login Now",
-        onConfirm: () => (window.location.href = "/login"),
-      });
-    } else {
-      swal("Error", response.data.message, "error");
+    try {
+      const formdata = new FormData();
+      formdata.append("username", user.username);
+      formdata.append("password", user.password);
+      formdata.append("firstname", user.firstname);
+      formdata.append("middlename", user.middlename);
+      formdata.append("lastname", user.lastname);
+      formdata.append("shopDescription", user.description);
+      formdata.append("shopName", user.name);
+      formdata.append("address", user.address);
+      formdata.append("shopEmail", user.email);
+      formdata.append("contact", user.contact);
+      formdata.append("shopLogo", img);
+      formdata.append("cfname", user?.cfirstname);
+      formdata.append("clname", user?.clastname);
+      formdata.append("cNumber", user?.cNumber);
+      const response = await User.createshop(formdata);
+      if (response.data.status == 1) {
+        alertWithCallBack({
+          title: "Registered",
+          message: "Your  account has been reviewed by the administrator",
+          icon: "success",
+          btnTextConfirm: "Login Now",
+          onConfirm: () => (window.location.href = "/login"),
+        });
+      } else {
+        swal("Error", response.data.message, "error");
+      }
+    } catch (e) {
+      console.log(e);
+      alertError();
     }
   }
 
@@ -334,6 +350,35 @@ export default function CreateShop() {
                 name="address"
                 label="Address"
                 placeholder="St. Brgy City"
+                onChange={onChange}
+              />
+              {/* link */}
+              <SizeBox height={20} />
+              <HeaderText>Contact Personal Information</HeaderText>
+              <SizeBox height={12} />
+              <Row>
+                <Col>
+                  <TextInput
+                    name="cfirstname"
+                    placeholder="Enter firstname"
+                    label="Firstname"
+                    onChange={onChange}
+                  />
+                </Col>
+                <Col>
+                  <TextInput
+                    name="clastname"
+                    placeholder="Enter lastname"
+                    label="Lastname"
+                    onChange={onChange}
+                  />
+                </Col>
+              </Row>
+              <SizeBox height={10} />
+              <TextInput
+                name="cNumber"
+                label="Mobile / Tel No."
+                placeholder="Mobile / Tel No."
                 onChange={onChange}
               />
               <SizeBox height={15} />

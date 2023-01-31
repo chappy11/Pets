@@ -1,10 +1,10 @@
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Row, Col, Navbar, Container, Nav } from "react-bootstrap";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Mail from "@mui/icons-material/Mail";
-
+import Notif from "@mui/icons-material/Notifications";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -19,12 +19,30 @@ import * as S from "./style";
 import { SizeBox } from "../../../../components";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import { Assessment, Cancel, MonetizationOn } from "@mui/icons-material";
+import { Notification } from "../../../../services/Notification";
+import { getItem, KEY } from "../../../../utils/storage";
 
 export default function Sidebar(props) {
+  const [notifCount, setNotifCount] = useState(0);
   function handleLogout() {
     localStorage.clear();
     window.location.href = "/";
   }
+
+  useEffect(() => {
+    getNotif();
+  }, []);
+
+  const getNotif = async () => {
+    try {
+      const user = await getItem(KEY.ACCOUNT);
+      const resp = await Notification.getUnRead(user?.user_id);
+
+      setNotifCount(resp.data.count);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -57,6 +75,12 @@ export default function Sidebar(props) {
                 {" "}
                 <Link to="/profile" />
                 Profile
+              </MenuItem>
+              <MenuItem icon={<Notif />}>
+                {" "}
+                <Link to="/notification" />
+                Notification
+                {notifCount > 0 && <S.Badge>{notifCount}</S.Badge>}
               </MenuItem>
               <MenuItem icon={<Mail />}>
                 {" "}

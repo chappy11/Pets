@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Accordion, Row, Col, Button, Image } from "react-bootstrap";
 
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Navigation,
   SizeBox,
@@ -22,6 +22,7 @@ import * as S from "./style";
 import OrderStatus from "./component/OrderStatus";
 import usePrompts from "../../hooks/usePrompts";
 import { defaultThemes } from "../../constants/DefaultThemes";
+import { formatDisplayDate } from "../../utils/date";
 
 export default function ViewOrder() {
   const [data, setData] = useState([]);
@@ -46,7 +47,10 @@ export default function ViewOrder() {
       const payload = {
         shop_id: shop_id,
         order_id: params.id,
+        remarks: "",
+        cancelBy: "customer",
       };
+
       const resp = await Orders.cancelOrder(payload);
 
       if (resp.data.status == "1") {
@@ -115,18 +119,20 @@ export default function ViewOrder() {
                         </Text>
                         <Text>Order Status:</Text>
                         <OrderStatus status={val.status} />
+                        <p>{formatDisplayDate(val.shopOrderUpdateAt)}</p>
                       </S.Container>
                       <S.Container alignment="flex-end">
-                        {val.status === "0" && data[0].payment_method === "0" && (
-                          <div>
-                            <CustomButton
-                              color="red"
-                              onClick={() => handleCancel(val.shop_id)}
-                            >
-                              Cancel Order
-                            </CustomButton>
-                          </div>
-                        )}
+                        {val.status === "0" &&
+                          data[0].payment_method === "0" && (
+                            <div>
+                              <CustomButton
+                                color="red"
+                                onClick={() => handleCancel(val.shop_id)}
+                              >
+                                Cancel Order
+                              </CustomButton>
+                            </div>
+                          )}
                       </S.Container>
                     </S.InfoContainer>
                     {val.items.map((item, i) => (
@@ -140,7 +146,14 @@ export default function ViewOrder() {
                             />
                           </Col>
                           <Col>
-                            <Subtitle>{item.productName}</Subtitle>
+                            <SizeBox height={50} />
+                            <Subtitle>
+                              <Link to={`/viewproduct/${item.product_id}`}>
+                                {" "}
+                                {item.productName}
+                              </Link>
+                            </Subtitle>
+                            <SizeBox height={10} />
                             <ListItem
                               label="Number of Items: "
                               value={item.orderItemNo + " " + item.unit}

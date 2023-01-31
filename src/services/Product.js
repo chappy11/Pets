@@ -19,6 +19,18 @@ export const Product = {
     return data;
   },
 
+  addPets: async (formdata) => {
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
+
+    const data = await axios.post(ItemApi(`addPets`), formdata, {
+      headers,
+    });
+
+    return data;
+  },
+
   displayProducts: async () => {
     const data = await axios.get(ItemApi("displayproducts"));
 

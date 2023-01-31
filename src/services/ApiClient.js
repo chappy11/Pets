@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost/petsociety/";
+export const BASE_URL = "http://192.168.68.171/petsociety/";
 
 const headers = {
   "Content-Type": "text/plain",
@@ -56,4 +56,12 @@ export const MessagesApi = (method) => {
 
 export const MessageConnectionApi = (method) => {
   return `${BASE_URL}messageconnection/${method}`;
+};
+
+export const NotificationApi = (method) => {
+  return `${BASE_URL}notification/${method}`;
+};
+
+export const RemarksApi = (method) => {
+  return `${BASE_URL}remarks/${method}`;
 };

@@ -152,7 +152,7 @@ export default function Register() {
           title: "Register",
           type: "success",
           btnTextConfirm: "Login Now",
-          message: response.data.message,
+          message: "Your  account has been reviewed by the administrator",
           onConfirm: () => (window.location.href = "/login"),
         });
       } else {

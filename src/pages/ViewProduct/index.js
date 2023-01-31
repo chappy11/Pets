@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Image, Row } from "react-bootstrap";
+import { Col, Image, Row } from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useParams } from "react-router-dom";
 import { formatCurrency } from "../../utils/Money";
@@ -38,6 +38,7 @@ export default function ViewProduct() {
   const [products, setProducts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [userReview, setUserReview] = useState("");
+  const [currentImage, setCurrentImg] = useState("");
   useEffect(() => {
     getproduct();
   }, []);
@@ -54,6 +55,7 @@ export default function ViewProduct() {
     const response = await Product.getProductById(id);
     if (response.data.status == 1) {
       setData(response.data.data);
+      setCurrentImg(response?.data?.data?.productImage);
     }
   };
 
@@ -256,21 +258,77 @@ export default function ViewProduct() {
     return false;
   }, [data?.stock]);
 
+  const displayPetInformation = useMemo(() => {
+    if (data?.category_id == "1") {
+      return (
+        <>
+          <ListItem label={"Type"} value={data?.type} />
+          <SizeBox height={10} />
+          <ListItem label={"Breed"} value={data?.breed} />
+        </>
+      );
+    }
+  }, [data]);
+
+  const header = useMemo(() => {
+    if (data?.category_id == 1) {
+      return "Pets Information";
+    }
+
+    return "Product Information";
+  }, [data]);
+
+  const displayDocument = useMemo(() => {
+    if (data?.category_id == "1") {
+      return (
+        <>
+          <Image width={300} height={350} src={BASE_URL + data?.documentImg} />
+        </>
+      );
+    }
+  }, [data]);
+
+  const displayImage = useMemo(() => {
+    if (data?.category_id == "1") {
+      return (
+        <>
+          <Image width={330} height={350} src={BASE_URL + currentImage} />
+          <Row>
+            <Col>
+              <Image
+                width={150}
+                height={150}
+                src={BASE_URL + data?.productImage}
+                onClick={() => setCurrentImg(data?.productImage)}
+              />
+            </Col>
+            <Col>
+              <Image
+                width={150}
+                height={150}
+                src={BASE_URL + data?.documentImg}
+                onClick={() => setCurrentImg(data?.documentImg)}
+              />
+            </Col>
+          </Row>
+        </>
+      );
+    }
+
+    return <Image width={300} height={350} src={BASE_URL + currentImage} />;
+  }, [data, currentImage]);
   return (
     <>
       <Navigation isFetch={isLoading} />
       <SizeBox height={10} />
       <Container>
         <SizeBox height={50} />
-        <S.TitleText>Product Information</S.TitleText>
+        <S.TitleText>{header}</S.TitleText>
         <SizeBox height={20} />
         <ItemRow>
           <S.Column md={6}>
-            <Image
-              width={300}
-              height={350}
-              src={BASE_URL + data?.productImage}
-            />
+            {displayImage}
+            <SizeBox height={10} />
           </S.Column>
           <S.Column md={6}>
             <S.InfoContainer>
@@ -278,6 +336,7 @@ export default function ViewProduct() {
                 {data?.productName}
               </HeaderText>
               <Line />
+              {displayPetInformation}
               <SizeBox height={10} />
               <ListItem label={"Stock"} value={displayStock} />
               <SizeBox height={10} />
@@ -312,7 +371,7 @@ export default function ViewProduct() {
       </Container>
       <SizeBox height={10} />
       <Container>
-        <S.TitleText>Related Products</S.TitleText>
+        <S.TitleText>Shop Products</S.TitleText>
         <Row>{displayProducts}</Row>
       </Container>
       <SizeBox height={10} />

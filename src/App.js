@@ -52,6 +52,10 @@ import InventoryReports from "./pages/MyShop/InventoryReports";
 import SuccessList from "./pages/MyShop/SuccessList";
 import About from "./pages/About";
 import ProductId from "./pages/MyShop/Product/ProductId";
+import AdminNotif from "./pages/Admin/AdminNotif";
+import UserNotif from "./pages/UserNotif";
+import ShopNotif from "./pages/MyShop/ShopNotif";
+import ViewRemarks from "./pages/ViewRemarks";
 
 require("./App.css");
 
@@ -111,6 +115,7 @@ function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/message/:id" element={<Message />} />
           <Route path="/inventoryreports" element={<InventoryReports />} />
+          <Route path="/notification" element={<ShopNotif />} />
           <Route path="/viewproduct/:id" element={<ProductId />} />
           <Route
             path="/viewordershop/:id/:reference"
@@ -134,6 +139,8 @@ function App() {
           <Route path="/vieworder/:id/:reference" element={<ViewOrder />} />
           <Route path="/viewprofile/:id" element={<VisitProfile />} />
           <Route path="/update" element={<UpdateUser />} />
+          <Route path="/notification" element={<UserNotif />} />
+          <Route path="/remarks/:id" element={<ViewRemarks />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );
@@ -154,6 +161,7 @@ function App() {
           <Route path="/customer/:id" element={<ViewCustomer />} />
           <Route path="/shop/:id" element={<ViewShop />} />
           <Route path="/logs" element={<Logs />} />
+          <Route path="/notification" element={<AdminNotif />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       );

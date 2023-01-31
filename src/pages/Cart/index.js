@@ -11,6 +11,7 @@ import { getItem, KEY } from "../../utils/storage";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import HeaderText from "../../components/HeaderText";
+import { Link } from "react-router-dom";
 import Subtitle from "../../components/Subtitle";
 import Text from "../../components/Text";
 import * as S from "./style";
@@ -175,7 +176,11 @@ export default function Cart() {
                   </Col>
                   <S.Column>
                     <S.ItemInformation>
-                      <Subtitle>{item.productName}</Subtitle>
+                      <Subtitle>
+                        <Link to={`/viewproduct/${item.product_id}`}>
+                          {item.productName}
+                        </Link>
+                      </Subtitle>
                       <ListItem
                         label="Product Price"
                         value={formatCurrency(parseFloat(item.price))}
