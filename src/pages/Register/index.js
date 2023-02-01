@@ -83,6 +83,8 @@ export default function Register() {
       alertWarning(
         "Invalid Firstname should not contain number and special character"
       );
+    }else if(user?.password.match(/^[A-Za-z]\w{7,14}$/)){
+      alertWarning("Password should password between 7 to 16 characters which contain only characters, numeric digits, underscore and first character must be a letter");
     } else if (
       isContainNumber(user.middlename) ||
       isContainNumberAndSpecialCharacter(user.middlename)

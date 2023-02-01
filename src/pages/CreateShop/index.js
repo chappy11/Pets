@@ -87,7 +87,9 @@ export default function CreateShop() {
       alertWarning("Please fillout all fields");
     } else if (!/^([a-zA-Z0-9_-]+)$/.test(user.username)) {
       alertWarning("Username should not include whitespaces");
-    } else if (!img) {
+    } else if(user?.password.match(/^[A-Za-z]\w{7,14}$/)){
+      alertWarning("Password should password between 7 to 16 characters which contain only characters, numeric digits, underscore and first character must be a letter");
+    }else if (!img) {
       alertWarning("Please choose your logo");
     } else if (!emailIsvalid(user.email)) {
       alertWarning("Invalid Email");
