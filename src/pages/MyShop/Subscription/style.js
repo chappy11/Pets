@@ -33,4 +33,5 @@ export const Price = styled.text`
   font-size: 29px;
   color: gray;
   text-align: center;
+  color: ${(props) => props.color};
 `;

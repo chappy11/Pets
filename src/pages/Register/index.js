@@ -58,6 +58,15 @@ export default function Register() {
   function validaDate() {
     openVerification();
   }
+
+  function isInvalidateMobileNumber(mobile) {
+    const isFirstNumberIsZero = mobile[0] !== "0";
+    const isSecondNumberIsNine = mobile[9] !== "9";
+    const isLengthEleven = mobile.length !== 11;
+
+    return isFirstNumberIsZero && isSecondNumberIsNine && isLengthEleven;
+  }
+
   async function openVerification() {
     setIsOpen(false);
     if (!img) {
@@ -76,6 +85,14 @@ export default function Register() {
       user.address === ""
     ) {
       alertWarning("Fill Out all fields");
+    } else if (user?.username.indexOf(" ") > 0) {
+      alertWarning("Username should not include whitespaces");
+    } else if (user?.password.indexOf(" ") > 0) {
+      alertWarning("Password should not incude whitespaces");
+    } else if (!emailIsvalid(user.email)) {
+      alertWarning("Email is Invalid");
+    } else if (isInvalidateMobileNumber(user?.contact)) {
+      alertWarning("Invalid Mobile Number");
     } else if (
       isContainNumber(user.firstname) ||
       isContainNumberAndSpecialCharacter(user.firstname)
@@ -83,8 +100,10 @@ export default function Register() {
       alertWarning(
         "Invalid Firstname should not contain number and special character"
       );
-    }else if(user?.password.match(/^[A-Za-z]\w{7,14}$/)){
-      alertWarning("Password should password between 7 to 16 characters which contain only characters, numeric digits, underscore and first character must be a letter");
+    } else if (user?.password.match(/^[A-Za-z]\w{7,14}$/)) {
+      alertWarning(
+        "Password should password between 7 to 16 characters which contain only characters, numeric digits, underscore and first character must be a letter"
+      );
     } else if (
       isContainNumber(user.middlename) ||
       isContainNumberAndSpecialCharacter(user.middlename)
@@ -103,8 +122,6 @@ export default function Register() {
       alertWarning("Password do not match");
     } else if (!isMobileNumberValid(user.contact)) {
       alertWarning("Mobile Number is Invalid");
-    } else if (!emailIsvalid(user.email)) {
-      alertWarning("Email is Invalid");
     } else if (user.password.length < 8) {
       alertWarning("Password should be 8 characters");
     } else {

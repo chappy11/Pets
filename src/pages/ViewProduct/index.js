@@ -116,6 +116,11 @@ export default function ViewProduct() {
       return;
     }
 
+    if (userReview === "") {
+      alertWarning("Please enter your review");
+
+      return;
+    }
     try {
       const payload = {
         user_id: user?.user_id,
@@ -131,6 +136,8 @@ export default function ViewProduct() {
       }
     } catch (e) {
       alertError();
+    } finally {
+      setUserReview("");
     }
   }
 
@@ -382,6 +389,7 @@ export default function ViewProduct() {
         <S.TextArea
           placeholder="Write Something..."
           onChange={reviewChange}
+          value={userReview}
         ></S.TextArea>
         <Button onClick={handleAddReview}>Add Review</Button>
       </Container>

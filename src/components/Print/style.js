@@ -3,10 +3,18 @@ import { defaultThemes } from "../../constants/DefaultThemes";
 
 export const Container = styled.div`
   padding: 20px 15px;
+  position: relative;
 `;
 
 export const Header = styled.div`
   display: flex;
+`;
+
+export const Logo = styled.img`
+  position: absolute;
+  right: 100;
+  width: 150px;
+  height: 150px;
 `;
 
 export const SideContainer = styled.div`

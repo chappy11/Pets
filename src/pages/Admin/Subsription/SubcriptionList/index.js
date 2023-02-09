@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useState } from "react";
 import { Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
+
 import {
   Title,
   Line,
@@ -194,7 +194,6 @@ export default function SubscriptionList() {
               <th>Price</th>
               <th>Price Limit</th>
               <th>Date Created</th>
-
               <th>Action</th>
             </tr>
           </thead>

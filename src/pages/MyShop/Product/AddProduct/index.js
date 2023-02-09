@@ -1,5 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import { Row, Col, Image, Form } from "react-bootstrap";
+import { isContainNumberAndSpecialCharacter } from "../../../../utils/String";
 import { useMemo, useState, useEffect } from "react";
 import {
   TextInput,
@@ -84,6 +85,8 @@ export default function AddProduct() {
       price === ""
     ) {
       swal("Warning", "Fill out all fields");
+    } else if (isContainNumberAndSpecialCharacter(name)) {
+      alertWarning(`Item Name should includes special characters`);
     } else if (+price > +user.price_limit) {
       alertWarning(`The price of item shoud be ${user.price_limit} below`);
     } else {
@@ -127,6 +130,11 @@ export default function AddProduct() {
       return;
     }
 
+    if (isContainNumberAndSpecialCharacter(name)) {
+      alertWarning(`Pets Name should includes special characters`);
+
+      return;
+    }
     if (
       name == "" ||
       description == "" ||
@@ -139,11 +147,12 @@ export default function AddProduct() {
       return;
     }
 
-    if (+price > +user.price_limit) {
-      alertWarning(`The price of item shoud be ${user.price_limit} below`);
+    if (isContainNumberAndSpecialCharacter(name))
+      if (+price > +user.price_limit) {
+        alertWarning(`The price of item shoud be ${user.price_limit} below`);
 
-      return;
-    }
+        return;
+      }
     try {
       const formdata = new FormData();
       formdata.append("name", name);

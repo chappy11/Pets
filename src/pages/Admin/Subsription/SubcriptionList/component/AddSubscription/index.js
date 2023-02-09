@@ -50,6 +50,7 @@ export default function AddSubscription(props) {
           placeholder="Description"
           label="Subscription Description"
           onChange={onChange}
+          max="50"
         />
       </Modal.Body>
       <Modal.Footer>

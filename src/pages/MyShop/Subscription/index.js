@@ -19,6 +19,13 @@ import { displayStringMonth } from "../../../utils/String";
 import { formatCurrency } from "../../../utils/Money";
 import PaymentMethod from "./components/PaymentMethod";
 
+const COLOR = [
+  defaultThemes.accepted,
+  defaultThemes.color001,
+  defaultThemes.primary,
+  "teal",
+];
+
 export default function Subscription() {
   const { subscriptions } = useGetSubscription();
   const { alertWarning } = usePrompts();
@@ -85,14 +92,16 @@ export default function Subscription() {
             color={
               val.subscription_id === (select ? select : user?.subscription_id)
                 ? defaultThemes.secondary
-                : "gray"
+                : COLOR[i]
             }
           >
             {val.subscriptionName}
           </S.HeadersText>
-          <S.Price>{formatCurrency(+val.subprice)}</S.Price>
+          <S.Price color={COLOR[i]}>{formatCurrency(+val.subprice)}</S.Price>
           <SizeBox height={20} />
-          <Text alignText="center">{val.subDescription}</Text>
+          <Text alignText="center" color={COLOR[i]}>
+            {val.subDescription}
+          </Text>
           <SizeBox height={10} />
           <ListItem
             label="Number of months"

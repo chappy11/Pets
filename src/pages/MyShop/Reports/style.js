@@ -13,3 +13,7 @@ export const Card = styled(DashBoardCard)`
 export const NoItemFound = styled.p`
   text-align: center;
 `;
+
+export const TableRow = styled.tr`
+  background-color: pink;
+`;

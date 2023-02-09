@@ -217,7 +217,7 @@ export default function InventoryReports() {
                 <tbody>
                   {filteredTransaction?.map((val) => (
                     <>
-                      <tr key={val.order_id}>
+                      <tr key={val.order_id} style={{ background: "pink" }}>
                         <td>{val.referenceNo}</td>
                         <td>{val.date_success}</td>
                         <td>

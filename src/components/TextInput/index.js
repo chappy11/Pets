@@ -17,6 +17,7 @@ export default function TextInput(props) {
         style={props.style}
         as={props?.as}
         rows={props?.rows}
+        max={props?.max}
       />
     </>
   );

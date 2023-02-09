@@ -124,7 +124,7 @@ export default function Reports() {
             <tbody>
               {filteredTransaction?.map((val) => (
                 <tr>
-                  <td>{val.shopReference}</td>
+                  <td style={{ background: "pink" }}>{val.shopReference}</td>
                   <td>{formatDisplayDate(val.date_success)}</td>
                   <td>{val.order_total_amout}</td>
                 </tr>
@@ -322,7 +322,7 @@ export default function Reports() {
                 <tbody>
                   {filteredTransaction?.map((val) => (
                     <>
-                      <tr key={val.order_id}>
+                      <tr key={val.order_id} style={{ background: "#add8e6" }}>
                         <td>{val.referenceNo}</td>
                         <td>{val.date_success}</td>
                         <td>

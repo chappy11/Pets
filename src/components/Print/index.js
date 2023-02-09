@@ -9,6 +9,7 @@ import useGetUserFromStorage from "../../hooks/useGetUserFromStorage";
 import HeaderText from "../HeaderText";
 import { Col, Row } from "react-bootstrap";
 
+const PETLOGO = require("../../asset/logo_edited.png");
 export default function Print(props) {
   const compref = useRef(null);
   const handlePrint = useReactToPrint({
@@ -23,6 +24,7 @@ export default function Print(props) {
   return (
     <div>
       <S.Container ref={compref}>
+        <S.Logo src={PETLOGO} />
         <S.Title>Pet Society</S.Title>
         <Text alignText="center">{user?.shopAddress}</Text>
         <Text alignText="center">{user?.shopContact}</Text>
