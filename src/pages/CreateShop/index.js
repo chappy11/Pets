@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row, Container, Col, Modal } from "react-bootstrap";
+import { Row, Col, Modal } from "react-bootstrap";
 import {
   Line,
   Navigation,
@@ -21,7 +21,7 @@ import {
   isContainNumber,
   isContainNumberAndSpecialCharacter,
   emailIsvalid,
-  isMobileNumberValid,
+  isInvalidMobileNumber,
 } from "../../utils/String";
 import { defaultThemes } from "../../constants/DefaultThemes";
 
@@ -85,15 +85,17 @@ export default function CreateShop() {
       user?.cNumber === ""
     ) {
       alertWarning("Please fillout all fields");
-    } else if (!/^([a-zA-Z0-9_-]+)$/.test(user.username)) {
+    } else if (user?.username.indexOf(" ") > 0) {
       alertWarning("Username should not include whitespaces");
-    } else if(user?.password.match(/^[A-Za-z]\w{7,14}$/)){
-      alertWarning("Password should password between 7 to 16 characters which contain only characters, numeric digits, underscore and first character must be a letter");
-    }else if (!img) {
+    } else if (user?.password.match(/^[A-Za-z]\w{7,14}$/)) {
+      alertWarning(
+        "Password should password between 7 to 16 characters which contain only characters, numeric digits, underscore and first character must be a letter"
+      );
+    } else if (!img) {
       alertWarning("Please choose your logo");
     } else if (!emailIsvalid(user.email)) {
       alertWarning("Invalid Email");
-    } else if (!isMobileNumberValid(user.contact)) {
+    } else if (isInvalidMobileNumber(user.contact)) {
       alertWarning("Invalid Mobile Number");
     } else if (
       isContainNumber(user.firstname) ||
@@ -120,6 +122,22 @@ export default function CreateShop() {
       alertWarning("Password do not match");
     } else if (user.password.length < 8) {
       alertWarning("Password should be 8 characters");
+    } else if (
+      isContainNumber(user.cfirstname) ||
+      isContainNumberAndSpecialCharacter(user.cfirstname)
+    ) {
+      alertWarning(
+        "Contact Firstname should not contain number and special character"
+      );
+    } else if (
+      isContainNumber(user?.clastname) ||
+      isContainNumberAndSpecialCharacter(user?.clastname)
+    ) {
+      alertWarning(
+        "Contact Lastname should not contain number and special character"
+      );
+    } else if (isInvalidMobileNumber(user?.cNumber)) {
+      alertWarning("Invalid Contact Mobile Number");
     } else {
       try {
         setIsLoading(true);
@@ -186,9 +204,6 @@ export default function CreateShop() {
       alertError();
     }
   }
-
-  console.log("CODE", sixDigitCode);
-  console.log("INPUTED", code);
 
   return (
     <>

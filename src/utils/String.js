@@ -18,10 +18,11 @@ export const isContainNumber = (value) => {
   return hasNumber.test(value);
 };
 
-export const isMobileNumberValid = (mobile) => {
-  const format = /([0]\d{3}\s?\d{3}\s?\d{4})/;
-
-  return mobile.match(format);
+export const isInvalidMobileNumber = (mobile) => {
+  const isMobileStartZero = mobile[0] !== "0";
+  const isSecondMobileNumberIsNine = mobile[1] !== "9";
+  const isElevenDigit = mobile.length !== 11;
+  return isMobileStartZero && isSecondMobileNumberIsNine && isElevenDigit;
 };
 
 export const displayStringMonth = (noMonths) => {

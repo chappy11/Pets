@@ -17,9 +17,9 @@ import Text from "../../components/Text";
 import usePrompts from "../../hooks/usePrompts";
 import {
   emailIsvalid,
-  isMobileNumberValid,
   isContainNumberAndSpecialCharacter,
   isContainNumber,
+  isInvalidMobileNumber,
 } from "../../utils/String";
 import { Email } from "../../services/Email";
 import { defaultThemes } from "../../constants/DefaultThemes";
@@ -120,7 +120,7 @@ export default function Register() {
       );
     } else if (user.password !== user.cpassword) {
       alertWarning("Password do not match");
-    } else if (!isMobileNumberValid(user.contact)) {
+    } else if (isInvalidMobileNumber(user.contact)) {
       alertWarning("Mobile Number is Invalid");
     } else if (user.password.length < 8) {
       alertWarning("Password should be 8 characters");
