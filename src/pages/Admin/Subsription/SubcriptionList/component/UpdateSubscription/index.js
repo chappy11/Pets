@@ -28,6 +28,7 @@ export default function UpdateSubscription(props) {
           name="subdesc"
           placeholder={dataToBeUpdate?.subDescription}
           onChange={dataOnUpdate}
+          max="50"
         />
         <SizeBox height={10} />
         <TextInput
