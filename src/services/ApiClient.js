@@ -65,3 +65,7 @@ export const NotificationApi = (method) => {
 export const RemarksApi = (method) => {
   return `${BASE_URL}remarks/${method}`;
 };
+
+export const VoucherApi = (method) => {
+  return `${BASE_URL}voucher/${method}`;
+};

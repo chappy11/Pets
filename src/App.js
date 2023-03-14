@@ -56,6 +56,7 @@ import AdminNotif from "./pages/Admin/AdminNotif";
 import UserNotif from "./pages/UserNotif";
 import ShopNotif from "./pages/MyShop/ShopNotif";
 import ViewRemarks from "./pages/ViewRemarks";
+import Vouchers from "./pages/MyShop/Vouchers";
 
 require("./App.css");
 
@@ -117,6 +118,7 @@ function App() {
           <Route path="/inventoryreports" element={<InventoryReports />} />
           <Route path="/notification" element={<ShopNotif />} />
           <Route path="/viewproduct/:id" element={<ProductId />} />
+          <Route path="/voucher" element={<Vouchers />} />
           <Route
             path="/viewordershop/:id/:reference"
             element={<ViewShopOrder />}

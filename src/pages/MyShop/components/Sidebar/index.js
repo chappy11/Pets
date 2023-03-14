@@ -1,6 +1,7 @@
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Row, Col, Navbar, Container, Nav } from "react-bootstrap";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Mail from "@mui/icons-material/Mail";
@@ -130,9 +131,11 @@ export default function Sidebar(props) {
                   Inventory Reports
                 </MenuItem>
               </SubMenu>
-
               <MenuItem icon={<SubscriptionsIcon />}>
                 My Subscription <Link to="/mysubscription" />
+              </MenuItem>
+              <MenuItem icon={<ConfirmationNumberIcon />}>
+                Voucher Management <Link to="/voucher" />
               </MenuItem>
               <MenuItem icon={<LogoutIcon />} onClick={handleLogout}>
                 Logout
