@@ -10,4 +10,10 @@ export const Voucher = {
 
     return data;
   },
+  getShopVouchers: async (shop_id) => {
+    console.log("BB", shop_id);
+    const data = await axios.get(VoucherApi(`shopvouchers/${shop_id}`));
+
+    return data;
+  },
 };

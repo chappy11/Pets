@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
+import React, { useState, useMemo } from "react";
+import { Modal, Table } from "react-bootstrap";
 import {
   Button,
   Container,
@@ -7,6 +7,7 @@ import {
   SizeBox,
   TextInput,
 } from "../../../components";
+import useGetShopVouchers from "../../../hooks/useGetShopVouchers";
 import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
 import usePrompts from "../../../hooks/usePrompts";
 import { Voucher } from "../../../services/Voucher";
@@ -17,6 +18,7 @@ function Vouchers() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useGetUserFromStorage();
   const { alertError, alertSuccess } = usePrompts();
+  const vouchers = useGetShopVouchers();
   const [data, setData] = useState({
     voucherLimit: 0,
     percentage: 0,
@@ -35,7 +37,7 @@ function Vouchers() {
         alertError();
         return;
       }
-
+      vouchers.getData();
       alertSuccess("Successfully Added");
     } catch (error) {
       alertError();
@@ -45,6 +47,15 @@ function Vouchers() {
   const onChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
+
+  const vouchersList = useMemo(() => {
+    return vouchers?.data.map((val, i) => (
+      <tr key={i.toString()}>
+        <td>{val.voucherLimit}</td>
+        <td>{val.percent}</td>
+      </tr>
+    ));
+  }, [vouchers]);
 
   return (
     <Sidebar>
@@ -83,6 +94,16 @@ function Vouchers() {
             <Button onClick={() => setIsOpen(true)}>Create New Voucher</Button>
           </S.ButtonContainer>
         </S.HeaderContainer>
+        <Table>
+          <thead>
+            <tr>
+              <th>Limits</th>
+              <th>Percentage</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{vouchersList}</tbody>
+        </Table>
       </Container>
     </Sidebar>
   );
