@@ -69,3 +69,7 @@ export const RemarksApi = (method) => {
 export const VoucherApi = (method) => {
   return `${BASE_URL}voucher/${method}`;
 };
+
+export const UserVoucherApi = (method) => {
+  return `${BASE_URL}uservoucher/${method}`;
+};

@@ -49,7 +49,7 @@ function Vouchers() {
   };
 
   const vouchersList = useMemo(() => {
-    return vouchers?.data.map((val, i) => (
+    return vouchers?.data?.map((val, i) => (
       <tr key={i.toString()}>
         <td>{val.voucherLimit}</td>
         <td>{val.percent}</td>

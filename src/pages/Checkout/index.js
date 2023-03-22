@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { Form, Image, Table, Row, Col } from "react-bootstrap";
 import useActiveItem from "../../hooks/useActiveItem";
 import { BASE_URL } from "../../services/ApiClient";
+import * as S from "./style";
 import {
   Navigation,
   SizeBox,
@@ -13,18 +14,20 @@ import {
 import swal from "sweetalert";
 import { Orders } from "../../services/Orders";
 import { getItem, KEY } from "../../utils/storage";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { formatCurrency } from "../../utils/Money";
 import PaymentMethod from "./components/PaymentMethod";
 import usePrompts from "../../hooks/usePrompts";
+import useGetUserVouchers from "../../hooks/useGetUserVouchers";
 
 export default function Checkout() {
-  const { item } = useActiveItem();
+  const { item, arr } = useActiveItem();
+  const { sendRequest, data: myvouchers } = useGetUserVouchers();
   const { alertWithCallBack, alertError } = usePrompts();
   const [isHalf, setIsHalf] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isCheckout, setIsCheckout] = useState(false);
+
   const onChange = (e) => {
     setIsHalf(e.target.value);
   };
@@ -32,6 +35,21 @@ export default function Checkout() {
   const onChangePayment = (e) => {
     setPaymentMethod(e.target.value);
   };
+
+  const getUserVoucher = async () => {
+    const user = await getItem(KEY.ACCOUNT);
+
+    const load = {
+      user_id: user.user_id,
+      shops: arr,
+    };
+
+    sendRequest(load);
+  };
+
+  useEffect(() => {
+    getUserVoucher();
+  }, [arr]);
 
   const displayTotal = () => {
     let total = 0;
@@ -81,6 +99,8 @@ export default function Checkout() {
       total_amount: getTotal(),
       isHalf: paymentMethod == "1" ? parseInt(isHalf) : 0,
       payment_method: paymentMethod,
+      hasVoucher: 0,
+      uservoucher_id: 0,
     };
     const res = await Orders.checkout(payload);
     if (res.data.status == 1) {
@@ -127,7 +147,16 @@ export default function Checkout() {
       );
     }
   }, [paymentMethod]);
-  console.log(paymentMethod);
+
+  const displayVoucher = useMemo(() => {
+    return myvouchers.map((x, i) => (
+      <S.VoucherCard>
+        <p>Vouchers</p>
+        <p>{x.percent}% Discount</p>
+      </S.VoucherCard>
+    ));
+  }, [myvouchers]);
+
   return (
     <>
       <Navigation />
@@ -164,6 +193,9 @@ export default function Checkout() {
             <h5>Total: {formatCurrency(parseFloat(displayTotal()))}</h5>
             <SizeBox height={20} />
             <Button onClick={handleCheckout}>Confirm Order Now</Button>
+            <SizeBox height={10} />
+            <h5>Voucher Available</h5>
+            {displayVoucher}
           </Col>
           <Col>
             <Table>
