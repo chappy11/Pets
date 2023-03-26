@@ -14,7 +14,7 @@ import {
 import swal from "sweetalert";
 import { Orders } from "../../services/Orders";
 import { getItem, KEY } from "../../utils/storage";
-import { formatCurrency } from "../../utils/Money";
+import { formatCurrency, getDiscount } from "../../utils/Money";
 import PaymentMethod from "./components/PaymentMethod";
 import usePrompts from "../../hooks/usePrompts";
 import useGetUserVouchers from "../../hooks/useGetUserVouchers";
@@ -23,6 +23,7 @@ export default function Checkout() {
   const { item, arr } = useActiveItem();
   const { sendRequest, data: myvouchers } = useGetUserVouchers();
   const { alertWithCallBack, alertError } = usePrompts();
+  const [selectVoucher, setSelectVoucher] = useState(null);
   const [isHalf, setIsHalf] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -73,6 +74,18 @@ export default function Checkout() {
 
     return total;
   };
+
+  const displayDiscount = () => {
+    let discount = 0;
+    const total = getTotal();
+
+    if (selectVoucher) {
+      discount = getDiscount(total, selectVoucher.percent);
+    }
+
+    return discount;
+  };
+
   async function handleCheckout() {
     if (paymentMethod === "") {
       swal("Warning", "Please Choose Payment Method", "warning");
@@ -99,8 +112,8 @@ export default function Checkout() {
       total_amount: getTotal(),
       isHalf: paymentMethod == "1" ? parseInt(isHalf) : 0,
       payment_method: paymentMethod,
-      hasVoucher: 0,
-      uservoucher_id: 0,
+      hasVoucher: selectVoucher ? 1 : 0,
+      uservoucher_id: selectVoucher ? selectVoucher.uservoucher_id : 0,
     };
     const res = await Orders.checkout(payload);
     if (res.data.status == 1) {
@@ -150,12 +163,17 @@ export default function Checkout() {
 
   const displayVoucher = useMemo(() => {
     return myvouchers.map((x, i) => (
-      <S.VoucherCard>
-        <p>Vouchers</p>
-        <p>{x.percent}% Discount</p>
+      <S.VoucherCard
+        onClick={() => setSelectVoucher(x)}
+        isSelected={selectVoucher?.uservoucher_id === x?.uservoucher_id}
+      >
+        <div>
+          <p>Vouchers</p>
+          <p>{x.percent}% Discount</p>
+        </div>
       </S.VoucherCard>
     ));
-  }, [myvouchers]);
+  }, [myvouchers, selectVoucher]);
 
   return (
     <>
@@ -189,8 +207,36 @@ export default function Checkout() {
             />
             <SizeBox height={20} />
             {displayPay}
-            <SizeBox height={30} />
-            <h5>Total: {formatCurrency(parseFloat(displayTotal()))}</h5>
+            <table className=" table table-borderless">
+              <tbody>
+                <tr>
+                  <td>
+                    <S.MyLabel>Principal Amount</S.MyLabel>
+                  </td>
+                  <td>{formatCurrency(parseFloat(displayTotal()))}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <S.MyLabel>Total Discount</S.MyLabel>
+                  </td>
+                  <td>{formatCurrency(parseFloat(displayDiscount()))}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <S.MyLabel>Total Amount</S.MyLabel>
+                  </td>{" "}
+                  <td>
+                    <S.Total>
+                      {" "}
+                      {formatCurrency(
+                        parseFloat(displayTotal()) - displayDiscount()
+                      )}
+                    </S.Total>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
             <SizeBox height={20} />
             <Button onClick={handleCheckout}>Confirm Order Now</Button>
             <SizeBox height={10} />
