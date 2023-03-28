@@ -28,7 +28,7 @@ export default function Checkout() {
   const [isOpen, setIsOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isCheckout, setIsCheckout] = useState(false);
-
+  console.log(item);
   const onChange = (e) => {
     setIsHalf(e.target.value);
   };
@@ -56,8 +56,9 @@ export default function Checkout() {
     let total = 0;
 
     item.forEach((val) => {
-      total += parseFloat(val.totalAmount);
+      total += shopTotal(val.orderItems);
     });
+
     if (isHalf === "" || isHalf === "0") {
       return total;
     } else {
@@ -69,21 +70,30 @@ export default function Checkout() {
     let total = 0;
 
     item.forEach((val) => {
-      total += parseFloat(val.totalAmount);
+      val.orderItems.forEach((item) => {
+        total += parseFloat(item.totalAmount);
+      });
     });
 
     return total;
   };
 
-  const displayDiscount = () => {
+  const shopTotal = (orderItems) => {
+    const shop_id = orderItems[0].shop_id;
+    let total = 0;
     let discount = 0;
-    const total = getTotal();
 
-    if (selectVoucher) {
-      discount = getDiscount(total, selectVoucher.percent);
+    orderItems.forEach((element) => {
+      total += parseFloat(element.totalAmount);
+    });
+    if (shop_id.toString() === selectVoucher?.shop_id) {
+      discount = getDiscount(
+        total.toString(),
+        selectVoucher.percent.toString()
+      );
     }
 
-    return discount;
+    return total - discount;
   };
 
   async function handleCheckout() {
@@ -128,7 +138,7 @@ export default function Checkout() {
       swal("Error", "Something went wrong", "error");
     }
   };
-
+  //{getDiscount}
   const displayPay = useMemo(() => {
     if (paymentMethod === "1") {
       return (
@@ -161,10 +171,18 @@ export default function Checkout() {
     }
   }, [paymentMethod]);
 
+  function handleSelectVoucher(vouch) {
+    if (vouch?.uservoucher_id === selectVoucher?.uservoucher_id) {
+      setSelectVoucher(null);
+      return;
+    }
+
+    setSelectVoucher(vouch);
+  }
   const displayVoucher = useMemo(() => {
     return myvouchers.map((x, i) => (
       <S.VoucherCard
-        onClick={() => setSelectVoucher(x)}
+        onClick={() => handleSelectVoucher(x)}
         isSelected={selectVoucher?.uservoucher_id === x?.uservoucher_id}
       >
         <div>
@@ -207,35 +225,6 @@ export default function Checkout() {
             />
             <SizeBox height={20} />
             {displayPay}
-            <table className=" table table-borderless">
-              <tbody>
-                <tr>
-                  <td>
-                    <S.MyLabel>Principal Amount</S.MyLabel>
-                  </td>
-                  <td>{formatCurrency(parseFloat(displayTotal()))}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <S.MyLabel>Total Discount</S.MyLabel>
-                  </td>
-                  <td>{formatCurrency(parseFloat(displayDiscount()))}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <S.MyLabel>Total Amount</S.MyLabel>
-                  </td>{" "}
-                  <td>
-                    <S.Total>
-                      {" "}
-                      {formatCurrency(
-                        parseFloat(displayTotal()) - displayDiscount()
-                      )}
-                    </S.Total>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
 
             <SizeBox height={20} />
             <Button onClick={handleCheckout}>Confirm Order Now</Button>
@@ -244,29 +233,36 @@ export default function Checkout() {
             {displayVoucher}
           </Col>
           <Col>
-            <Table>
-              <tbody>
-                {item.map((val) => (
-                  <>
-                    <tr key={val.product_id}>
-                      <td>
-                        <Image
-                          src={BASE_URL + val.productImage}
-                          width={100}
-                          height={100}
-                        />
-                      </td>
-                      <td>
-                        <Text>{val.productName}</Text>
-                      </td>
-                      <td>
-                        <p>{val.totalAmount}</p>
-                      </td>
-                    </tr>
-                  </>
-                ))}
-              </tbody>
-            </Table>
+            {item.map((v, i) => (
+              <S.ItemContainer>
+                <h5>{v.shop_id}</h5>
+                <Table>
+                  <tbody>
+                    {v?.orderItems?.map((val, i) => (
+                      <>
+                        <tr key={val.product_id}>
+                          <td>
+                            <Image
+                              src={BASE_URL + val.productImage}
+                              width={100}
+                              height={100}
+                            />
+                          </td>
+                          <td>
+                            <Text>{val.productName}</Text>
+                          </td>
+                          <td>
+                            <p>{val.totalAmount}</p>
+                          </td>
+                        </tr>
+                      </>
+                    ))}
+                  </tbody>
+                </Table>
+                <p>{formatCurrency(parseFloat(shopTotal(v.orderItems)))}</p>
+              </S.ItemContainer>
+            ))}
+            <p>{formatCurrency(parseFloat(displayTotal()))}</p>
           </Col>
         </Row>
       </Container>

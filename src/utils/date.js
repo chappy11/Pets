@@ -26,6 +26,21 @@ export const compareDate = (start, end) => {
   return isValid;
 };
 
+export const getWeekly = () => {
+  const dateRanges = getDateRange("w");
+
+  let startDate = dayjs(dateRanges.firstDate);
+  const endDate = dayjs(dateRanges.lastDate);
+  let ranges = [];
+
+  while (startDate.isBefore(endDate) || startDate.isSame(endDate)) {
+    startDate = startDate.add(1, "d");
+    ranges.push(startDate.format("YYYY-MM-DD"));
+  }
+
+  return ranges;
+};
+
 export const isDateBetween = (start, end, current) => {
   return dayjs(current).isBetween(start, end, "day", "[]");
 };

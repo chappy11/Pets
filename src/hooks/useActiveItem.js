@@ -24,7 +24,19 @@ export default function useActiveItem() {
       });
 
       setArr(newArr);
-      setItem(dat);
+      let getItemByShop = [];
+
+      newArr.forEach((element) => {
+        const fil = dat.filter((e) => e.shop_id === element);
+        const shopData = {
+          shop_id: fil[0].shopName,
+          orderItems: fil,
+        };
+
+        getItemByShop.push(shopData);
+      });
+
+      setItem(getItemByShop);
     } else {
       setItem([]);
     }

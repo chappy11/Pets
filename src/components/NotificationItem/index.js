@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import SizeBox from "../SizeBox";
 import * as S from "./style";
 
@@ -9,6 +9,9 @@ export default function NotificationItem({
   isRead,
   date,
 }) {
+  const status = useMemo(() => {
+    return isRead === "0" ? "UnRead" : "Read";
+  }, [isRead]);
   return (
     <S.ListItem
       color={isRead === "0" ? "whitesmoke" : "white"}
@@ -19,6 +22,8 @@ export default function NotificationItem({
       <S.Date>{date}</S.Date>
       <SizeBox height={10} />
       <p>{message}</p>
+      <SizeBox height={10} />
+      <S.NotifStatus>{status}</S.NotifStatus>
     </S.ListItem>
   );
 }

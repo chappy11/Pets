@@ -15,3 +15,9 @@ export const Header = styled.p`
 export const Date = styled.p`
   font-size: 10px;
 `;
+
+export const NotifStatus = styled.p`
+  font-size: 10px;
+  font-weight: bold;
+  text-align: right;
+`;

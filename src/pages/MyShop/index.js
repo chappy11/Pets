@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Sidebar from "./components/Sidebar";
 import {
   Container,
@@ -7,6 +7,17 @@ import {
   SizeBox,
   Title,
 } from "../../components";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 import { defaultThemes } from "../../constants/DefaultThemes";
 import { Col, Row } from "react-bootstrap";
@@ -19,6 +30,34 @@ import * as S from "./style";
 export default function MyShop() {
   const { totalSales } = useGetAllSuccessTransaction();
   const { orders, dataCounts } = useGetAllOrdersByShop();
+  // console.log("Data", totalSales?.weeklySet);
+  // const displayGraph = useMemo(() => {
+  //   if (totalSales?.weeklySet) {
+  //     console.log("NISUD", totalSales.weeklySet);
+  //     return (
+  //       <div style={{ width: "100%" }}>
+  //         <ResponsiveContainer width="100%" height={100}>
+  //           <BarChart
+  //             width={500}
+  //             height={300}
+  //             data={totalSales?.weeklySet}
+  //             // margin={{
+  //             //   top: 5,
+  //             //   right: 30,
+  //             //   left: 20,
+  //             //   bottom: 5,
+  //             // }}
+  //           >
+  //             <Bar
+  //               dataKey={totalSales?.weeklySet ? "day" : ""}
+  //               fill="#8884d8"
+  //             />
+  //           </BarChart>{" "}
+  //         </ResponsiveContainer>
+  //       </div>
+  //     );
+  //   }
+  // }, [totalSales?.weeklySet]);
 
   return (
     <Sidebar>
@@ -100,9 +139,10 @@ export default function MyShop() {
               title={dataCounts?.cancel}
               color={defaultThemes.cancel}
               onClick={() => (window.location.href = "/canceled")}
-              />    
+            />
           </Col>
         </Row>
+        {totalSales?.weeklySet}
       </Container>
     </Sidebar>
   );

@@ -20,3 +20,8 @@ export const Total = styled.div`
   font-weight: bold;
   font-size: 18px;
 `;
+
+export const ItemContainer = styled.div`
+  width: 100%;
+  flex: 1;
+`;

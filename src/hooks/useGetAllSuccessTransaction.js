@@ -1,12 +1,24 @@
 import { Compress, GetAppRounded } from "@mui/icons-material";
 import dayjs from "dayjs";
 import React, { useState, useEffect, useCallback } from "react";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { useMemo } from "react";
 import { ShopReport } from "../services/ShopReport";
 import {
   compareDate,
   formatDisplayDate,
   getDateRange,
+  getWeekly,
   isDateBetween,
   standarDateFormat,
 } from "../utils/date";
@@ -19,6 +31,7 @@ export default function useGetAllSuccessTransaction() {
   const [filteredTransaction, setFilteredTransaction] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalSales, setTotalSales] = useState(null);
+  const [weeklyDataSet, setWeeklyDataSet] = useState([]);
   const { alertError, alertWarning } = usePrompts();
 
   useEffect(() => {
@@ -35,8 +48,11 @@ export default function useGetAllSuccessTransaction() {
         day: getSalesByDay(res.data.data),
         week: getSalesByWeek(res.data.data),
         month: getSalesByMonth(res.data.data),
+        weeklySet: getWeeklyIncome(res.data.data),
       };
       setTotalSales(sales);
+
+      setWeeklyDataSet(getWeeklyIncome(res.data.data));
       setIsLoading(false);
       setTransactions(res.data.data);
       setFilteredTransaction(res.data.data);
@@ -184,7 +200,59 @@ export default function useGetAllSuccessTransaction() {
     return formatCurrency(0);
   }, [setFilteredTransaction, filteredTransaction]);
 
+  const getWeeklyIncome = (resp) => {
+    const dayOfWeeks = getWeekly();
+    const days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    let dataSampling = [];
+
+    dayOfWeeks.forEach((val, i) => {
+      const filtered = resp.filter(
+        (e) => val === standarDateFormat(e.date_success)
+      );
+      let total = 0;
+      filtered.forEach((element) => {
+        total += parseFloat(element.order_total_amout);
+      });
+      const payload = {
+        day: days[i],
+        total,
+      };
+
+      dataSampling.push(payload);
+    });
+
+    //  return dataSampling;
+
+    return (
+      <div style={{ width: "100%" }}>
+        <ResponsiveContainer width="100%" height={100}>
+          <BarChart
+            width={500}
+            height={300}
+            data={dataSampling}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <Bar dataKey={"day"} fill="#8884d8" />
+          </BarChart>{" "}
+        </ResponsiveContainer>
+      </div>
+    );
+  };
   return {
+    weeklyDataSet,
     transactions,
     isLoading,
     getByDays,
