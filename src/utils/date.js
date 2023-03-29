@@ -41,6 +41,13 @@ export const getWeekly = () => {
   return ranges;
 };
 
+export const getTheMonth = (date) => {
+  return dayjs(date).month();
+};
+
+export const getYear = (date) => {
+  return dayjs(date).year();
+};
 export const isDateBetween = (start, end, current) => {
   return dayjs(current).isBetween(start, end, "day", "[]");
 };

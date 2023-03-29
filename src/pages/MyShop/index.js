@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import {
   Container,
@@ -7,17 +7,6 @@ import {
   SizeBox,
   Title,
 } from "../../components";
-import {
-  BarChart,
-  Bar,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 
 import { defaultThemes } from "../../constants/DefaultThemes";
 import { Col, Row } from "react-bootstrap";
@@ -26,58 +15,81 @@ import useGetAllSuccessTransaction from "../../hooks/useGetAllSuccessTransaction
 import { formatCurrency } from "../../utils/Money";
 import useGetAllOrdersByShop from "../../hooks/useGetAllOrdersByShop";
 import * as S from "./style";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  BarElement,
+  Tooltip,
+  Legend,
+  LinearScale,
+} from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
 
+ChartJS.register(BarElement, Tooltip, CategoryScale, Legend, LinearScale);
 export default function MyShop() {
   const { totalSales } = useGetAllSuccessTransaction();
   const { orders, dataCounts } = useGetAllOrdersByShop();
-  // console.log("Data", totalSales?.weeklySet);
-  // const displayGraph = useMemo(() => {
-  //   if (totalSales?.weeklySet) {
-  //     console.log("NISUD", totalSales.weeklySet);
-  //     return (
-  //       <div style={{ width: "100%" }}>
-  //         <ResponsiveContainer width="100%" height={100}>
-  //           <BarChart
-  //             width={500}
-  //             height={300}
-  //             data={totalSales?.weeklySet}
-  //             // margin={{
-  //             //   top: 5,
-  //             //   right: 30,
-  //             //   left: 20,
-  //             //   bottom: 5,
-  //             // }}
-  //           >
-  //             <Bar
-  //               dataKey={totalSales?.weeklySet ? "day" : ""}
-  //               fill="#8884d8"
-  //             />
-  //           </BarChart>{" "}
-  //         </ResponsiveContainer>
-  //       </div>
-  //     );
-  //   }
-  // }, [totalSales?.weeklySet]);
+  const [currentTable, setCurrentTable] = useState("y");
+  console.log(totalSales?.yearly?.data);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const data = {
+    labels:
+      currentTable === "w"
+        ? totalSales?.weeklySet?.dataLabels
+        : totalSales?.yearly?.labels,
+    datasets: [
+      {
+        label: currentTable === "w" ? "Daily Income" : "Monthly Income",
+        data:
+          currentTable === "w"
+            ? totalSales?.weeklySet?.data
+            : totalSales?.yearly?.data,
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+          "rgba(255, 205, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(201, 203, 207, 0.2)",
+        ],
+        borderColor: [
+          "rgb(255, 99, 132)",
+          "rgb(255, 159, 64)",
+          "rgb(255, 205, 86)",
+          "rgb(75, 192, 192)",
+          "rgb(54, 162, 235)",
+          "rgb(153, 102, 255)",
+          "rgb(201, 203, 207)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {};
+  const displayGraph = useMemo(() => {
+    if (data) {
+      // console.log("NISUD", totalSales.weeklySet);
+      return (
+        <div>
+          <Bar data={data} options={options}></Bar>
+        </div>
+      );
+    }
+  }, [data, options]);
 
   return (
     <Sidebar>
       <Container>
-        <S.HeaderText>
-          <HeaderText color={defaultThemes.white}>Dashboard</HeaderText>
-        </S.HeaderText>
+        <HeaderText color={defaultThemes.secondary}>Dashboard</HeaderText>
         <Row>
           <Col>
             <DashBoardCard
               title={"Today Income"}
               subtitle={formatCurrency(+totalSales?.day)}
               color={defaultThemes.color001}
-            />
-          </Col>
-          <Col>
-            <DashBoardCard
-              title={"This Week"}
-              subtitle={formatCurrency(+totalSales?.week)}
-              color={defaultThemes.color001}
+              onClick={() => alert("HI")}
             />
           </Col>
           <Col>
@@ -87,7 +99,33 @@ export default function MyShop() {
               color={defaultThemes.color001}
             />
           </Col>
+          <Col>
+            <DashBoardCard
+              title={"This Year"}
+              subtitle={formatCurrency(+totalSales?.year)}
+              color={defaultThemes.color001}
+            />
+          </Col>
         </Row>
+        <Row>
+          <Col>
+            <DashBoardCard
+              title={"Daily Income"}
+              subtitle={formatCurrency(+totalSales?.week)}
+              color={defaultThemes.color001}
+              onClick={() => setCurrentTable("w")}
+            />
+          </Col>
+          <Col>
+            <DashBoardCard
+              title={"Monthly Income"}
+              subtitle={formatCurrency(+totalSales?.week)}
+              color={defaultThemes.color001}
+              onClick={() => setCurrentTable("y")}
+            />
+          </Col>
+        </Row>
+        <Bar data={data} options={options}></Bar>
         <SizeBox height={20} />
         <HeaderText>Total Orders: {dataCounts?.all}</HeaderText>
         <Row>
@@ -142,7 +180,13 @@ export default function MyShop() {
             />
           </Col>
         </Row>
-        {totalSales?.weeklySet}
+        {/* <div style={{ width: "100%" }}>
+          <ResponsiveContainer width="100%" height={100}>
+            <BarChart width={150} height={40} data={totalSales?.weeklySet}>
+              <Bar dataKey="day" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div> */}
       </Container>
     </Sidebar>
   );

@@ -17,8 +17,11 @@ import { ShopReport } from "../services/ShopReport";
 import {
   compareDate,
   formatDisplayDate,
+  getCurrentDate,
   getDateRange,
+  getTheMonth,
   getWeekly,
+  getYear,
   isDateBetween,
   standarDateFormat,
 } from "../utils/date";
@@ -48,7 +51,9 @@ export default function useGetAllSuccessTransaction() {
         day: getSalesByDay(res.data.data),
         week: getSalesByWeek(res.data.data),
         month: getSalesByMonth(res.data.data),
+        year: getSalesByYear(res.data.data),
         weeklySet: getWeeklyIncome(res.data.data),
+        yearly: getYearSales(res.data.data),
       };
       setTotalSales(sales);
 
@@ -127,6 +132,19 @@ export default function useGetAllSuccessTransaction() {
     return total;
   };
 
+  const getSalesByYear = (data) => {
+    let total = 0;
+    const filtered = data.filter(
+      (e) => getYear(e.date_success) === getYear(getCurrentDate())
+    );
+
+    filtered.forEach((val) => {
+      total += parseFloat(val.order_total_amout);
+    });
+
+    return total;
+  };
+  getYear(getCurrentDate());
   const getByMonth = () => {
     const dateRange = getDateRange("M");
 
@@ -147,7 +165,7 @@ export default function useGetAllSuccessTransaction() {
   const getByDays = () => {
     const dateRange = getDateRange("d");
     const current = dayjs();
-    console.log(standarDateFormat(current));
+
     const filteredData = transactions.filter((val) => {
       return standarDateFormat(current) === standarDateFormat(val.date_success);
     });
@@ -181,7 +199,7 @@ export default function useGetAllSuccessTransaction() {
           return isDateBetween(startDate, endDate, val.date_success);
         }
       });
-      console.log(filtered.length);
+
       setFilteredTransaction(filtered);
     },
     [filteredTransaction, transactions, setFilteredTransaction]
@@ -221,35 +239,52 @@ export default function useGetAllSuccessTransaction() {
       filtered.forEach((element) => {
         total += parseFloat(element.order_total_amout);
       });
-      const payload = {
-        day: days[i],
-        total,
-      };
 
-      dataSampling.push(payload);
+      dataSampling.push(total);
     });
 
-    //  return dataSampling;
+    return {
+      dataLabels: days,
+      data: dataSampling,
+    };
+  };
 
-    return (
-      <div style={{ width: "100%" }}>
-        <ResponsiveContainer width="100%" height={100}>
-          <BarChart
-            width={500}
-            height={300}
-            data={dataSampling}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <Bar dataKey={"day"} fill="#8884d8" />
-          </BarChart>{" "}
-        </ResponsiveContainer>
-      </div>
-    );
+  const getYearSales = (respdata) => {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const arr = [];
+
+    months.map((val, i) => {
+      const filtered = respdata.filter((e) => {
+        const formated = standarDateFormat(e.date_success);
+
+        return getTheMonth(formated) == i;
+      });
+      let total = 0;
+
+      filtered.forEach((element) => {
+        total += parseFloat(element.order_total_amout);
+      });
+      arr.push(total);
+    });
+
+    return {
+      labels: months,
+      data: arr,
+    };
   };
   return {
     weeklyDataSet,
