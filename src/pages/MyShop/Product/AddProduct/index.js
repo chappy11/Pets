@@ -35,6 +35,7 @@ export default function AddProduct() {
     unit: "",
     type: "",
     breed: "",
+    reorderLevel: 0,
   });
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export default function AddProduct() {
       unit: "",
       type: "",
       breed: "",
+      reorderLevel: 0,
     });
   }, [categoryId]);
 
@@ -75,7 +77,7 @@ export default function AddProduct() {
   }
 
   async function handleAddproduct() {
-    const { name, description, unit, price, stock } = data;
+    const { name, description, unit, price, stock, reorderLevel } = data;
     if (!img) {
       swal("Warning", "Provide Picture of Product");
     } else if (
@@ -101,6 +103,7 @@ export default function AddProduct() {
         formdata.append("stock", stock);
         formdata.append("shop_id", user.shop_id);
         formdata.append("pic", img);
+        formdata.append("reorderLevel", data?.reorderLevel);
 
         const response = await Product.addProduct(formdata);
         console.log("DATA", response);
@@ -164,6 +167,7 @@ export default function AddProduct() {
       formdata.append("shop_id", user.shop_id);
       formdata.append("pic", img);
       formdata.append("document", documentPic);
+      formdata.append("reorderLevel", data?.reorderLevel);
 
       const resp = await Product.addPets(formdata);
 
@@ -247,6 +251,15 @@ export default function AddProduct() {
               value={data?.stock}
             />
             <SizeBox height={15} />
+            <TextInput
+              label="Reorder Level"
+              name="reorderLevel"
+              type="number"
+              placeholder="0"
+              onChange={onChange}
+              value={data?.reorderLevel}
+            />
+            <SizeBox height={15} />
 
             <TextInput
               label="Price"
@@ -296,6 +309,16 @@ export default function AddProduct() {
               value={data?.breed}
             />
             <SizeBox height={15} />
+            <TextInput
+              label="Reorder Level"
+              name="reorderLevel"
+              type="number"
+              placeholder="0"
+              onChange={onChange}
+              value={data?.reorderLevel}
+            />
+            <SizeBox height={15} />
+
             <TextInput
               label="Price"
               name="price"

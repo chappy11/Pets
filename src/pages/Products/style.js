@@ -12,7 +12,8 @@ export const CustomizeCard = styled(Card)`
   width: 250px;
   margin: 10px;
   padding: 0px;
-  height: 250px;
+  height: 300px;
+  padding: 5px 2px;
   opacity: 1;
   cursor: pointer;
   border: 1px solid lightgrey;

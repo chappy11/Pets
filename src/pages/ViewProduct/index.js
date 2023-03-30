@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Col, Image, Row } from "react-bootstrap";
+import { Col, Image, Modal, ModalBody, Row } from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useParams } from "react-router-dom";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { formatCurrency } from "../../utils/Money";
 import {
   Navigation,
@@ -27,22 +29,32 @@ import { Box, BoxContainer, ItemRow } from "./style";
 import { Add, Remove } from "@mui/icons-material";
 import * as S from "./style";
 import { Review } from "../../services/Review";
+import useGetRating from "../../hooks/useGetRating";
+import ProductRating from "../../components/ProductRating";
+import Rating from "react-rating";
+import { Rates } from "../../services/Rate";
+import { getItem, KEY } from "../../utils/storage";
 
 export default function ViewProduct() {
   const [data, setData] = useState(null);
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [rating, setRating] = useState(0);
   const [noItems, setNoItems] = useState(1);
+  const [ratingModal, setRatingModal] = useState(false);
   const { user } = useGetUserFromStorage();
   const { alertError, alertWarning, alertSuccess } = usePrompts();
   const [products, setProducts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [userReview, setUserReview] = useState("");
   const [currentImage, setCurrentImg] = useState("");
+  const { data: rate } = useGetRating({
+    product_id: data ? data.product_id : 0,
+  });
   useEffect(() => {
     getproduct();
   }, []);
-
+  console.log(rate);
   useEffect(() => {
     getProducts();
   }, [setData, data]);
@@ -250,12 +262,15 @@ export default function ViewProduct() {
   }, [reviews, setReviews]);
 
   const displayStock = useMemo(() => {
+    if (parseInt(data?.stock) <= parseInt(data?.reorderLevel)) {
+      return `Hurry up! Only ${data?.stock + " " + data?.unit} in stock`;
+    }
     if (data?.stock > 0) {
       return data?.stock + " " + data?.unit + " available";
     }
 
     return "Out Of Stock";
-  }, [data?.stock]);
+  }, [data?.stock, data?.reorderLevel]);
 
   const isDisAbled = useMemo(() => {
     if (data?.stock < 1) {
@@ -324,10 +339,92 @@ export default function ViewProduct() {
 
     return <Image width={300} height={350} src={BASE_URL + currentImage} />;
   }, [data, currentImage]);
+
+  async function handleCreateRate() {
+    try {
+      if (parseInt(rating) < 1) {
+        alertWarning("Please choose rating");
+        return;
+      }
+
+      const payload = {
+        user_id: user?.user_id,
+        product_id: data?.product_id,
+        rate: rating,
+      };
+
+      const resp = await Rates.createRating(payload);
+
+      if (resp.data.status == "1") {
+        alertSuccess("Thank you for rating");
+        setRatingModal(false);
+      }
+    } catch (error) {}
+  }
+
+  function handleOpenModal() {
+    if (!user) {
+      swal("You Should Login First", {
+        buttons: {
+          cancel: "Cancel",
+          catch: {
+            text: "Login",
+            value: "login",
+          },
+        },
+      }).then((value) => {
+        switch (value) {
+          case "login":
+            window.location.href = "/login";
+            break;
+
+          default:
+        }
+      });
+
+      return;
+    }
+
+    setRatingModal(true);
+  }
   return (
     <>
       <Navigation isFetch={isLoading} />
       <SizeBox height={10} />
+      <Modal show={ratingModal}>
+        <Modal.Header>
+          <HeaderText>Rate Now:</HeaderText>
+        </Modal.Header>
+        <ModalBody
+          style={{
+            display: "flex",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Rating
+            initialRating={0}
+            emptySymbol={
+              <StarBorderIcon
+                style={{ color: "yellow" }}
+                sx={{ fontSize: 80 }}
+              />
+            }
+            fullSymbol={
+              <StarIcon style={{ color: "yellow" }} sx={{ fontSize: 80 }} />
+            }
+            style={{ fontSize: "20px" }}
+            onChange={(e) => setRating(e)}
+          />
+        </ModalBody>
+        <Modal.Footer>
+          <Button onClick={handleCreateRate}>Save Rating</Button>
+          <Button color="red" onClick={() => setRatingModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Container>
         <SizeBox height={50} />
         <S.TitleText>{header}</S.TitleText>
@@ -342,6 +439,10 @@ export default function ViewProduct() {
               <HeaderText color={defaultThemes.primary}>
                 {data?.productName}
               </HeaderText>
+              <div onClick={handleOpenModal}>
+                <ProductRating rate={rate} />
+              </div>
+
               <Line />
               {displayPetInformation}
               <SizeBox height={10} />
