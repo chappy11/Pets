@@ -111,12 +111,18 @@ export default function MyShop() {
         </Row>
         <Row>
           <Col>
+            <S.EmplyCont />
+          </Col>
+          <Col>
             <DashBoardCard
               title={"This Year"}
               subtitle={formatCurrency(+totalSales?.year)}
               color={defaultThemes.color001}
               onClick={() => setCurrentTable("y")}
             />
+          </Col>
+          <Col>
+            <S.EmplyCont />
           </Col>
         </Row>
         <Bar data={data} options={options}></Bar>

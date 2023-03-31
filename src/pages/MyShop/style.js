@@ -8,3 +8,7 @@ export const HeaderText = styled.div`
   padding: 20px;
   border-radius: 5px;
 `;
+
+export const EmplyCont = styled.div`
+  flex: 1;
+`;
