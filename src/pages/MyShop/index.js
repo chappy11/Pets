@@ -94,15 +94,17 @@ export default function MyShop() {
           </Col>
           <Col>
             <DashBoardCard
-              title={"This Month"}
-              subtitle={formatCurrency(+totalSales?.month)}
+              title={"This Week"}
+              subtitle={formatCurrency(+totalSales?.week)}
               color={defaultThemes.color001}
+              onClick={() => setCurrentTable("w")}
             />
           </Col>
+
           <Col>
             <DashBoardCard
-              title={"This Year"}
-              subtitle={formatCurrency(+totalSales?.year)}
+              title={"This Month"}
+              subtitle={formatCurrency(+totalSales?.month)}
               color={defaultThemes.color001}
             />
           </Col>
@@ -110,16 +112,8 @@ export default function MyShop() {
         <Row>
           <Col>
             <DashBoardCard
-              title={"Daily Income"}
-              subtitle={formatCurrency(+totalSales?.week)}
-              color={defaultThemes.color001}
-              onClick={() => setCurrentTable("w")}
-            />
-          </Col>
-          <Col>
-            <DashBoardCard
-              title={"Monthly Income"}
-              subtitle={formatCurrency(+totalSales?.week)}
+              title={"This Year"}
+              subtitle={formatCurrency(+totalSales?.year)}
               color={defaultThemes.color001}
               onClick={() => setCurrentTable("y")}
             />
