@@ -220,6 +220,10 @@ export default function useGetAllSuccessTransaction() {
 
   const getWeeklyIncome = (resp) => {
     const dayOfWeeks = getWeekly();
+    if(resp.length < 1){
+      return [0,0,0,0,0,0,0];
+    }
+    
     const days = [
       "Monday",
       "Tuesday",
@@ -250,6 +254,12 @@ export default function useGetAllSuccessTransaction() {
   };
 
   const getYearSales = (respdata) => {
+    if(respdata.length < 1){
+      return [0,0,0,0,0,0,0,0,0,0,0,0];
+    }
+   
+
+   
     const months = [
       "January",
       "February",
