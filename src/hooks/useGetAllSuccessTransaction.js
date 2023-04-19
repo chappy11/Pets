@@ -133,12 +133,15 @@ export default function useGetAllSuccessTransaction() {
   };
 
   const getSalesByYear = (data) => {
+    if (data?.length < 1) {
+      return 0;
+    }
     let total = 0;
-    const filtered = data.filter(
+    const filtered = data?.filter(
       (e) => getYear(e.date_success) === getYear(getCurrentDate())
     );
 
-    filtered.forEach((val) => {
+    filtered?.forEach((val) => {
       total += parseFloat(val.order_total_amout);
     });
 
@@ -220,10 +223,10 @@ export default function useGetAllSuccessTransaction() {
 
   const getWeeklyIncome = (resp) => {
     const dayOfWeeks = getWeekly();
-    if(resp.length < 1){
-      return [0,0,0,0,0,0,0];
+    if (resp?.length < 1) {
+      return [0, 0, 0, 0, 0, 0, 0];
     }
-    
+
     const days = [
       "Monday",
       "Tuesday",
@@ -236,11 +239,11 @@ export default function useGetAllSuccessTransaction() {
     let dataSampling = [];
 
     dayOfWeeks.forEach((val, i) => {
-      const filtered = resp.filter(
+      const filtered = resp?.filter(
         (e) => val === standarDateFormat(e.date_success)
       );
       let total = 0;
-      filtered.forEach((element) => {
+      filtered?.forEach((element) => {
         total += parseFloat(element.order_total_amout);
       });
 
@@ -254,12 +257,10 @@ export default function useGetAllSuccessTransaction() {
   };
 
   const getYearSales = (respdata) => {
-    if(respdata.length < 1){
-      return [0,0,0,0,0,0,0,0,0,0,0,0];
+    if (respdata?.length < 1) {
+      return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
-   
 
-   
     const months = [
       "January",
       "February",
@@ -278,14 +279,14 @@ export default function useGetAllSuccessTransaction() {
     const arr = [];
 
     months.map((val, i) => {
-      const filtered = respdata.filter((e) => {
+      const filtered = respdata?.filter((e) => {
         const formated = standarDateFormat(e.date_success);
 
         return getTheMonth(formated) == i;
       });
       let total = 0;
 
-      filtered.forEach((element) => {
+      filtered?.forEach((element) => {
         total += parseFloat(element.order_total_amout);
       });
       arr.push(total);
