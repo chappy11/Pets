@@ -160,7 +160,7 @@ export default function Product() {
           </thead>
           <tbody>
             {products.map((val, i) => (
-              <tr>
+              <S.Item isReOrder={val.stock <= val.reorderLevel} >
                 <td>{val.p_createdAt}</td>
                 <td>
                   <img
@@ -200,7 +200,7 @@ export default function Product() {
                     </ButtonGroup>
                   )}
                 </td>
-              </tr>
+              </S.Item>
             ))}
           </tbody>
         </Table>

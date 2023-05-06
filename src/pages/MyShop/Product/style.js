@@ -14,3 +14,7 @@ export const JustifyEnd = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
 `;
+
+export const Item = styled.tr`
+  background-color:${props=>props.isReOrder ? '#FFCCCB':''}
+`;
