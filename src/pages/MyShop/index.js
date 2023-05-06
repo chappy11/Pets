@@ -24,12 +24,14 @@ import {
   LinearScale,
 } from "chart.js/auto";
 import { Bar } from "react-chartjs-2";
+import useGetSaleable from "../../hooks/useGetSaleable";
 
 ChartJS.register(BarElement, Tooltip, CategoryScale, Legend, LinearScale);
 export default function MyShop() {
   const { totalSales } = useGetAllSuccessTransaction();
   const { orders, dataCounts } = useGetAllOrdersByShop();
   const [currentTable, setCurrentTable] = useState("y");
+  const { products, sales } = useGetSaleable();
   console.log(totalSales?.yearly?.data);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = {
@@ -67,18 +69,47 @@ export default function MyShop() {
     ],
   };
 
+  const dats = {
+    labels: products,
+    datasets: [
+      {
+        label: "Most Saleable Products",
+        data: sales,
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+          "rgba(255, 205, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(201, 203, 207, 0.2)",
+        ],
+        borderColor: [
+          "rgb(255, 99, 132)",
+          "rgb(255, 159, 64)",
+          "rgb(255, 205, 86)",
+          "rgb(75, 192, 192)",
+          "rgb(54, 162, 235)",
+          "rgb(153, 102, 255)",
+          "rgb(201, 203, 207)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   const options = {};
   const displayGraph = useMemo(() => {
     if (data) {
       // console.log("NISUD", totalSales.weeklySet);
       return (
         <div>
-          <Bar data={data} options={options}></Bar>
+          <Bar data={dats} options={options}></Bar>
         </div>
       );
     }
-  }, [data, options]);
-
+  }, [products, sales, options]);
+  console.log(products, sales);
   return (
     <Sidebar>
       <Container>
@@ -126,6 +157,9 @@ export default function MyShop() {
           </Col>
         </Row>
         <Bar data={data} options={options}></Bar>
+        <SizeBox height={20} />
+
+        {displayGraph}
         <SizeBox height={20} />
         <HeaderText>Total Orders: {dataCounts?.all}</HeaderText>
         <Row>

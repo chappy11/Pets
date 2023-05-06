@@ -74,4 +74,9 @@ export const Orders = {
 
     return data;
   },
+  getsales: async (shop_id) => {
+    const data = await axios.get(OrderApi(`saleable/${shop_id}`));
+
+    return data;
+  },
 };
