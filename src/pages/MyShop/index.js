@@ -120,7 +120,7 @@ export default function MyShop() {
               title={"Today Income"}
               subtitle={formatCurrency(+totalSales?.day)}
               color={defaultThemes.color001}
-              onClick={() => alert("HI")}
+              onClick={() =>{}}
             />
           </Col>
           <Col>
