@@ -160,7 +160,7 @@ export default function Product() {
           </thead>
           <tbody>
             {products.map((val, i) => (
-              <S.Item isReOrder={val.stock <= val.reorderLevel} >
+              <S.Item isReOrder={parseInt(val.stock) <= parseInt(val.reorderLevel)} >
                 <td>{val.p_createdAt}</td>
                 <td>
                   <img
