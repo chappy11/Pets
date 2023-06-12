@@ -25,14 +25,29 @@ import {
 } from "chart.js/auto";
 import { Bar } from "react-chartjs-2";
 import useGetSaleable from "../../hooks/useGetSaleable";
+const MONTH = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 ChartJS.register(BarElement, Tooltip, CategoryScale, Legend, LinearScale);
 export default function MyShop() {
+  const [month,setMonth] = useState(" this Month")
   const { totalSales } = useGetAllSuccessTransaction();
   const { orders, dataCounts } = useGetAllOrdersByShop();
   const [currentTable, setCurrentTable] = useState("y");
-  const { products, sales } = useGetSaleable();
-  console.log(totalSales?.yearly?.data);
+  const { products, sales,getByMonth } = useGetSaleable();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = {
     labels:
@@ -71,9 +86,10 @@ export default function MyShop() {
 
   const dats = {
     labels: products,
+    
     datasets: [
       {
-        label: "Most Saleable Products",
+        label: "Most Saleable Products "+month,
         data: sales,
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
@@ -98,7 +114,16 @@ export default function MyShop() {
     ],
   };
 
-  const options = {};
+  const options = {
+    onClick: (event, elements) => {
+      // Handle click event here
+      if (elements.length > 0) {
+        const clickedIndex = elements[0].index + 1;
+        setMonth(` for ${MONTH[elements[0].index]}`)
+        getByMonth(clickedIndex);
+      }
+    }
+  };
   const displayGraph = useMemo(() => {
     if (data) {
       // console.log("NISUD", totalSales.weeklySet);

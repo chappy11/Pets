@@ -156,6 +156,7 @@ export default function ViewProduct() {
   function handleAddReview() {
     createReview();
   }
+
   async function handleAddToCart() {
     try {
       setIsLoading(true);
@@ -180,6 +181,8 @@ export default function ViewProduct() {
 
         return;
       }
+
+
 
       const payload = {
         user_id: user.user_id,
@@ -358,8 +361,12 @@ export default function ViewProduct() {
       if (resp.data.status == "1") {
         alertSuccess("Thank you for rating");
         setRatingModal(false);
+      }else{
+        alertWarning(resp.data.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      alertError();
+    }
   }
 
   function handleOpenModal() {

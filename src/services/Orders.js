@@ -79,4 +79,9 @@ export const Orders = {
 
     return data;
   },
+  getSalesByMonth:async(shop_id,month)=>{
+    const data = await axios.get(OrderApi(`saleableproductbymonth/${shop_id}/${month}`))
+  
+    return data;
+  }
 };
