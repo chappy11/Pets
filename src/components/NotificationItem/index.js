@@ -10,7 +10,7 @@ export default function NotificationItem({
   date,
 }) {
   const status = useMemo(() => {
-    return isRead === "0" ? "UnRead" : "Read";
+    return isRead === "0" ? "UnRead" : "read";
   }, [isRead]);
   return (
     <S.ListItem

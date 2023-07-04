@@ -16,6 +16,7 @@ import swal from "sweetalert";
 import UpdateStock from "../components/UpdateStock";
 import useGetUserFromStorage from "../../../hooks/useGetUserFromStorage";
 import { Link } from "react-router-dom";
+import { defaultThemes } from "../../../constants/DefaultThemes";
 
 export default function Product() {
   const [products, setProducts] = useState([]);
@@ -107,7 +108,7 @@ export default function Product() {
     }
 
     return (
-      <CustomButton className="float-right" onClick={handleAddProduct}>
+      <CustomButton className="float-right" color={defaultThemes.cancel} onClick={handleAddProduct}>
         Add New Product
       </CustomButton>
     );

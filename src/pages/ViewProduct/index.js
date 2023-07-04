@@ -129,7 +129,7 @@ export default function ViewProduct() {
     }
 
     if (userReview === "") {
-      alertWarning("Please enter your review");
+      alertWarning("Please buy first before reviewing this product.");
 
       return;
     }
